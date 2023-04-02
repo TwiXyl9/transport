@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
+import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
+import 'package:transport/routing/route.dart';
+import 'package:transport/routing/route_names.dart';
 import 'package:transport/views/home/home_view.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/sliders/news_slider_view.dart';
@@ -31,8 +34,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/',
-        home: LayoutTemplate(),
+        builder: (context, child) => LayoutTemplate(
+          child: child!,
+        ),
+        navigatorKey: locator<NavigationHelper>().navigatorKey,
+        onGenerateRoute: generateRoute,
+        initialRoute: homeRoute,
         debugShowCheckedModeBanner: false,
       ),
     );

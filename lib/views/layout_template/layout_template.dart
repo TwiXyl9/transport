@@ -7,18 +7,10 @@ import 'package:transport/widgets/navigation_bar/navbar.dart';
 import 'package:transport/widgets/navigation_drawer/nav_drawer.dart';
 import 'package:transport/widgets/order/order_button.dart';
 
-class LayoutTemplate extends StatefulWidget {
-  const LayoutTemplate({Key? key}) : super(key: key);
+class LayoutTemplate extends StatelessWidget {
+  final Widget child;
 
-  @override
-  State<LayoutTemplate> createState() => _LayoutTemplateState();
-}
-
-class _LayoutTemplateState extends State<LayoutTemplate> {
-
-  void openOrderDialog() {
-
-  }
+  const LayoutTemplate({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +25,7 @@ class _LayoutTemplateState extends State<LayoutTemplate> {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                    Navigator(
-                      key: locator<NavigationHelper>().navigatorKey,
-                      onGenerateRoute: generateRoute,
-                      initialRoute: homeRoute,
-                    ),
+                  child,
                   OrderButton(),
                 ],
               ),

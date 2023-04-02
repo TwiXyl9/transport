@@ -9,16 +9,16 @@ import 'package:transport/views/registration/registration_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings){
   switch(settings.name){
-    case homeRoute: return _getPageRoute(HomeView());
-    case carsRoute: return _getPageRoute(CarsView());
-    case aboutRoute: return _getPageRoute(AboutView());
-    case authenticationRoute: return _getPageRoute(AuthenticationView());
-    case registrationRoute: return _getPageRoute(RegistrationView());
-    case accountRoute: return _getPageRoute(AccountView());
-    default: return _getPageRoute(HomeView());
+    case homeRoute: return _getPageRoute(HomeView(), settings);
+    case carsRoute: return _getPageRoute(CarsView(), settings);
+    case aboutRoute: return _getPageRoute(AboutView(), settings);
+    case authenticationRoute: return _getPageRoute(AuthenticationView(), settings);
+    case registrationRoute: return _getPageRoute(RegistrationView(), settings);
+    case accountRoute: return _getPageRoute(AccountView(), settings);
+    default: return _getPageRoute(HomeView(), settings);
   }
 }
 
-PageRoute _getPageRoute(Widget child) {
-  return MaterialPageRoute(builder: (context) => child);
+PageRoute _getPageRoute(Widget child, RouteSettings settings) {
+  return MaterialPageRoute(builder: (context) => child, settings: settings);
 }
