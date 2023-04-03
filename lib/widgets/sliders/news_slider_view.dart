@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
-import 'package:transport/requests/requests_paths_names.dart';
-
-import '../../models/news.dart';
-import '../../services/api_service.dart';
+import 'package:transport/blocs/news_bloc.dart';
 
 class NewsSlider extends StatelessWidget {
   NewsSlider({super.key});
-  ApiService crud = ApiService();
   List<CarouselItem> newsToCarouselItem(allNews) {
     List<CarouselItem> itemList = [];
     for (var i = 0; i < allNews.length; i++) {
@@ -39,37 +36,34 @@ class NewsSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<News>>(
-      future: crud.newsIndexRequest(newsPath),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('An error has occurred!'),
-          );
-        } else if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  const Text("Новости"),
-                  CustomCarouselSlider(
-                    items: newsToCarouselItem(snapshot.data!),
-                    height: 300,
-                    subHeight: 75,
-                    width: 500,
-                    autoplay: true,
-                  ),
-                ],
-              ),
+    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+      if (state is NewsInitial){
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is NewsLoaded){
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const Text("Новости"),
+                CustomCarouselSlider(
+                  items: newsToCarouselItem(state.news),
+                  height: 300,
+                  subHeight: 75,
+                  width: 500,
+                  autoplay: true,
+                ),
+              ],
             ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+          ),
+        );
+      }
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    });
   }
 }
 

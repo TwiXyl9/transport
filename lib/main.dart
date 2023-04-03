@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
+import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<CarsBloc>(
           create: (context) => CarsBloc()..add(InitialCarEvent()),
+        ),
+        BlocProvider<NewsBloc>(
+          create: (context) => NewsBloc()..add(InitialNewsEvent()),
         ),
       ],
       child: MaterialApp(
