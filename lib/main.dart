@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
+import 'package:transport/blocs/registration_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc()..add(AuthenticationCheckStatusEvent()),
+        ),
+        BlocProvider<RegistrationBloc>(
+          create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
         ),
       ],
       child: MaterialApp(

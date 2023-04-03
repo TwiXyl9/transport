@@ -36,7 +36,6 @@ class AuthenticationFailureState extends AuthenticationState {
   AuthenticationFailureState(this.error);
 }
 class AuthenticationInProgressState extends AuthenticationState {}
-class AuthenticationCheckStatusInProgressState extends AuthenticationState {}
 
 
 

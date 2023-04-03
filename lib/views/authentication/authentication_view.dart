@@ -5,9 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
-import 'package:transport/helpers/navigation_helper.dart';
-import 'package:transport/locator.dart';
-import 'package:transport/routing/route_names.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/components/image_container.dart';
@@ -84,9 +81,9 @@ class _AuthenticationViewState extends State<AuthenticationView> {
           builder: (context, state) {
             final bloc = context.read<AuthenticationBloc>();
             if (state is AuthenticationUnauthorizedState || state is AuthenticationFailureState) {
-              return Scaffold(
-                  backgroundColor: Colors.grey[300],
-                  body: SafeArea(
+              return Container(
+                  color: Colors.grey[300],
+                  child: SafeArea(
                     child: Center(
                       child: Container(
                         constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
