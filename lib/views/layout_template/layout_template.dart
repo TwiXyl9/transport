@@ -17,6 +17,7 @@ class LayoutTemplate extends StatelessWidget {
     return Scaffold(
       drawer: NavDrawer(),
       backgroundColor: Colors.white,
+
       body: Column(
         children: [
           NavBar(),

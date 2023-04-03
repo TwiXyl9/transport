@@ -1,17 +1,18 @@
 import 'dart:convert';
 
+import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
-import 'package:transport/models/auth.dart';
 import 'package:transport/routing/route_names.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/components/image_container.dart';
 import 'package:transport/helpers/validation_helper.dart';
 
-import '../../services/auth_service.dart';
 class AuthenticationView extends StatefulWidget {
 
   AuthenticationView({Key? key}) : super(key: key);
@@ -43,25 +44,12 @@ class _AuthenticationViewState extends State<AuthenticationView> {
     );
   }
 
-  Future<void> signIn() async {
+  Future<void> signIn(AuthenticationBloc bloc) async {
     if(_formKey.currentState!.validate()){
       try {
         final email = emailController.text;
         final password = passwordController.text;
-
-        // final responseBody = jsonDecode(response.body);
-        // if(responseBody['errors']!=null){
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(
-        //       content: Text(responseBody['errors'][0]),
-        //       backgroundColor: Theme.of(context).errorColor,
-        //     ),
-        //   );
-        // }
-        // else{
-        //   Auth.fromResponse(response);
-        //
-        // }
+        bloc.add(AuthenticationLoginEvent(email: email, password: password));
 
       } catch (error) {
         var errorMessage = error.toString();
@@ -73,91 +61,130 @@ class _AuthenticationViewState extends State<AuthenticationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: SafeArea(
-          child: Center(
-            child: Container(
-              constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 30,),
-                    Text("Авторизация", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                    SizedBox(height: 30,),
-                    CustomTextField(
-                        controller: emailController,
-                        hint: 'Email',
-                        type: FieldType.text,
-                      validator: (val) {
-                          if(!val!.isValidEmail){
-                            return 'Некорректный email';
-                          }
-                      }),
-                    SizedBox(height: 20,),
-                    CustomTextField(
-                        controller: passwordController,
-                        hint: 'Пароль',
-                        type: FieldType.password,
-                        validator: (val){
-                          if(!val!.isValidPassword){
-                            return 'Некорректный пароль';
-                          }
-                        }),
-                    CustomButton(btnText: "Войти", onTap: signIn,),
-                    Container(
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(text: "У вас нет аккаунта? "),
-                            TextSpan(
-                              text: "Зарегистрироваться",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = (){
-                                  locator<NavigationHelper>().navigateTo(registrationRoute);
-                                }
-                            )
-                          ]
-                        )
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if(state is AuthenticationFailureState){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: Theme
+                    .of(context)
+                    .errorColor,
+              ),
+            );
+          }
+          if(state is AuthenticationAuthorizedState){
+            CherryToast.success(
+              title: Text('Успешная авторизация!'),
+              borderRadius: 0,
+            ).show(context);
+          }
+        },
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            final bloc = context.read<AuthenticationBloc>();
+            if (state is AuthenticationUnauthorizedState || state is AuthenticationFailureState) {
+              return Scaffold(
+                  backgroundColor: Colors.grey[300],
+                  body: SafeArea(
+                    child: Center(
+                      child: Container(
+                        constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 30,),
+                              Text("Авторизация", style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),),
+                              SizedBox(height: 30,),
+                              CustomTextField(
+                                  controller: emailController,
+                                  hint: 'Email',
+                                  type: FieldType.text,
+                                  validator: (val) {
+                                    if (!val!.isValidEmail) {
+                                      return 'Некорректный email';
+                                    }
+                                  }),
+                              SizedBox(height: 20,),
+                              CustomTextField(
+                                  controller: passwordController,
+                                  hint: 'Пароль',
+                                  type: FieldType.password,
+                                  validator: (val) {
+                                    if (!val!.isValidPassword) {
+                                      return 'Некорректный пароль';
+                                    }
+                                  }),
+                              CustomButton(
+                                btnText: "Войти", onTap: () => signIn(bloc),),
+                              Container(
+                                child: Text.rich(
+                                    TextSpan(
+                                        children: [
+                                          TextSpan(
+                                              text: "У вас нет аккаунта? "),
+                                          TextSpan(
+                                              text: "Зарегистрироваться",
+                                              style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight
+                                                      .bold),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  bloc.add(AuthenticationRedirectToRegistrationEvent());
+                                                }
+                                          )
+                                        ]
+                                    )
+                                ),
+                              ),
+                              SizedBox(height: 25,),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Divider(
+                                        thickness: 0.5,
+                                        color: Colors.grey[400],
+                                      )
+                                  ),
+                                  Text('Или войдите с помощью',
+                                    style: TextStyle(color: Colors.grey[700]),
+                                  ),
+                                  Expanded(
+                                      child: Divider(
+                                        thickness: 0.5,
+                                        color: Colors.grey[400],
+                                      )
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 50,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ImageContainer(
+                                      imgPath: 'lib/assets/facebook_logo.png'),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(height: 25,),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.grey[400],
-                            )
-                        ),
-                        Text('Или войдите с помощью',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                        Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.grey[400],
-                            )
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 50,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ImageContainer(imgPath: 'lib/assets/facebook_logo.png'),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        )
+                  )
+              );
+            }
+            if (state is AuthenticationAuthorizedState) {
+              bloc.add(AuthenticationRedirectToHomeEvent());
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 }

@@ -23,6 +23,8 @@ class AuthenticationLoginEvent extends AuthenticationEvent {
 }
 class AuthenticationLogoutEvent extends AuthenticationEvent {}
 class AuthenticationCheckStatusEvent extends AuthenticationEvent {}
+class AuthenticationRedirectToHomeEvent extends AuthenticationEvent {}
+class AuthenticationRedirectToRegistrationEvent extends AuthenticationEvent {}
 
 @immutable
 abstract class AuthenticationState {}
@@ -30,7 +32,7 @@ class AuthenticationInitial extends AuthenticationState {}
 class AuthenticationUnauthorizedState extends AuthenticationState {}
 class AuthenticationAuthorizedState extends AuthenticationState {}
 class AuthenticationFailureState extends AuthenticationState {
-  final Object error;
+  final String error;
   AuthenticationFailureState(this.error);
 }
 class AuthenticationInProgressState extends AuthenticationState {}
@@ -48,6 +50,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         await onAuthLoginEvent(event, emit);
       } else if (event is AuthenticationLogoutEvent) {
         await onAuthLogoutEvent(event, emit);
+      } else if (event is AuthenticationRedirectToHomeEvent){
+        await onAuthRedirectToHomeEvent();
+      } else if (event is AuthenticationRedirectToRegistrationEvent){
+        await onAuthRedirectToRegistrationEvent();
       }
     }, transformer: sequential());
     add(AuthenticationCheckStatusEvent());
@@ -64,16 +70,35 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       emit(AuthenticationInProgressState());
       final authData = await AuthService().login(event.email, event.password,);
-      await _sessionDataProvider.setAuthData(jsonEncode(authData.mapFromFields()));
-      await _sessionDataProvider.setAccountId(authData.userId!);
-      emit(AuthenticationAuthorizedState());
-      locator<NavigationHelper>().navigateTo(homeRoute);
+      if(authData.errorMsg == null){
+        await _sessionDataProvider.setAuthData(jsonEncode(authData.mapFromFields()));
+        await _sessionDataProvider.setAccountId(authData.userId!);
+        emit(AuthenticationAuthorizedState());
+        onAuthRedirectToHomeEvent();
+      } else{
+        emit(AuthenticationFailureState(authData.errorMsg!));
+      }
+
     } catch (e) {
-      emit(AuthenticationFailureState(e));
+      print(e.toString());
+      emit(AuthenticationFailureState(e.toString()));
     }
   }
 
   onAuthLogoutEvent(AuthenticationLogoutEvent event, Emitter<AuthenticationState> emit) async {
-
+    try {
+      await _sessionDataProvider.deleteAuthData();
+      await _sessionDataProvider.deleteAccountId();
+      emit(AuthenticationUnauthorizedState());
+      locator<NavigationHelper>().navigateTo(authenticationRoute);
+    } catch (e) {
+      emit(AuthenticationFailureState(e.toString()));
+    }
+  }
+  onAuthRedirectToHomeEvent() async {
+    locator<NavigationHelper>().navigateTo(homeRoute);
+  }
+  onAuthRedirectToRegistrationEvent() async {
+    locator<NavigationHelper>().navigateTo(registrationRoute);
   }
 }

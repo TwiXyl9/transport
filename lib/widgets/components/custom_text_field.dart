@@ -28,7 +28,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.controller,
       validator: widget.validator,
-      obscureText: _obscure,
+      obscureText: widget.type == FieldType.password? !_obscure : _obscure,
       decoration: InputDecoration(
           enabledBorder:  OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white)
@@ -41,7 +41,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           hintText: widget.hint,
           hintStyle: TextStyle(color: Colors.grey[500]),
           suffixIcon: widget.type == FieldType.password? IconButton(
-              icon: Icon(!_obscure ? Icons.visibility : Icons.visibility_off),
+              icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
               onPressed: () {
                 setState(() {
                   _obscure = !_obscure;
