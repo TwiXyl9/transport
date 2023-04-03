@@ -12,7 +12,7 @@ class AccountView extends StatelessWidget {
   Widget build(BuildContext context) {
 
     void logoutClick(){
-      AuthService().logout();
+     // AuthService().logout();
       locator<NavigationHelper>().navigateTo(homeRoute);
     }
 

@@ -48,21 +48,20 @@ class _AuthenticationViewState extends State<AuthenticationView> {
       try {
         final email = emailController.text;
         final password = passwordController.text;
-          // Log user in
-        final response = await AuthService().login(email, password);
-        final responseBody = jsonDecode(response.body);
-        if(responseBody['errors']!=null){
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(responseBody['errors'][0]),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
-        else{
-          Auth.fromResponse(response);
-          locator<NavigationHelper>().navigateTo(homeRoute);
-        }
+
+        // final responseBody = jsonDecode(response.body);
+        // if(responseBody['errors']!=null){
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       content: Text(responseBody['errors'][0]),
+        //       backgroundColor: Theme.of(context).errorColor,
+        //     ),
+        //   );
+        // }
+        // else{
+        //   Auth.fromResponse(response);
+        //
+        // }
 
       } catch (error) {
         var errorMessage = error.toString();

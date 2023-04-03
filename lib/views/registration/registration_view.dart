@@ -60,23 +60,23 @@ class _RegistrationViewState extends State<RegistrationView> {
         final confirmPassword = confirmPasswordController.text;
         // Log user in
         final response = await AuthService().signup(name, phone, email, password, confirmPassword);
-        final responseBody = jsonDecode(response.body);
-        if(responseBody['errors']!=null){
-          print(responseBody['errors']);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(responseBody['errors']['full_messages'][0]),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
-        else{
-          locator<NavigationHelper>().navigateTo(authenticationRoute);
-          CherryToast.success(
-            title: Text('Ваш аккаунт успешно зарегистрирован'),
-            borderRadius: 0,
-          ).show(context);
-        }
+        // final responseBody = jsonDecode(response.body);
+        // if(responseBody['errors']!=null){
+        //   print(responseBody['errors']);
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       content: Text(responseBody['errors']['full_messages'][0]),
+        //       backgroundColor: Theme.of(context).errorColor,
+        //     ),
+        //   );
+        // }
+        // else{
+        //   locator<NavigationHelper>().navigateTo(authenticationRoute);
+        //   CherryToast.success(
+        //     title: Text('Ваш аккаунт успешно зарегистрирован'),
+        //     borderRadius: 0,
+        //   ).show(context);
+        // }
 
      } catch (error) {
        var errorMessage = error.toString();

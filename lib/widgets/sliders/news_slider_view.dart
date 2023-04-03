@@ -53,7 +53,7 @@ class NewsSlider extends StatelessWidget {
                   height: 300,
                   subHeight: 75,
                   width: 500,
-                  autoplay: true,
+                  autoplay: false,
                 ),
               ],
             ),

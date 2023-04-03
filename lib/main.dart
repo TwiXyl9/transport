@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NewsBloc>(
           create: (context) => NewsBloc()..add(InitialNewsEvent()),
+        ),
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc()..add(AuthenticationCheckStatusEvent()),
         ),
       ],
       child: MaterialApp(
