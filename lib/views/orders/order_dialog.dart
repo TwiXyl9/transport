@@ -33,14 +33,8 @@ class _OrderDialogState extends State<OrderDialog> {
   late DateTime date;
   late TimeOfDay time;
   int groupValue = 0;
-  late List<Object?> selectedServices;
-  void takeUserData(){
-    if(Prefs.getString('userData') != null){
-      var userData = jsonDecode(Prefs.getString('userData')!);
-      nameController.text = userData['name'];
-      phoneController.text = userData['phone'];
-    }
-  }
+  late List<Service> selectedServices;
+
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -212,6 +206,21 @@ class _OrderDialogState extends State<OrderDialog> {
                                   ),
                              )
                              : CircularProgressIndicator(),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Выберите доп. усуги',
+                            ),
+                          ),
+                          state is OrderLoadedState ?
+                          MultiSelectDialogField(
+                            items: state.services.map((e) => MultiSelectItem(e, e.name)).toList(),
+                            listType: MultiSelectListType.CHIP,
+                            onConfirm: (values) {
+                               selectedServices = values;
+                               },
+                          )
+                              : CircularProgressIndicator(),
                           SizedBox(height: 20,),
                           CustomButton(btnText: "Создать", onTap: () => createOrder(context),),
                         ],
