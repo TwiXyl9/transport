@@ -4,9 +4,12 @@ import 'package:transport/locator.dart';
 import 'package:transport/views/orders/order_dialog.dart';
 
 class OrderButton extends StatelessWidget {
+  BuildContext parent_context;
+  OrderButton(this.parent_context);
+
   Future showOrderDialog() =>
       showDialog(
-        context: locator<NavigationHelper>().navigatorKey.currentContext!,
+        context: parent_context,
         builder: (BuildContext context) {
           return OrderDialog();
         }

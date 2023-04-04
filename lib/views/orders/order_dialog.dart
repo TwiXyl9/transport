@@ -3,13 +3,10 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
-import 'package:transport/models/prefs.dart';
-import 'package:transport/services/api_service.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
@@ -33,7 +30,7 @@ class _OrderDialogState extends State<OrderDialog> {
   late DateTime date;
   late TimeOfDay time;
   int groupValue = 0;
-  late List<Service> selectedServices;
+  late List<Service> selectedServices = [];
 
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
@@ -73,6 +70,18 @@ class _OrderDialogState extends State<OrderDialog> {
     }else{
       print("Date is not selected");
     }
+  }
+  void _showMultiSelect(BuildContext context, List<Service> services) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return  MultiSelectDialog(
+          items: services.map((e) => MultiSelectItem(e, e.name)).toList(),
+          initialValue: selectedServices,
+          onConfirm: (values) {},
+        );
+      },
+    );
   }
   void createOrder(context) {
     if (_formKey.currentState!.validate()) {
@@ -172,7 +181,6 @@ class _OrderDialogState extends State<OrderDialog> {
                           TextFormField(
                               controller: dateController,
                               validator: (val){
-                                print(val);
                                 if(val != ''){
                                   if(DateFormat('dd.MM.yy, HH:mm').parse(val!).isBefore(DateTime.now())){
                                     return 'Некорректное время';
@@ -213,13 +221,7 @@ class _OrderDialogState extends State<OrderDialog> {
                             ),
                           ),
                           state is OrderLoadedState ?
-                          MultiSelectDialogField(
-                            items: state.services.map((e) => MultiSelectItem(e, e.name)).toList(),
-                            listType: MultiSelectListType.CHIP,
-                            onConfirm: (values) {
-                               selectedServices = values;
-                               },
-                          )
+                            ElevatedButton(onPressed:() => _showMultiSelect(context,state.services), child: Text('Pess'))
                               : CircularProgressIndicator(),
                           SizedBox(height: 20,),
                           CustomButton(btnText: "Создать", onTap: () => createOrder(context),),

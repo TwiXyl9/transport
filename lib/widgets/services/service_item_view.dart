@@ -12,10 +12,6 @@ class ServiceItemView extends StatelessWidget {
     return Card(
       child: Row(
         children: [
-          Checkbox(
-              value: value,
-              onChanged: onChanged
-          ),
           Text(service.name),
           TextField()
         ],

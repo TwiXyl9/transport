@@ -14,22 +14,14 @@ class LayoutTemplate extends StatelessWidget {
       drawer: NavDrawer(),
       backgroundColor: Colors.white,
 
-      body: Column(
-        children: [
-          NavBar(),
-          Container(
-            child: Expanded(
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  child,
-                  OrderButton(),
-                ],
-              ),
-            ),
-          ),
-
-        ],
+      body: Container(
+        constraints: BoxConstraints(minWidth: 200, maxHeight: MediaQuery.of(context).size.height),
+        child: Column(
+          children: [
+            NavBar(),
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
