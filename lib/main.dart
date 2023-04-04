@@ -3,15 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
+import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/blocs/registration_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
 import 'package:transport/routing/route.dart';
 import 'package:transport/routing/route_names.dart';
-import 'package:transport/views/home/home_view.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
-import 'package:transport/widgets/sliders/news_slider_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RegistrationBloc>(
           create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
+        ),
+        BlocProvider<OrderBloc>(
+          create: (context) => OrderBloc()..add(OrderInitialEvent()),
         ),
       ],
       child: MaterialApp(

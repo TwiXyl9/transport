@@ -37,12 +37,12 @@ class NewsSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is NewsInitial){
+      if (state is NewsInitialState){
         return Center(
           child: CircularProgressIndicator(),
         );
       }
-      if (state is NewsLoaded){
+      if (state is NewsLoadedState){
         return SingleChildScrollView(
           child: Center(
             child: Column(

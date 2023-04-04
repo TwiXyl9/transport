@@ -22,8 +22,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   List<Car> cars = [];
   CarsBloc() : super(CarsInitial()) {
     on<InitialCarEvent>((event, emit) async {
-     cars = await ApiService().carsIndexRequest(carsPath);
-     emit(CarsLoaded(cars));
+      await onInitialCarEvent(event, emit);
     });
+  }
+  onInitialCarEvent(InitialCarEvent event, Emitter<CarsState> emit) async {
+    cars = await ApiService().carsIndexRequest(carsPath);
+    emit(CarsLoaded(cars));
   }
 }

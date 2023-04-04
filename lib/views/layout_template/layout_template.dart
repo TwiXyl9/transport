@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transport/locator.dart';
-import 'package:transport/routing/route.dart';
-import 'package:transport/routing/route_names.dart';
-import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/widgets/navigation_bar/navbar.dart';
 import 'package:transport/widgets/navigation_drawer/nav_drawer.dart';
 import 'package:transport/widgets/order/order_button.dart';

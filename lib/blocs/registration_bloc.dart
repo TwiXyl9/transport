@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:meta/meta.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/routing/route_names.dart';
@@ -23,7 +24,7 @@ class RegistrationSignUpEvent extends RegistrationEvent {
 
 @immutable
 abstract class RegistrationState {}
-class RegistrationInitial extends RegistrationState {}
+class RegistrationInitialState extends RegistrationState {}
 class RegistrationInProcessState extends RegistrationState {}
 class RegistrationSuccessState extends RegistrationState {}
 class RegistrationFailureState extends RegistrationState {
@@ -33,14 +34,14 @@ class RegistrationFailureState extends RegistrationState {
 
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc() : super(RegistrationInitial()) {
+  RegistrationBloc() : super(RegistrationInitialState()) {
     on<RegistrationEvent>((event, emit) async {
       if (event is RegistrationSignUpEvent) {
         await onRegistrationSignUpEvent(event, emit);
       } else if (event is RegistrationRedirectToAuthEvent) {
         await onRegistrationRedirectToAuthEvent();
       }
-    });
+    }, transformer: sequential());
   }
 
   onRegistrationSignUpEvent(RegistrationSignUpEvent event, Emitter<RegistrationState> emit) async {

@@ -13,18 +13,21 @@ class InitialNewsEvent extends NewsEvent {}
 
 @immutable
 abstract class NewsState {}
-class NewsInitial extends NewsState {}
-class NewsLoaded extends NewsState {
+class NewsInitialState extends NewsState {}
+class NewsLoadedState extends NewsState {
   final List<News> news;
-  NewsLoaded(this.news);
+  NewsLoadedState(this.news);
 }
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   List<News> news = [];
-  NewsBloc() : super(NewsInitial()) {
+  NewsBloc() : super(NewsInitialState()) {
     on<InitialNewsEvent>((event, emit) async {
-      news = await ApiService().newsIndexRequest(newsPath);
-      emit(NewsLoaded(news));
+      await onInitialNewsEvent(event, emit);
     });
+  }
+  onInitialNewsEvent(InitialNewsEvent event, Emitter<NewsState> emit) async {
+    news = await ApiService().newsIndexRequest(newsPath);
+    emit(NewsLoadedState(news));
   }
 }
