@@ -141,92 +141,86 @@ class _OrderDialogState extends State<OrderDialog> {
             return CircularProgressIndicator();
           }
           return Dialog(
-                  insetPadding: EdgeInsets.zero,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Container(
-                      constraints: BoxConstraints(minWidth: 200, maxWidth: 600),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 30,),
-                            CustomTextField(
-                                controller: nameController,
-                                hint: 'Имя',
-                                type: FieldType.text,
-                                validator: (val) {
-                                  if(!val!.isValidName){
-                                    return 'Некорректное имя';
-                                  }
+            insetPadding: EdgeInsets.zero,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 200, maxWidth: MediaQuery.of(context).size.width),
+                  child: Form(
+                    key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 30,),
+                          CustomTextField(
+                              controller: nameController,
+                              hint: 'Имя',
+                              type: FieldType.text,
+                              validator: (val) {
+                                if(!val!.isValidName){
+                                  return 'Некорректное имя';
                                 }
-                            ),
-                            SizedBox(height: 20,),
-                            CustomTextField(
-                                controller: phoneController,
-                                hint: 'Телефон',
-                                type: FieldType.text,
-                                validator: (val) {
-                                  if(!val!.isValidPhone){
-                                    return 'Некорректный телефон';
-                                  }
+                              }
+                              ),
+                          SizedBox(height: 20,),
+                          CustomTextField(
+                              controller: phoneController,
+                              hint: 'Телефон',
+                              type: FieldType.text,
+                              validator: (val) {
+                                if(!val!.isValidPhone){
+                                  return 'Некорректный телефон';
                                 }
-                            ),
-                            SizedBox(height: 20,),
-                            TextFormField(
-                                controller: dateController,
-                                validator: (val){
-                                  print(val);
-                                  if(val != ''){
-                                    if(DateFormat('dd.MM.yy, HH:mm').parse(val!).isBefore(DateTime.now())){
-                                      return 'Некорректное время';
-                                    }
-                                  }else{
-                                    return 'Выберите дату и время';
+                              }
+                              ),
+                          SizedBox(height: 20,),
+                          TextFormField(
+                              controller: dateController,
+                              validator: (val){
+                                print(val);
+                                if(val != ''){
+                                  if(DateFormat('dd.MM.yy, HH:mm').parse(val!).isBefore(DateTime.now())){
+                                    return 'Некорректное время';
                                   }
+                                }else{
+                                  return 'Выберите дату и время';
+                                }
                                 },
-                                decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_today), //icon of text field
+                              decoration: const InputDecoration(
+                                  icon: Icon(Icons.calendar_today), //icon of text field
                                     labelText: "Выберите дату и время" //label text of field
-                                ),
-                                readOnly: true,  // when true user cannot edit text
-                                onTap: dateAndTimePicker
-                            ),
-                            SizedBox(height: 20,),
-                            FutureBuilder<List<Car>>(
-                              future: ApiService().carsIndexRequest(carsPath),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  print(snapshot.error);
-                                  return const Center(
-                                    child: Text('An error has occurred!'),
-                                  );
-                                } else if (snapshot.hasData) {
-                                  return Expanded(
-                                    child: GridView.count(
+                              ),
+                              readOnly: true,  // when true user cannot edit text
+                              onTap: dateAndTimePicker
+                          ),
+                          SizedBox(height: 20,),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Выберите машину',
+                              ),
+                          ),
+                          state is OrderLoadedState ?
+                             SizedBox(
+                               height: 400,
+                               child: ListView(
                                       scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.zero,
-                                        crossAxisCount: 1,
-                                        shrinkWrap: true,
-                                        children: snapshot.data!.map((e) => CarsItemView(e, callBack, groupValue)).toList()
-                                    ),
-                                  );
-                                } else {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                              },
-                            ),
-                            SizedBox(height: 20,),
-                            CustomButton(btnText: "Создать", onTap: () => createOrder(context),),
-                          ],
-                        ),
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      children: state.cars.map((e) => CarsItemView(e, callBack, groupValue)).toList()
+                                  ),
+                             )
+                             : CircularProgressIndicator(),
+                          SizedBox(height: 20,),
+                          CustomButton(btnText: "Создать", onTap: () => createOrder(context),),
+                        ],
                       ),
-                    ),
                   ),
-                );
+                ),
+              ),
+            ),
+          );
         },
       ),
     );

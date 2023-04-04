@@ -142,6 +142,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  flutter_layout_grid:
+    dependency: "direct main"
+    description:
+      name: flutter_layout_grid
+      sha256: "1df27a2e9cd34faa0c0a33148c8bb9d9259e87cc5b934c989a59a77e1a4c0d6b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -296,14 +304,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  oktoast:
-    dependency: "direct main"
-    description:
-      name: oktoast
-      sha256: fd5dd5c7dd02c41c56bdbdbc163351bd6cd59cba61c416daf255e35d1a86dce1
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.1"
   path:
     dependency: transitive
     description:
@@ -368,6 +368,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   responsive_builder:
     dependency: "direct main"
     description:
