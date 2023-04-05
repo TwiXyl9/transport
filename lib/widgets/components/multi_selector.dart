@@ -75,7 +75,7 @@ class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
 
   Widget _buildItem(MultiSelectDialogItem<V> item) {
     final checked = _selectedValues.keys.contains(item.value);
-    int count = checked? _selectedValues[item.value]! : 0;
+    int count = checked? _selectedValues[item.value]! : 1;
     setCountCallback(val) {
       setState(() {
         count = val;

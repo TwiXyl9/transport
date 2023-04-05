@@ -5,40 +5,60 @@ import 'package:transport/widgets/cars/car_info_view.dart';
 
 class CarItemOrderView extends StatefulWidget {
   final Car car;
-  Function radioCallback;
+  Function selectCallback;
   int groupValue;
-  CarItemOrderView(this.car, this.radioCallback,[this.groupValue = -1]);
+  CarItemOrderView(this.car, this.selectCallback, this.groupValue);
 
   @override
   State<CarItemOrderView> createState() => _CarItemOrderViewState();
 }
 
 class _CarItemOrderViewState extends State<CarItemOrderView> {
+  late Car _car;
+  late Function _selectCallback;
+  late int _groupValue;
+  void initState() {
+    _car = widget.car;
+    _selectCallback = widget.selectCallback;
+    _groupValue = widget.groupValue;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 12,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              height: 130,
-              decoration: BoxDecoration(
-                color: Colors.white
-              ),
-              child: Image.network(widget.car.images[0]),
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          _groupValue = _car.id;
+          _selectCallback(_groupValue);
+        });
+
+      },
+      child: Container(
+        decoration: widget.groupValue == _car.id? BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.green,
+              blurRadius: 20.0,
+              offset: Offset(3,5)
             ),
-            CarInfoView(widget.car),
-            widget.groupValue != -1?
-            Radio(
-                value: widget.car.id,
-                groupValue: widget.groupValue,
-                onChanged: (val)=>{
-                    widget.radioCallback(val)
-                }
-            ) : Container(),
           ],
+        ):BoxDecoration(),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 130,
+                  decoration: BoxDecoration(
+                    color: Colors.white
+                  ),
+                  child: Image.network(widget.car.images[0]),
+                ),
+                CarInfoView(widget.car),
+              ],
+            ),
+          ),
         ),
       ),
     );

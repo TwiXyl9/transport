@@ -7,6 +7,7 @@ import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/cars/car_item_order_view.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
+import 'package:transport/widgets/services/service_item_view.dart';
 
 import '../../models/service.dart';
 import '../../widgets/components/custom_button.dart';
@@ -26,7 +27,7 @@ class _OrderDialogState extends State<OrderDialog> {
   final _formKey = GlobalKey<FormState>();
   late DateTime date;
   late TimeOfDay time;
-  int groupValue = 0;
+  int groupValue = -1;
   late Map<int,int> selectedServices = Map<int,int>();
 
   Future<DateTime?> pickDate() => showDatePicker(
@@ -150,7 +151,7 @@ class _OrderDialogState extends State<OrderDialog> {
               padding: const EdgeInsets.all(25.0),
               child: SingleChildScrollView(
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 200, maxWidth: MediaQuery.of(context).size.width),
+                  constraints: BoxConstraints(minWidth: 200, maxWidth: 800),
                   child: Form(
                     key: _formKey,
                       child: Column(
@@ -221,17 +222,11 @@ class _OrderDialogState extends State<OrderDialog> {
                             ),
                           ),
                           state is OrderLoadedState ?
-
-                          // MultiSelectDialogField(
-                          //   items: state.services.map((e) => MultiSelectItem(e, e.name)).toList(),
-                          //   listType: MultiSelectListType.LIST,
-                          //   onConfirm: (values) {
-                          //     selectedServices = values;
-                          //   },
-                          // )
-                            ElevatedButton(
-                                onPressed:(){ showMultiSelect(context, state.services);},
-                                child: Text('Press')
+                            Container(
+                              constraints: BoxConstraints(maxHeight: 200, maxWidth: 350),
+                              child: ListView(
+                                children: state.services.map((e) => ServiceItemView((e))).toList(),
+                              ),
                             )
                               : CircularProgressIndicator(),
                           SizedBox(height: 20,),

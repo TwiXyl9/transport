@@ -51,6 +51,10 @@ dependencies:
 
   flutter_multiselect: ^1.0.0
 
+  yandex_mapkit: ^3.2.0
+
+  geolocator: ^9.0.2
+
   cherry_toast: ^1.1.0
 
   bottom_picker: ^2.0.1

@@ -42,7 +42,7 @@ class _CounterViewState extends State<CounterView> {
   }
 
   void _dicrement() {
-    if (_currentCount > 1) {
+    if (_currentCount > 0) {
       _currentCount--;
       _counterCallback(_currentCount);
     }
