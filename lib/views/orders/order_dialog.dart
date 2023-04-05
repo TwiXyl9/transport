@@ -3,18 +3,14 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/cars/car_item_order_view.dart';
-import 'package:transport/widgets/cars/cars_item_view.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
-import '../../models/car.dart';
 import '../../models/service.dart';
-import '../../requests/requests_paths_names.dart';
 import '../../widgets/components/custom_button.dart';
+import '../../widgets/components/multi_selector.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog({Key? key}) : super(key: key);
@@ -31,7 +27,7 @@ class _OrderDialogState extends State<OrderDialog> {
   late DateTime date;
   late TimeOfDay time;
   int groupValue = 0;
-  late List<Service> selectedServices = [];
+  late Map<int,int> selectedServices = Map<int,int>();
 
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
@@ -72,18 +68,21 @@ class _OrderDialogState extends State<OrderDialog> {
       print("Date is not selected");
     }
   }
-  void _showMultiSelect(BuildContext context, List<Service> services) async {
-    await showDialog(
+
+  void showMultiSelect(BuildContext context, List<Service> services) async {
+    final items = services.map((e) => MultiSelectDialogItem(e.id, e.name)).toList();
+
+    final selectedValues = await showDialog(
       context: context,
-      builder: (ctx) {
-        return  MultiSelectDialog(
-          items: services.map((e) => MultiSelectItem(e, e.name)).toList(),
-          initialValue: selectedServices,
-          onConfirm: (values) {},
-        );
+      builder: (BuildContext context) {
+        return MultiSelectDialog(items, selectedServices);
       },
     );
+    selectedServices = selectedValues!;
+
+    print(selectedServices);
   }
+
   void createOrder(context) {
     if (_formKey.currentState!.validate()) {
       try {
@@ -222,7 +221,18 @@ class _OrderDialogState extends State<OrderDialog> {
                             ),
                           ),
                           state is OrderLoadedState ?
-                            ElevatedButton(onPressed:() => _showMultiSelect(context,state.services), child: Text('Pess'))
+
+                          // MultiSelectDialogField(
+                          //   items: state.services.map((e) => MultiSelectItem(e, e.name)).toList(),
+                          //   listType: MultiSelectListType.LIST,
+                          //   onConfirm: (values) {
+                          //     selectedServices = values;
+                          //   },
+                          // )
+                            ElevatedButton(
+                                onPressed:(){ showMultiSelect(context, state.services);},
+                                child: Text('Press')
+                            )
                               : CircularProgressIndicator(),
                           SizedBox(height: 20,),
                           CustomButton(btnText: "Создать", onTap: () => createOrder(context),),

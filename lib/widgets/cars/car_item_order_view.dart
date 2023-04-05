@@ -35,9 +35,7 @@ class _CarItemOrderViewState extends State<CarItemOrderView> {
                 value: widget.car.id,
                 groupValue: widget.groupValue,
                 onChanged: (val)=>{
-                  setState(() {
-                    widget.radioCallback(val);
-                  })
+                    widget.radioCallback(val)
                 }
             ) : Container(),
           ],
