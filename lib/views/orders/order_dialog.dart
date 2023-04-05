@@ -7,6 +7,7 @@ import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
+import 'package:transport/widgets/cars/car_item_order_view.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
@@ -205,12 +206,12 @@ class _OrderDialogState extends State<OrderDialog> {
                           ),
                           state is OrderLoadedState ?
                              SizedBox(
-                               height: 400,
+                               height: 420,
                                child: ListView(
                                       scrollDirection: Axis.horizontal,
                                       padding: EdgeInsets.zero,
                                       shrinkWrap: true,
-                                      children: state.cars.map((e) => CarsItemView(e, callBack, groupValue)).toList()
+                                      children: state.cars.map((e) => CarItemOrderView(e, callBack, groupValue)).toList()
                                   ),
                              )
                              : CircularProgressIndicator(),

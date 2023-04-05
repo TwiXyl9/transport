@@ -11,6 +11,7 @@ import 'package:transport/services/api_service.dart';
 @immutable
 abstract class OrderEvent {}
 class OrderInitialEvent extends OrderEvent {}
+class OrderSetCarEvent extends OrderEvent {}
 class OrderCreateEvent extends OrderEvent {
   List<int> servicesId;
   int carId;
@@ -30,6 +31,7 @@ class OrderLoadedState extends OrderState {
   final List<Car> cars;
   final List<Service> services;
   final User? user;
+
   OrderLoadedState(this.cars, this.services, this.user);
 }
 class OrderInProcessState extends OrderState {}
@@ -48,6 +50,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         await onOrderInitialEvent(event, emit);
       } else if (event is OrderCreateEvent) {
         await onOrderCreateEvent(event, emit);
+      } else if (event is OrderSetCarEvent) {
+        await onOrderSetCarEvent(event, emit);
       }
     }, transformer: sequential());
   }
@@ -76,5 +80,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     } catch (e) {
       emit(OrderFailureState(e.toString()));
     }
+  }
+
+  onOrderSetCarEvent(OrderSetCarEvent event, Emitter<OrderState> emit) {
+
   }
 }

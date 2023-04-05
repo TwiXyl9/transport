@@ -35,7 +35,7 @@ class CarsView extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         crossAxisCount: 1,
                         shrinkWrap: true,
-                        children: state.cars.map((e) => CarsItemView(e, (){})).toList()
+                        children: state.cars.map((e) => CarsItemView(e)).toList()
                     ),
                   ),
                 ),
