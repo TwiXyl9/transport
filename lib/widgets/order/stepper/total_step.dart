@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transport/models/car.dart';
+import 'package:transport/widgets/order/stepper/total_services_table.dart';
 
 class TotalStep extends StatelessWidget {
   final String name;
@@ -11,41 +12,37 @@ class TotalStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
+    return Column(
       children: [
-        TableRow(
+        Table(
           children: [
-            Text("Имя:"),
-            Text(name),
-          ]
+            TableRow(
+              children: [
+                Text("Имя:"),
+                Text(name),
+              ]
+            ),
+            TableRow(
+                children: [
+                  Text("Телефон:"),
+                  Text(phone),
+                ]
+            ),
+            TableRow(
+                children: [
+                  Text("Дата и время:"),
+                  Text(dateTime),
+                ]
+            ),
+            TableRow(
+                children: [
+                  Text("Машина:"),
+                  Text("${car.brand} ${car.model}"),
+                ]
+            ),
+          ],
         ),
-        TableRow(
-            children: [
-              Text("Телефон:"),
-              Text(phone),
-            ]
-        ),
-        TableRow(
-            children: [
-              Text("Дата и время:"),
-              Text(dateTime),
-            ]
-        ),
-        TableRow(
-            children: [
-              Text("Машина:"),
-              Text("${car.brand} ${car.model}"),
-            ]
-        ),
-        if (servicesCount.length > 0) ...[
-          TableRow(
-          children: [
-            Text("Услуги:"),
-            //servicesCount.map((e) => Text("${e.key} ${e.value}"));
-          ]
-          )
-
-      ]
+        TotalServicesTable(services: servicesCount)
       ],
     );
   }

@@ -5,7 +5,9 @@ import '../../services/service_item_view.dart';
 
 class ServicesStep extends StatelessWidget {
   List<Service> services;
-  ServicesStep({Key? key, required this.services}) : super(key: key);
+  Map<int,int> selectedServices;
+  Function servicesCallback;
+  ServicesStep({Key? key, required this.selectedServices, required this.servicesCallback, required this.services}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class ServicesStep extends StatelessWidget {
       children: [
         ListView(
           shrinkWrap: true,
-          children: services.map((e) => ServiceItemView((e))).toList(),
+          children: services.map((e) => ServiceItemView( selectedServices, servicesCallback, e)).toList(),
         ),
       ],
     );

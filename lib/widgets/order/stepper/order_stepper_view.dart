@@ -116,7 +116,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 3 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 3,
         title: Text("Дополнительные услуги"),
-        content: state is OrderLoadedState? ServicesStep(services: state.services) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? ServicesStep(selectedServices: servicesCount = { for (var e in state.services) e.id : 0 }, servicesCallback: servicesCallback, services: state.services) : CircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
@@ -148,6 +148,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
     });
   }
   servicesCallback(val){
+    print(val);
     setState(() {
       servicesCount = val;
     });
