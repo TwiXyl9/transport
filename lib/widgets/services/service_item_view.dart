@@ -28,7 +28,12 @@ class _ServiceItemViewState extends State<ServiceItemView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.service.name),
+            Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.service.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                Text("Цена: ${widget.service.price.toString()} б.р", style: TextStyle(fontSize: 12),),
+              ],
+            ),
             CounterView(initCount: count, countCallback: setCountCallback,)
           ],
         ),

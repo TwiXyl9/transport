@@ -37,7 +37,7 @@ class _CarItemOrderViewState extends State<CarItemOrderView> {
         decoration: widget.groupValue == _car.id? BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.green,
+              color: Colors.blue,
               blurRadius: 20.0,
               offset: Offset(3,5)
             ),

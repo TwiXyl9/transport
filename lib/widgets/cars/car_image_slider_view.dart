@@ -10,7 +10,6 @@ class CarImageSliderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CarouselController carouselController = CarouselController();
-    var deviceType = getDeviceType(MediaQuery.of(context).size);
     return Expanded(
       child: Stack(
         alignment: Alignment.center,
@@ -35,32 +34,6 @@ class CarImageSliderView extends StatelessWidget {
               );
             }).toList(),
           ),
-          if (deviceType != DeviceScreenType.mobile) ...[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: CircleAvatar(
-                backgroundColor: Colors.blueGrey,
-                child: IconButton(
-                  onPressed: () {
-                    carouselController.previousPage();
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: CircleAvatar(
-                backgroundColor: Colors.blueGrey,
-                child: IconButton(
-                  onPressed: () {
-                    carouselController.nextPage();
-                  },
-                  icon: Icon(Icons.arrow_forward),
-                ),
-              ),
-            )
-          ] else Container()
         ],
       ),
     );
