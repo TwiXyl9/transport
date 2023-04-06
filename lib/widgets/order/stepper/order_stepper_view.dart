@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/order_bloc.dart';
+import 'package:transport/widgets/error/error_dialog_view.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
+import 'package:transport/widgets/order/stepper/total_step.dart';
 
 class OrderStepperView extends StatefulWidget {
   const OrderStepperView({Key? key}) : super(key: key);
@@ -15,64 +17,139 @@ class OrderStepperView extends StatefulWidget {
 
 class _OrderStepperViewState extends State<OrderStepperView> {
   int currentStep = 0;
-
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final dateTimeController = TextEditingController();
+  int selectedCar = -1;
+  final personInfoFormKey = GlobalKey<FormState>();
+  final dateFormKey = GlobalKey<FormState>();
+  late Map<int,int> servicesCount = Map<int,int>();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
-        return Stepper(
-            type: StepperType.vertical,
-            currentStep: currentStep,
-            onStepCancel: () => currentStep == 0
-                ? null
-                : setState(() {
-              currentStep -= 1;
-            }),
-            onStepContinue: () {
-              bool isLastStep = (currentStep == getSteps(state).length - 1);
-              if (isLastStep) {
-                //Do something with this information
-              } else {
-                setState(() {
-                  currentStep += 1;
-                });
-              }
-            },
-            onStepTapped: (step) => setState(() {
-              currentStep = step;
-            }),
-            steps: getSteps(state)
-        );
+          int lastStep = getSteps(state).length - 1;
+          bool isLastStep = (currentStep == lastStep);
+          return Stepper(
+              type: StepperType.vertical,
+              currentStep: currentStep,
+              onStepCancel: () => currentStep == 0
+                  ? null
+                  : setState(() {
+                currentStep -= 1;
+              }),
+              onStepContinue: () {
+                if (isLastStep) {
+                  //Do something with this information
+                } else {
+                  if (fieldsAreValid()) {
+                    setState(() {
+                      currentStep += 1;
+                    });
+                  }
+                }
+              },
+              onStepTapped: (step) => {
+                if (step == lastStep && !allFieldsValidation()) {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => ErrorDialogView(ctx: ctx, message: "Вы не заполнили все поля или не выбрали машину!")
+                  )
+                } else {
+                  setState(() {
+                    currentStep = step;
+                  })
+                }
+              },
+              controlsBuilder: (BuildContext context, ControlsDetails details) {
+                return Container(
+                  margin: EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      if(currentStep!=0) ...[
+                        ElevatedButton(
+                          child: Text("Назад"),
+                          onPressed: details.onStepCancel,
+                        ),
+                      ],
+                      SizedBox(width: 20,),
+                      ElevatedButton(
+                        child: isLastStep? Text("Подтвердить") : Text("Далее"),
+                        onPressed: details.onStepContinue,
+                      ),
+                    ],
+                  ),
+                );
+              },
+              steps: getSteps(state)
+          );
       }
     );
   }
 
   List<Step> getSteps(OrderState state){
+    if(state is OrderLoadedState && state.user != null){
+      nameController.text = state.user!.name;
+      phoneController.text = state.user!.phone;
+    }
     return <Step>[
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
           title: Text("Личные данные"),
-          content: PersonInfoStep()
+          content: PersonInfoStep(personInfoFormKey, nameController, phoneController)
       ),
       Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
           title: Text("Дата"),
-          content: DateStep()
+          content: DateStep(dateFormKey, dateTimeController)
       ),
       Step(
-          state: currentStep > 3 ? StepState.complete : StepState.indexed,
-          isActive: currentStep >= 3,
+          state: currentStep > 2 ? StepState.complete : StepState.indexed,
+          isActive: currentStep >= 2,
           title: Text("Машина"),
-          content: state is OrderLoadedState? CarsStep(cars: state.cars) : CircularProgressIndicator(),
+          content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CircularProgressIndicator(),
+      ),
+      Step(
+        state: currentStep > 3 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 3,
+        title: Text("Дополнительные услуги"),
+        content: state is OrderLoadedState? ServicesStep(services: state.services) : CircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 4,
-        title: Text("Дополнительные услуги"),
-        content: state is OrderLoadedState? ServicesStep(services: state.services) : CircularProgressIndicator(),
+        title: Text("Итог"),
+        content: state is OrderLoadedState? TotalStep(name: nameController.text, phone: phoneController.text, dateTime: dateTimeController.text, car: selectedCar > 0? state.cars.where((car) => car.id == selectedCar).first : state.cars[0], servicesCount: servicesCount,) : CircularProgressIndicator(),
       ),
     ];
+  }
+  bool fieldsAreValid(){
+    bool result = true;
+    if (currentStep == 0 && !personInfoFormKey.currentState!.validate()) {
+      result = false;
+    } else if (currentStep == 1 && !dateFormKey.currentState!.validate()) {
+      result = false;
+    }
+    return result;
+  }
+  bool allFieldsValidation(){
+    bool result = true;
+    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar > 0) {
+      result = false;
+    }
+    return result;
+  }
+  carsCallback(val) {
+    setState(() {
+      selectedCar = val;
+    });
+  }
+  servicesCallback(val){
+    setState(() {
+      servicesCount = val;
+    });
   }
 }

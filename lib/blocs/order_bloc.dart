@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:meta/meta.dart';
@@ -7,6 +9,8 @@ import 'package:transport/models/service.dart';
 import 'package:transport/models/user.dart';
 import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
+
+import '../models/auth.dart';
 
 @immutable
 abstract class OrderEvent {}
@@ -31,7 +35,7 @@ class OrderLoadedState extends OrderState {
   final List<Car> cars;
   final List<Service> services;
   final User? user;
-
+  late String name;
   OrderLoadedState(this.cars, this.services, this.user);
 }
 class OrderInProcessState extends OrderState {}
@@ -65,7 +69,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       services = await ApiService().servicesIndexRequest(servicesPath);
       var userId = await _sessionDataProvider.getAccountId();
       if (userId != null) {
-        //user = await ApiService().
+        var authString = await _sessionDataProvider.getAuthData();
+        var authData = Auth.fromJson(jsonDecode(authString!));
+        var authHeadersMap = authData.mapFromFields();
+        user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
+        print(user);
       }
       emit(OrderLoadedState(cars, services, user));
     } catch (e) {

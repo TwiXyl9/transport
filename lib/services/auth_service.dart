@@ -11,23 +11,22 @@ import 'package:transport/requests/requests_paths_names.dart';
 import '../models/prefs.dart';
 class AuthService {
 
-  Future<Auth> _authenticate(String prefix, Map<String, String> body) async {
+  Future<dynamic> _authenticate(String prefix, Map<String, String> body) async {
     final url = '$baseUrl$authPath$prefix';
-    late Auth auth;
     try {
       var response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: json.encode(body),
       );
-      auth = Auth.fromResponse(response);
+      return Auth.fromResponse(response);
     } catch (error) {
       print(error);
     }
-    return auth;
+    return null;
   }
 
-  Future<Auth> signup(String name, String phone, String email, String password, String confirmPassword) async {
+  Future<dynamic> signup(String name, String phone, String email, String password, String confirmPassword) async {
     return _authenticate('/',
       {
         'name': name,
@@ -39,7 +38,7 @@ class AuthService {
     );
   }
 
-  Future<Auth> login(String email, String password) async {
+  Future<dynamic> login(String email, String password) async {
     return _authenticate('/sign_in', {
       'email': email,
       'password': password,

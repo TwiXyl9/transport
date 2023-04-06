@@ -9,7 +9,6 @@ class User {
   late String email;
 
   User(this.id, this.name, this.phone, this.email);
-
   User.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];

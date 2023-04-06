@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../models/news.dart';
+import '../models/user.dart';
 import '../requests/requests_config.dart';
 
 class ApiService {
@@ -57,5 +58,17 @@ class ApiService {
 
     http.Response response = await http.post(Uri.parse(baseUrl), headers: headers, body: body);
     return response;
+  }
+  Future<dynamic> userShowRequest(String path, authHeaders) async {
+    var fullPath = apiUrl + path;
+    authHeaders.addAll(headers);
+    http.Response response = await http.get(Uri.parse(fullPath), headers: authHeaders as Map<String, String>);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return User.fromMap(data);
+    } else {
+      return null;
+    }
   }
 }

@@ -5,6 +5,7 @@ class Auth {
   late DateTime? expiryDate;
   late String? uid;
   late String? client;
+  late String? authorization;
   late int? userId;
   late String? errorMsg;
 
@@ -28,10 +29,15 @@ class Auth {
     }
   }
 
+  Auth.fromJson(json){
+    token = json['access-token'];
+    uid = json['uid'];
+    client = json['client'];
+  }
+
   Map<String, dynamic> mapFromFields() {
-    return {
-      'access-token': token, 'uid': uid, 'client': client
-    };
+    Map<String, String> data = {'access-token': token!, 'uid': uid!, 'client': client!};
+    return data;
   }
 
   bool get isAuth {

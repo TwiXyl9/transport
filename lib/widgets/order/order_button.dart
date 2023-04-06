@@ -17,17 +17,17 @@ class OrderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 80,
-      margin: EdgeInsets.all(30),
-      decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(8)
-      ),
-      child: Center(
-        child: TextButton(
-          onPressed: (){ showOrderDialog(); },
+    return GestureDetector(
+      onTap: () => showOrderDialog(),
+      child: Container(
+        width: 200,
+        height: 80,
+        margin: EdgeInsets.all(30),
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(8)
+        ),
+        child: Center(
           child: Text(
                 "Оставить заявку",
                 style: TextStyle(

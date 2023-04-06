@@ -4,23 +4,12 @@ import '../../../models/car.dart';
 import '../../cars/car_item_order_view.dart';
 import '../../services/service_item_view.dart';
 
-class CarsStep extends StatefulWidget {
+class CarsStep extends StatelessWidget {
   final List<Car> cars;
-  CarsStep({Key? key, required this.cars}) : super(key: key);
+  final int selectedCar;
+  final Function carCallback;
+  CarsStep({Key? key, required this.carCallback, required this.selectedCar, required this.cars}) : super(key: key);
 
-  @override
-  State<CarsStep> createState() => _CarsStepState();
-}
-
-
-class _CarsStepState extends State<CarsStep> {
-  late List<Car> _cars;
-  int groupValue = -1;
-  @override
-  void initState() {
-    _cars = widget.cars;
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -30,14 +19,9 @@ class _CarsStepState extends State<CarsStep> {
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
-            children: _cars.map((e) => CarItemOrderView(e, callBack, groupValue)).toList()
+            children: cars.map((e) => CarItemOrderView(e, carCallback, selectedCar)).toList()
         ),
       ),
     );
-  }
-  callBack(val) {
-    setState(() {
-      groupValue = val;
-    });
   }
 }

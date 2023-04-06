@@ -216,7 +216,6 @@ class _OrderDialogState extends State<OrderDialog> {
   void createOrder(context) {
     if (_formKey.currentState!.validate()) {
       try {
-        print(groupValue);
         if(groupValue==-1){
           showDialog(
             context: context,
