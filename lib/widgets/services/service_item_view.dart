@@ -37,7 +37,7 @@ class _ServiceItemViewState extends State<ServiceItemView> {
     return Card(
       elevation: 6,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.all(5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

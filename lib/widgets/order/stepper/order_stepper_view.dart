@@ -6,7 +6,9 @@ import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
-import 'package:transport/widgets/order/stepper/total_step.dart';
+import 'package:transport/widgets/order/stepper/total/total_step.dart';
+
+import '../../../models/service.dart';
 
 class OrderStepperView extends StatefulWidget {
   const OrderStepperView({Key? key}) : super(key: key);
@@ -129,7 +131,12 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 4,
         title: Text("Итог"),
-        content: state is OrderLoadedState? TotalStep(name: nameController.text, phone: phoneController.text, dateTime: dateTimeController.text, car: selectedCar > 0? state.cars.where((car) => car.id == selectedCar).first : state.cars[0], servicesCount: servicesCount,) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? TotalStep(
+          name: nameController.text,
+          phone: phoneController.text,
+          dateTime: dateTimeController.text,
+          car: selectedCar > 0? state.cars.where((car) => car.id == selectedCar).first : state.cars[0],
+          servicesCount: selectedServicesByNameCount(state.services),) : CircularProgressIndicator(),
       ),
     ];
   }
@@ -144,7 +151,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   }
   bool allFieldsValidation(){
     bool result = true;
-    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar > 0) {
+    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar < 1) {
       result = false;
     }
     return result;
@@ -155,9 +162,18 @@ class _OrderStepperViewState extends State<OrderStepperView> {
     });
   }
   servicesCallback(val){
-    print(val);
     setState(() {
       servicesCount = val;
     });
+  }
+  Map<Service, int> selectedServicesByNameCount(services){
+    Map<Service, int> new_map = Map<Service, int>();
+    servicesCount.forEach((key, value) {
+      if(value > 0) {
+        new_map[services
+            .firstWhere((serv) => serv.id == key)] = value;
+      }
+    });
+    return new_map;
   }
 }

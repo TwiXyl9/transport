@@ -22,8 +22,9 @@ class _CounterViewState extends State<CounterView> {
     return Container(
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey[300],
+        //border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(50),
+        color: Colors.white,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,13 +55,15 @@ class _CounterViewState extends State<CounterView> {
       constraints: BoxConstraints(minWidth: 32.0, minHeight: 32.0),
       onPressed: () => onPressed(),
       elevation: 2.0,
-      fillColor: Colors.grey[300],
+      fillColor: Colors.white,
       child: Icon(
         icon,
         color: Colors.black,
         size: 12.0,
       ),
-      shape: CircleBorder(),
+      shape: CircleBorder(
+          side: BorderSide(color: Colors.black)
+      ),
     );
   }
 }
