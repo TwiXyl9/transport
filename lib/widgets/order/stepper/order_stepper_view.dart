@@ -43,9 +43,16 @@ class _OrderStepperViewState extends State<OrderStepperView> {
                   //Do something with this information
                 } else {
                   if (fieldsAreValid()) {
-                    setState(() {
-                      currentStep += 1;
-                    });
+                    if (currentStep == lastStep - 1 && !allFieldsValidation()) {
+                      showDialog(
+                          context: context,
+                          builder: (ctx) => ErrorDialogView(ctx: ctx, message: "Вы не заполнили все поля или не выбрали машину!")
+                      );
+                    } else {
+                      setState(() {
+                        currentStep += 1;
+                      });
+                    }
                   }
                 }
               },
@@ -116,7 +123,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 3 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 3,
         title: Text("Дополнительные услуги"),
-        content: state is OrderLoadedState? ServicesStep(selectedServices: servicesCount = { for (var e in state.services) e.id : 0 }, servicesCallback: servicesCallback, services: state.services) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? ServicesStep(selectedServices: servicesCount.length == 0? servicesCount = { for (var e in state.services) e.id : 0 } : servicesCount, servicesCallback: servicesCallback, services: state.services) : CircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
