@@ -15,11 +15,14 @@ class CarsStep extends StatelessWidget {
     return Center(
       child: SizedBox(
         height: 420,
-        child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            children: cars.map((e) => CarItemOrderView(e, carCallback, selectedCar)).toList()
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              children: cars.map((e) => CarItemOrderView(e, carCallback, selectedCar)).toList()
+          ),
         ),
       ),
     );

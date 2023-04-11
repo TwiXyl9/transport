@@ -11,20 +11,22 @@ import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
 
 import '../models/auth.dart';
+import '../models/cargo_type.dart';
 
 @immutable
 abstract class OrderEvent {}
 class OrderInitialEvent extends OrderEvent {}
 class OrderSetCarEvent extends OrderEvent {}
 class OrderCreateEvent extends OrderEvent {
-  List<int> servicesId;
+  Map<int, int> servicesId;
   int carId;
+  int cargoTypeId;
   String name;
   String phone;
   String dateTime;
   int? userId;
 
-  OrderCreateEvent(this.name, this.phone, this.dateTime,this.servicesId, this.carId, this.userId);
+  OrderCreateEvent(this.name, this.phone, this.dateTime,this.servicesId, this.carId, this.userId, this.cargoTypeId);
 }
 
 @immutable
@@ -34,9 +36,9 @@ class OrderLoadInProcessState extends OrderState {}
 class OrderLoadedState extends OrderState {
   final List<Car> cars;
   final List<Service> services;
+  final List<CargoType> cargoTypes;
   final User? user;
-  late String name;
-  OrderLoadedState(this.cars, this.services, this.user);
+  OrderLoadedState(this.cars, this.services, this.user, this.cargoTypes);
 }
 class OrderInProcessState extends OrderState {}
 class OrderCreatedState extends OrderState {}
@@ -62,11 +64,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   onOrderInitialEvent(OrderInitialEvent event, Emitter<OrderState> emit) async {
     List<Car> cars = [];
     List<Service> services = [];
+    List<CargoType> cargoTypes = [];
     User? user = null;
     try {
       emit(OrderLoadInProcessState());
       cars = await ApiService().carsIndexRequest(carsPath);
       services = await ApiService().servicesIndexRequest(servicesPath);
+      cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
       var userId = await _sessionDataProvider.getAccountId();
       if (userId != null) {
         var authString = await _sessionDataProvider.getAuthData();
@@ -75,7 +79,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
         print(user);
       }
-      emit(OrderLoadedState(cars, services, user));
+      emit(OrderLoadedState(cars, services, user, cargoTypes));
     } catch (e) {
       emit(OrderFailureState(e.toString()));
     }

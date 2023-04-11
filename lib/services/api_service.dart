@@ -5,6 +5,7 @@ import 'package:transport/models/service.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import '../models/cargo_type.dart';
 import '../models/news.dart';
 import '../models/user.dart';
 import '../requests/requests_config.dart';
@@ -69,6 +70,16 @@ class ApiService {
       return User.fromMap(data);
     } else {
       return null;
+    }
+  }
+  Future<List<CargoType>> cargoTypesIndexRequest(path) async {
+    var fullPath = apiUrl + path;
+    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((types) => CargoType.fromMap(types)).toList();
+    } else {
+      return [];
     }
   }
 }
