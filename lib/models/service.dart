@@ -19,6 +19,6 @@ class Service {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'service':{'name': name, 'price': price}};
+    return {'service':{'id': id, 'name': name, 'price': price}};
   }
 }

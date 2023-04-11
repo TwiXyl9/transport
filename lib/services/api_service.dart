@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:transport/models/car.dart';
+import 'package:transport/models/order.dart';
 import 'package:transport/models/service.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -37,7 +38,7 @@ class ApiService {
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      return data.map((cars) => Car.fromMap(cars)).toList();
+      return data.map((car) => Car.fromMap(car)).toList();
     } else {
       return [];
     }
@@ -51,14 +52,6 @@ class ApiService {
     } else {
       return [];
     }
-  }
-  Future<http.Response> auth(String email, String password) async {
-    var body = jsonEncode({
-      'email' : email, 'password' : password
-    });
-
-    http.Response response = await http.post(Uri.parse(baseUrl), headers: headers, body: body);
-    return response;
   }
   Future<dynamic> userShowRequest(String path, authHeaders) async {
     var fullPath = apiUrl + path;
@@ -78,6 +71,27 @@ class ApiService {
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
       return data.map((types) => CargoType.fromMap(types)).toList();
+    } else {
+      return [];
+    }
+  }
+  Future<bool> createOrderRequest(path) async {
+    var result = true;
+    var fullPath = apiUrl + path;
+    var body = jsonEncode({
+    });
+    http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: body);
+    if(response.statusCode != 201){
+      result = false;
+    }
+    return result;
+  }
+  Future<List<Order>> orderIndexRequest(path) async {
+    var fullPath = apiUrl + path;
+    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((order) => Order.fromMap(order)).toList();
     } else {
       return [];
     }

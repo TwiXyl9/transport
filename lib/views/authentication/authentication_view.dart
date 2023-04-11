@@ -10,6 +10,8 @@ import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/components/image_container.dart';
 import 'package:transport/helpers/validation_helper.dart';
 
+import '../../widgets/error/error_dialog_view.dart';
+
 class AuthenticationView extends StatefulWidget {
 
   AuthenticationView({Key? key}) : super(key: key);
@@ -22,38 +24,6 @@ class _AuthenticationViewState extends State<AuthenticationView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Some error'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Future<void> signIn(AuthenticationBloc bloc) async {
-    if(_formKey.currentState!.validate()){
-      try {
-        final email = emailController.text;
-        final password = passwordController.text;
-        bloc.add(AuthenticationLoginEvent(email: email, password: password));
-
-      } catch (error) {
-        var errorMessage = error.toString();
-        _showErrorDialog(errorMessage);
-      }
-    }
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -70,12 +40,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
               ),
             );
           }
-          if(state is AuthenticationAuthorizedState){
-            CherryToast.success(
-              title: Text('Успешная авторизация!'),
-              borderRadius: 0,
-            ).show(context);
-          }
+
         },
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
@@ -183,6 +148,23 @@ class _AuthenticationViewState extends State<AuthenticationView> {
         ),
       ),
     );
+  }
+
+  Future<void> signIn(AuthenticationBloc bloc) async {
+    if(_formKey.currentState!.validate()){
+      try {
+        final email = emailController.text;
+        final password = passwordController.text;
+        bloc.add(AuthenticationLoginEvent(email: email, password: password));
+
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
+    }
   }
 }
 

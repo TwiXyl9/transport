@@ -23,15 +23,17 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
+  int userId = 0;
   int selectedCar = 0;
   int selectedCargoType = 0;
   final personInfoFormKey = GlobalKey<FormState>();
   final dateFormKey = GlobalKey<FormState>();
-  late Map<int,int> servicesCount = Map<int,int>();
+  late Map<int,int> selectedServices = Map<int,int>();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
+          final bloc = context.read<OrderBloc>();
           int lastStep = getSteps(state).length - 1;
           bool isLastStep = (currentStep == lastStep);
           return Stepper(
@@ -44,7 +46,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
               }),
               onStepContinue: () {
                 if (isLastStep) {
-
+                  createOrder(bloc);
                 } else {
                   if (fieldAreValid(currentStep)) {
                     if (currentStep == lastStep - 1 && !allFieldsValidation()) {
@@ -101,6 +103,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
 
   List<Step> getSteps(OrderState state){
     if(state is OrderLoadedState && state.user != null){
+      userId = state.user!.id;
       nameController.text = state.user!.name;
       phoneController.text = state.user!.phone;
     }
@@ -133,7 +136,11 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 4,
         title: Text("Дополнительные услуги"),
-        content: state is OrderLoadedState? ServicesStep(selectedServices: servicesCount.length == 0? servicesCount = { for (var e in state.services) e.id : 0 } : servicesCount, servicesCallback: servicesCallback, services: state.services) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? ServicesStep(
+            selectedServices: selectedServices.length == 0? selectedServices = { for (var e in state.services) e.id : 0 } : selectedServices,
+            servicesCallback: servicesCallback,
+            services: state.services
+        ) : CircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 5 ? StepState.complete : StepState.indexed,
@@ -176,7 +183,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   }
   servicesCallback(val){
     setState(() {
-      servicesCount = val;
+      selectedServices = val;
     });
   }
   cargoTypesCallback(val){
@@ -186,7 +193,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   }
   Map<Service, int> selectedServicesByNameCount(services){
     Map<Service, int> new_map = Map<Service, int>();
-    servicesCount.forEach((key, value) {
+    selectedServices.forEach((key, value) {
       if(value > 0) {
         new_map[services
             .firstWhere((serv) => serv.id == key)] = value;
@@ -194,5 +201,32 @@ class _OrderStepperViewState extends State<OrderStepperView> {
     });
     return new_map;
   }
-
+  void createOrder(OrderBloc bloc) {
+    try {
+      var name = nameController.text;
+      var phone = phoneController.text;
+      var dateTime = dateTimeController.text;
+      var servicesId = selectedServices;
+      var carId = selectedCar;
+      var cargoTypeId = selectedCargoType;
+      bloc.add(
+          OrderCreateEvent(
+            name,
+            phone,
+            dateTime,
+            servicesId,
+            carId,
+            userId,
+            cargoTypeId
+          )
+      );
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
+      Navigator.of(context).pop();
+  }
 }

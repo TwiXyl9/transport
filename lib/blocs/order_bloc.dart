@@ -12,6 +12,7 @@ import 'package:transport/services/api_service.dart';
 
 import '../models/auth.dart';
 import '../models/cargo_type.dart';
+import '../models/order.dart';
 
 @immutable
 abstract class OrderEvent {}
@@ -68,6 +69,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     User? user = null;
     try {
       emit(OrderLoadInProcessState());
+      List<Order> orders = await ApiService().orderIndexRequest(ordersPath);
+      print(orders.length.toString());
+      orders.forEach((order) {
+        print(order.mapFromFields());
+      });
       cars = await ApiService().carsIndexRequest(carsPath);
       services = await ApiService().servicesIndexRequest(servicesPath);
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
@@ -84,11 +90,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderFailureState(e.toString()));
     }
   }
-  onOrderCreateEvent(OrderCreateEvent event, Emitter<OrderState> emit){
+  onOrderCreateEvent(OrderCreateEvent event, Emitter<OrderState> emit) async {
     try {
       emit(OrderInProcessState());
 
-      emit(OrderCreatedState());
+      if (true) {
+
+        emit(OrderCreatedState());
+      } else {
+        emit(OrderCreatedState());
+      }
     } catch (e) {
       emit(OrderFailureState(e.toString()));
     }

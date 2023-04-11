@@ -10,7 +10,7 @@ class News {
     id = map['id'];
     title = map['title'];
     description = map['description'];
-    image = map['image'];
+    image = map['image_url'];
   }
 
   Map<String, dynamic> mapFromFields() {

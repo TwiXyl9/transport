@@ -27,11 +27,11 @@ class CarInfoView extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           AutoSizeText(
-              'Грузоподъемность до: ${car.loadCapacity} т.\n'
-              'Ширина: ${car.width}\n'
-              'Высота: ${car.height}\n'
-              'Длина: ${car.length}\n'
-              'Кол-во европаллет: ${car.numOfPallets}\n'
+              'Грузоподъемность до: ${car.capacity.loadCapacity} т.\n'
+              'Ширина: ${car.capacity.width}\n'
+              'Высота: ${car.capacity.height}\n'
+              'Длина: ${car.capacity.length}\n'
+              'Кол-во европаллет: ${car.capacity.numOfPallets}\n'
               'Тип борта: ${car.tailType}\n'
               'Цена за час: ${car.price} р.',
               textAlign: TextAlign.start
