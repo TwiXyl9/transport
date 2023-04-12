@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/blocs/account_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<OrderBloc>(
           create: (context) => OrderBloc()..add(OrderInitialEvent()),
+        ),
+        BlocProvider<AccountBloc>(
+          create: (context) => AccountBloc()..add(AccountInitialEvent()),
         ),
       ],
       child: MaterialApp(

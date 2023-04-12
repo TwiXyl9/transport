@@ -11,7 +11,7 @@ import '../requests/requests_paths_names.dart';
 
 @immutable
 abstract class AccountEvent {}
-class InitialAccountEvent extends AccountEvent {}
+class AccountInitialEvent extends AccountEvent {}
 
 @immutable
 abstract class AccountState {}
@@ -25,15 +25,14 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   final _sessionDataProvider = SessionDataProvider();
   List<Order> orders = [];
   AccountBloc() : super(AccountInitialState()) {
-    on<InitialAccountEvent>((event, emit) async {
+    on<AccountInitialEvent>((event, emit) async {
       await onInitialAccountEvent(event, emit);
     });
   }
-  onInitialAccountEvent(InitialAccountEvent event, Emitter<AccountState> emit) async {
+  onInitialAccountEvent(AccountInitialEvent event, Emitter<AccountState> emit) async {
     var userId = await _sessionDataProvider.getAccountId();
     if (userId != null) {
       orders = await ApiService().orderIndexRequest(ordersPath);
-      orders = orders.where((e) => e.user != null? e.user!.id == userId : ).toList();
     }
     emit(AccountLoadedState(orders));
   }
