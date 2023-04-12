@@ -1,7 +1,7 @@
 import 'package:transport/models/point.dart';
 
 class Route {
-  late int id;
+  late int? id;
   late Point start_point;
   late Point end_point;
 
@@ -14,6 +14,6 @@ class Route {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'route':{'id': id, 'start_point': start_point.mapFromFields(), 'end_point': end_point.mapFromFields()}};
+    return {'id': id, 'start_point': start_point.mapFromFields(), 'end_point': end_point.mapFromFields()};
   }
 }

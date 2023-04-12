@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/order_bloc.dart';
+import 'package:transport/models/cargo_type.dart';
+import 'package:transport/models/route.dart' as OrderRoute;
 import 'package:transport/widgets/error/error_dialog_view.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
@@ -8,6 +10,10 @@ import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
 import 'package:transport/widgets/order/stepper/total/total_step.dart';
 
+import '../../../models/car.dart';
+import '../../../models/order.dart';
+import '../../../models/order_service.dart';
+import '../../../models/point.dart';
 import '../../../models/service.dart';
 import 'cargo_types_step.dart';
 
@@ -24,11 +30,11 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
   int userId = 0;
-  int selectedCar = 0;
-  int selectedCargoType = 0;
+  Car selectedCar = new Car(0);
+  CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();
   final dateFormKey = GlobalKey<FormState>();
-  late Map<int,int> selectedServices = Map<int,int>();
+  late List<OrderService> selectedServices = [];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
@@ -137,7 +143,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         isActive: currentStep >= 4,
         title: Text("Дополнительные услуги"),
         content: state is OrderLoadedState? ServicesStep(
-            selectedServices: selectedServices.length == 0? selectedServices = { for (var e in state.services) e.id : 0 } : selectedServices,
+            selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
             servicesCallback: servicesCallback,
             services: state.services
         ) : CircularProgressIndicator(),
@@ -150,9 +156,9 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           name: nameController.text,
           phone: phoneController.text,
           dateTime: dateTimeController.text,
-          cargoType: selectedCargoType > 0? state.cargoTypes.where((type) => type.id == selectedCargoType).first : state.cargoTypes[0],
-          car: selectedCar > 0? state.cars.where((car) => car.id == selectedCar).first : state.cars[0],
-          servicesCount: selectedServicesByNameCount(state.services),) : CircularProgressIndicator(),
+          cargoType: selectedCargoType.id > 0? selectedCargoType : state.cargoTypes[0],
+          car: selectedCar.id != 0? selectedCar : state.cars[0],
+          services: selectedServices,) : CircularProgressIndicator(),
       ),
     ];
   }
@@ -162,16 +168,16 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       result = false;
     } else if (stepNum == 1 && !dateFormKey.currentState!.validate()) {
       result = false;
-    } else if (stepNum == 2 && selectedCargoType == 0) {
+    } else if (stepNum == 2 && selectedCargoType.id == 0) {
       result = false;
-    } else if (stepNum == 3 && selectedCar == 0) {
+    } else if (stepNum == 3 && selectedCar.id == 0) {
       result = false;
     }
     return result;
   }
   bool allFieldsValidation(){
     bool result = true;
-    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar < 1 || selectedCargoType < 1) {
+    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar.id == 0 || selectedCargoType.id < 1) {
       result = false;
     }
     return result;
@@ -191,34 +197,16 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       selectedCargoType = val;
     });
   }
-  Map<Service, int> selectedServicesByNameCount(services){
-    Map<Service, int> new_map = Map<Service, int>();
-    selectedServices.forEach((key, value) {
-      if(value > 0) {
-        new_map[services
-            .firstWhere((serv) => serv.id == key)] = value;
-      }
-    });
-    return new_map;
-  }
   void createOrder(OrderBloc bloc) {
     try {
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
-      var servicesId = selectedServices;
-      var carId = selectedCar;
-      var cargoTypeId = selectedCargoType;
+      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
+      Order order = new Order(0, name, phone, dateTime, null, selectedCar, selectedCargoType, route, selectedServices);
+
       bloc.add(
-          OrderCreateEvent(
-            name,
-            phone,
-            dateTime,
-            servicesId,
-            carId,
-            userId,
-            cargoTypeId
-          )
+          OrderCreateEvent(order)
       );
       } catch (error) {
         var errorMessage = error.toString();

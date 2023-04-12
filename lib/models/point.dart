@@ -14,6 +14,6 @@ class Point {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'id': id, 'latitude': latitude, 'longitude': longitude, 'address': address};
+    return {'latitude': latitude, 'longitude': longitude, 'address': address};
   }
 }

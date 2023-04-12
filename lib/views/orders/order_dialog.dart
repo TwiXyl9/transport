@@ -22,20 +22,13 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final dateController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  late DateTime date;
-  late TimeOfDay time;
-  int groupValue = -1;
-  late Map<int,int> selectedServices = Map<int,int>();
 
     @override
     Widget build(BuildContext context) {
       return BlocListener<OrderBloc, OrderState>(
       listener: (context, state) {
         if(state is OrderFailureState){
+          print(state.error);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),

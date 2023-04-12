@@ -6,7 +6,7 @@ import '../../services/service_item_view.dart';
 
 class CarsStep extends StatelessWidget {
   final List<Car> cars;
-  final int selectedCar;
+  final Car selectedCar;
   final Function carCallback;
   CarsStep({Key? key, required this.carCallback, required this.selectedCar, required this.cars}) : super(key: key);
 

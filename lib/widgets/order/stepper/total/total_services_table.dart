@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:transport/models/order_service.dart';
 
 import '../../../../models/service.dart';
 
 class TotalServicesTable extends StatelessWidget {
-  final Map<Service,int> services;
+  final List<OrderService> services;
   TotalServicesTable({Key? key, required this.services}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Table(
-      children: services.entries.map((entry) {
-        if(entry.value > 0) {
+      children: services.map((e) {
+        if(e.amount > 0) {
           return TableRow(
               children: [
-                Text(entry.key.name),
-                Text("${entry.value}"),
-                Text("${entry.key.price * entry.value} р."),
+                Text(e.service.name),
+                Text("${e.service.price} р. x ${e.amount}"),
+                Text("${e.service.price * e.amount} р."),
               ]
           );
         } else {

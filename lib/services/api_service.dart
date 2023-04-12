@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:transport/models/car.dart';
@@ -75,16 +77,15 @@ class ApiService {
       return [];
     }
   }
-  Future<bool> createOrderRequest(path) async {
-    var result = true;
+  Future<dynamic> createOrderRequest(path, body) async {
     var fullPath = apiUrl + path;
-    var body = jsonEncode({
-    });
-    http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: body);
+    http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: json.encode(body));
+    final responseData = json.decode(response.body);
+    print(responseData);
     if(response.statusCode != 201){
-      result = false;
+      return new HttpException(responseData['errors']['full_messages']);
     }
-    return result;
+    return new Order.fromMap(responseData);
   }
   Future<List<Order>> orderIndexRequest(path) async {
     var fullPath = apiUrl + path;

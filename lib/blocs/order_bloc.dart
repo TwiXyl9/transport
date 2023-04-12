@@ -5,6 +5,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:meta/meta.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/models/car.dart';
+import 'package:transport/models/http_exception.dart';
+import 'package:transport/models/order_service.dart';
 import 'package:transport/models/service.dart';
 import 'package:transport/models/user.dart';
 import 'package:transport/requests/requests_paths_names.dart';
@@ -19,15 +21,9 @@ abstract class OrderEvent {}
 class OrderInitialEvent extends OrderEvent {}
 class OrderSetCarEvent extends OrderEvent {}
 class OrderCreateEvent extends OrderEvent {
-  Map<int, int> servicesId;
-  int carId;
-  int cargoTypeId;
-  String name;
-  String phone;
-  String dateTime;
-  int? userId;
+  Order order;
 
-  OrderCreateEvent(this.name, this.phone, this.dateTime,this.servicesId, this.carId, this.userId, this.cargoTypeId);
+  OrderCreateEvent(this.order);
 }
 
 @immutable
@@ -69,11 +65,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     User? user = null;
     try {
       emit(OrderLoadInProcessState());
-      List<Order> orders = await ApiService().orderIndexRequest(ordersPath);
-      print(orders.length.toString());
-      orders.forEach((order) {
-        print(order.mapFromFields());
-      });
       cars = await ApiService().carsIndexRequest(carsPath);
       services = await ApiService().servicesIndexRequest(servicesPath);
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
@@ -93,12 +84,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   onOrderCreateEvent(OrderCreateEvent event, Emitter<OrderState> emit) async {
     try {
       emit(OrderInProcessState());
-
-      if (true) {
-
+      var result = await ApiService().createOrderRequest(ordersPath, event.order.shortMapFromFields());
+      if (result.runtimeType != HttpException) {
         emit(OrderCreatedState());
       } else {
-        emit(OrderCreatedState());
+        emit(OrderFailureState("slkdfmlskdnflskdnf"));
       }
     } catch (e) {
       emit(OrderFailureState(e.toString()));

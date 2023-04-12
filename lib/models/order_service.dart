@@ -1,10 +1,10 @@
 import 'package:transport/models/service.dart';
 
 class OrderService {
-  late int id;
+  late int? id;
   late int amount;
   late Service service;
-  OrderService(this.id, this.amount);
+  OrderService(this.id, this.amount, this.service);
 
   OrderService.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -13,6 +13,6 @@ class OrderService {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'cargo_type':{'id' : id, 'name': amount,}};
+    return {'amount': amount, 'additional_service': service.mapFromFields()};
   }
 }

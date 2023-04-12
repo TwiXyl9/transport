@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:transport/models/order_service.dart';
 
 import '../../models/service.dart';
 import '../components/counter_view.dart';
 
 class ServiceItemView extends StatefulWidget {
   final Service service;
-  final Map<int,int> selectedServices;
+  final List<OrderService> selectedServices;
   final Function servicesCallback;
 
   const ServiceItemView(this.selectedServices, this.servicesCallback, this.service);
@@ -16,7 +17,7 @@ class ServiceItemView extends StatefulWidget {
 
 class _ServiceItemViewState extends State<ServiceItemView> {
   late Service _service;
-  late Map<int,int> _selectedServices;
+  late List<OrderService> _selectedServices;
   late Function _servicesCallback;
   @override
   void initState() {
@@ -27,10 +28,10 @@ class _ServiceItemViewState extends State<ServiceItemView> {
   }
   @override
   Widget build(BuildContext context) {
-    int count = _selectedServices[_service.id]!;
+    int count = _selectedServices.firstWhere((e) => e.service == _service).amount;
     setCountCallback(val){
       setState(() {
-        _selectedServices[_service.id] = val;
+        _selectedServices.firstWhere((e) => e.service == _service).amount = val;
         _servicesCallback(_selectedServices);
       });
     }

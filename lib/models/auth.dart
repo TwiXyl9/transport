@@ -14,11 +14,11 @@ class Auth {
   Auth.fromResponse(http.Response response) {
     final responseData = json.decode(response.body);
     if(responseData['errors'] != null){
-      if (responseData['errors']['full_messages'] != null) {
-        errorMsg = responseData['errors']['full_messages'][0];
-      } else {
+      //if (responseData['errors']['full_messages'] != null) {
+      //  errorMsg = responseData['errors']['full_messages'][0];
+      //} else {
         errorMsg = responseData['errors'][0];
-      }
+      //}
     } else {
       errorMsg = null;
       userId = responseData['data']['id'];

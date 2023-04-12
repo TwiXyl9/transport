@@ -32,7 +32,7 @@ class CarInfoView extends StatelessWidget {
               'Высота: ${car.capacity.height}\n'
               'Длина: ${car.capacity.length}\n'
               'Кол-во европаллет: ${car.capacity.numOfPallets}\n'
-              'Тип борта: ${car.tailType}\n'
+              'Тип борта: ${car.tailType.name}\n'
               'Цена за час: ${car.price} р.',
               textAlign: TextAlign.start
           ),

@@ -3,7 +3,7 @@ import 'package:transport/models/cargo_type.dart';
 
 class CargoTypesStep extends StatelessWidget {
   List<CargoType> types;
-  int value;
+  CargoType value;
   Function callback;
   CargoTypesStep({Key? key, required this.types, required this.value, required this.callback}) : super(key: key);
 
@@ -12,7 +12,7 @@ class CargoTypesStep extends StatelessWidget {
     return Container(
       child: DropdownButton(
         hint: Text("Выберите груз"),
-        value: value > 0 ? value : null,
+        value: value.id > 0 ? value : null,
           isExpanded: true,
           items: getItems,
           onChanged: (val)=>{
@@ -22,10 +22,10 @@ class CargoTypesStep extends StatelessWidget {
     );
   }
 
-  List<DropdownMenuItem<int>> get getItems{
-    List<DropdownMenuItem<int>> menuItems = [];
+  List<DropdownMenuItem<CargoType>> get getItems{
+    List<DropdownMenuItem<CargoType>> menuItems = [];
     types.forEach((type) {
-      var item = DropdownMenuItem(child: Text(type.name), value: type.id,);
+      var item = DropdownMenuItem(child: Text(type.name), value: type,);
       menuItems.add(item);
     });
     return menuItems;

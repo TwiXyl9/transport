@@ -6,18 +6,18 @@ import 'package:transport/widgets/cars/car_info_view.dart';
 class CarItemOrderView extends StatelessWidget {
   final Car car;
   Function selectCallback;
-  int groupValue;
-  CarItemOrderView(this.car, this.selectCallback, this.groupValue);
+  Car selectedCar;
+  CarItemOrderView(this.car, this.selectCallback, this.selectedCar);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        groupValue = car.id;
-        selectCallback(groupValue);
+        selectedCar = car;
+        selectCallback(selectedCar);
       },
       child: Container(
-        decoration: groupValue == car.id? BoxDecoration(
+        decoration: selectedCar == car? BoxDecoration(
           boxShadow: [
             BoxShadow(
               color: Colors.blue,
