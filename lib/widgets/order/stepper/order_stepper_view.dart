@@ -14,7 +14,7 @@ import '../../../models/car.dart';
 import '../../../models/order.dart';
 import '../../../models/order_service.dart';
 import '../../../models/point.dart';
-import '../../../models/service.dart';
+import '../../../models/user.dart';
 import 'cargo_types_step.dart';
 
 class OrderStepperView extends StatefulWidget {
@@ -29,7 +29,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
-  int userId = 0;
+  late User user;
   Car selectedCar = new Car(0);
   CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();
@@ -109,7 +109,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
 
   List<Step> getSteps(OrderState state){
     if(state is OrderLoadedState && state.user != null){
-      userId = state.user!.id;
+      user = state.user! != null ? state.user! : new User(null);
       nameController.text = state.user!.name;
       phoneController.text = state.user!.phone;
     }
@@ -203,7 +203,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
       OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
-      Order order = new Order(0, name, phone, dateTime, null, selectedCar, selectedCargoType, route, selectedServices);
+      Order order = new Order(0, name, phone, dateTime, null, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
 
       bloc.add(
           OrderCreateEvent(order)

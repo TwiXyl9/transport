@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -68,14 +69,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   onAuthLoginEvent(AuthenticationLoginEvent event, Emitter<AuthenticationState> emit) async {
     try {
       emit(AuthenticationInProgressState());
-      final authData = await AuthService().login(event.email, event.password,);
-      if(authData.errorMsg == null){
-        await _sessionDataProvider.setAuthData(jsonEncode(authData.mapFromFields()));
-        await _sessionDataProvider.setAccountId(authData.userId!);
+      final result = await AuthService().login(event.email, event.password,);
+      if(result != HttpException){
+        await _sessionDataProvider.setAuthData(jsonEncode(result.mapFromFields()));
+        await _sessionDataProvider.setAccountId(result.userId!);
         emit(AuthenticationAuthorizedState());
         onAuthRedirectToHomeEvent();
       } else{
-        emit(AuthenticationFailureState(authData.errorMsg!));
+        emit(AuthenticationFailureState(result.toString()));
       }
 
     } catch (e) {

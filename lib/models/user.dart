@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:transport/models/prefs.dart';
 
 class User {
-  late int id;
+  late int? id;
   late String name;
   late String phone;
   late String email;
-
-  User(this.id, this.name, this.phone, this.email);
+  User(this.id);
+  User.fromData(this.id, this.name, this.phone, this.email);
   User.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
