@@ -19,11 +19,15 @@ class AuthService {
         headers: headers,
         body: json.encode(body),
       );
-      return Auth.fromResponse(response);
+      final responseData = json.decode(response.body);
+      print(response.statusCode);
+      if (response.statusCode != 201 && response.statusCode != 200) {
+        return new HttpException(responseData['errors']['full_messages'][0]);
+      }
+      return Auth.fromMap(responseData, response.headers);
     } catch (error) {
       print(error);
     }
-    return null;
   }
 
   Future<dynamic> signup(String name, String phone, String email, String password, String confirmPassword) async {

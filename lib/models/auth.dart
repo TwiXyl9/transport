@@ -7,26 +7,15 @@ class Auth {
   late String? client;
   late String? authorization;
   late int? userId;
-  late String? errorMsg;
 
   Auth(this.token, this.expiryDate, this.uid, this.client, this.userId);
 
-  Auth.fromResponse(http.Response response) {
-    final responseData = json.decode(response.body);
-    if(responseData['errors'] != null){
-      //if (responseData['errors']['full_messages'] != null) {
-      //  errorMsg = responseData['errors']['full_messages'][0];
-      //} else {
-        errorMsg = responseData['errors'][0];
-      //}
-    } else {
-      errorMsg = null;
-      userId = responseData['data']['id'];
-      token = response.headers['access-token'];
-      uid = response.headers['uid'];
-      client = response.headers['client'];
-      expiryDate = new DateTime.fromMillisecondsSinceEpoch(int.parse(response.headers['expiry']!) * 1000);
-    }
+  Auth.fromMap(data, headers) {
+      userId = data['data']['id'];
+      token = headers['access-token'];
+      uid = headers['uid'];
+      client = headers['client'];
+      expiryDate = new DateTime.fromMillisecondsSinceEpoch(int.parse(headers['expiry']!) * 1000);
   }
 
   Auth.fromJson(json){

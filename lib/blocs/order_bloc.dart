@@ -88,7 +88,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       if (result.runtimeType != HttpException) {
         emit(OrderCreatedState());
       } else {
-        emit(OrderFailureState("slkdfmlskdnflskdnf"));
+        emit(OrderFailureState(result.toString()));
       }
     } catch (e) {
       emit(OrderFailureState(e.toString()));

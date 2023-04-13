@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:meta/meta.dart';
 import 'package:transport/helpers/navigation_helper.dart';
+import 'package:transport/models/http_exception.dart';
 import 'package:transport/routing/route_names.dart';
 import 'package:transport/services/auth_service.dart';
 
@@ -47,12 +48,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   onRegistrationSignUpEvent(RegistrationSignUpEvent event, Emitter<RegistrationState> emit) async {
     try {
       emit(RegistrationInProcessState());
-      final authData = await AuthService().signup(event.name, event.phone, event.email, event.password, event.confirmPassword);
-      if(authData.errorMsg == null){
+      final result = await AuthService().signup(event.name, event.phone, event.email, event.password, event.confirmPassword);
+      print(result);
+      if(result.runtimeType != HttpException){
         emit(RegistrationSuccessState());
         onRegistrationRedirectToAuthEvent();
       } else{
-        emit(RegistrationFailureState(authData.errorMsg!));
+        emit(RegistrationFailureState(result.toString()));
       }
     } catch (e) {
       emit(RegistrationFailureState(e.toString()));

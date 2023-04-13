@@ -78,14 +78,18 @@ class ApiService {
     }
   }
   Future<dynamic> createOrderRequest(path, body) async {
-    var fullPath = apiUrl + path;
-    http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: json.encode(body));
-    final responseData = json.decode(response.body);
-    print(responseData);
-    if(response.statusCode != 201){
-      return new HttpException(responseData['errors']['full_messages']);
+    try {
+      var fullPath = apiUrl + path;
+      http.Response response = await http.post(
+          Uri.parse(fullPath), headers: headers, body: json.encode(body));
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 201) {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return new Order.fromMap(responseData);
+    } catch(e){
+      print(e);
     }
-    return new Order.fromMap(responseData);
   }
   Future<List<Order>> orderIndexRequest(path) async {
     var fullPath = apiUrl + path;
