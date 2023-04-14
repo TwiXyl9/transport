@@ -50,14 +50,43 @@ class Order {
   }
   Map<String, dynamic> shortMapFromFields() {
     return {
-      'name': name,
-      'phone': phone,
-      'date': dateTime,
-      'car_id': car.id,
-      'cargo_type_id': cargoType.id,
-      'user_id': user!.id,
-      'route': route.mapFromFields(),
-      'order_additional_services_attributes': services.map((e) => e.mapFromFields()).toList()
+      'order': {
+        'name': name,
+        'phone': phone,
+        'date': dateTime,
+        'car_id': car.id,
+        'cargo_type_id': cargoType.id,
+        'user_id': user!.id,
+        'route': route.mapFromFields(),
+        'order_additional_services_attributes': services.map((e) => e.shortMapFromFields()).toList()
+      }
     };
   }
 }
+// {"name"=>"Иван",
+// "phone"=>"80291234567",
+// "date"=>"25.04.23, 16:56",
+// "car_id"=>2, "cargo_type_id"=>2,
+// "user_id"=>1,
+// "route"=>{"id"=>0, "start_point"=>{"latitude"=>54.3, "longitude"=>43.3, "address"=>"address1"},
+//                    "end_point"=>{"latitude"=>55.3, "longitude"=>45.3, "address"=>"address2"}},
+// "order_additional_services_attributes"=>[
+// {"amount"=>5, "additional_service_id"=>1},
+// {"amount"=>1, "additional_service_id"=>2},
+// {"amount"=>1, "additional_service_id"=>3}],
+// "order"=>{"phone"=>"80291234567", "name"=>"Иван", "date"=>"25.04.23, 16:56", "car_id"=>2, "user_id"=>1, "cargo_type_id"=>2}}
+
+
+
+
+// {"order"=>{
+// "name"=>"Иван",
+// "phone"=>"80291234567",
+// "date"=>"07.04.2023, 13:30",
+// "car_id"=>"1",
+// "cargo_type_id"=>"1",
+// "order_additional_services_attributes"=>[
+// {"amount"=>"3", "additional_service_id"=>"1"},
+// {"amount"=>"4", "additional_service_id"=>"2"}]},
+// "route"=>{"start_point"=>{"latitude"=>"53.3", "longitude"=>"27.4", "address"=>"Lenina 20"},
+// "end_point"=>{"latitude"=>"55.4", "longitude"=>"34.5", "address"=>"Ozeshko 22"}}}

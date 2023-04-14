@@ -14,6 +14,6 @@ class Route {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'id': id, 'start_point': start_point.mapFromFields(), 'end_point': end_point.mapFromFields()};
+    return {'start_point': start_point.mapFromFields(), 'end_point': end_point.mapFromFields()};
   }
 }

@@ -29,7 +29,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
-  late User user;
+  User user = new User(0,'','');
   Car selectedCar = new Car(0);
   CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();
@@ -42,6 +42,11 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           final bloc = context.read<OrderBloc>();
           int lastStep = getSteps(state).length - 1;
           bool isLastStep = (currentStep == lastStep);
+          if(state is OrderLoadedState && user.id == 0 && state.user.id != 0){
+            user = state.user!;
+            nameController.text = user.name;
+            phoneController.text = user.phone;
+          }
           return Stepper(
               type: StepperType.vertical,
               currentStep: currentStep,
@@ -108,11 +113,6 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   }
 
   List<Step> getSteps(OrderState state){
-    if(state is OrderLoadedState && state.user != null){
-      user = state.user! != null ? state.user! : new User(null);
-      nameController.text = state.user!.name;
-      phoneController.text = state.user!.phone;
-    }
     return <Step>[
       Step(
           state: currentStep > 0 ? fieldAreValid(0) ? StepState.complete : StepState.error : StepState.indexed,

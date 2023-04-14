@@ -7,7 +7,7 @@ class User {
   late String name;
   late String phone;
   late String email;
-  User(this.id);
+  User(this.id, this.name, this.phone);
   User.fromData(this.id, this.name, this.phone, this.email);
   User.fromMap(Map<String, dynamic> map) {
     id = map['id'];

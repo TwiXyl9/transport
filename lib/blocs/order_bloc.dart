@@ -34,7 +34,7 @@ class OrderLoadedState extends OrderState {
   final List<Car> cars;
   final List<Service> services;
   final List<CargoType> cargoTypes;
-  final User? user;
+  final User user;
   OrderLoadedState(this.cars, this.services, this.user, this.cargoTypes);
 }
 class OrderInProcessState extends OrderState {}
@@ -62,7 +62,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     List<Car> cars = [];
     List<Service> services = [];
     List<CargoType> cargoTypes = [];
-    User? user = null;
+    User user = new User(0,'','');
     try {
       emit(OrderLoadInProcessState());
       cars = await ApiService().carsIndexRequest(carsPath);
@@ -74,7 +74,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var authData = Auth.fromJson(jsonDecode(authString!));
         var authHeadersMap = authData.mapFromFields();
         user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        print(user);
       }
       emit(OrderLoadedState(cars, services, user, cargoTypes));
     } catch (e) {

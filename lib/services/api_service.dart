@@ -56,15 +56,20 @@ class ApiService {
     }
   }
   Future<dynamic> userShowRequest(String path, authHeaders) async {
-    var fullPath = apiUrl + path;
-    authHeaders.addAll(headers);
-    http.Response response = await http.get(Uri.parse(fullPath), headers: authHeaders as Map<String, String>);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      return User.fromMap(data);
-    } else {
-      return null;
+    try {
+      var fullPath = apiUrl + path;
+      authHeaders.addAll(headers);
+      http.Response response = await http.get(Uri.parse(fullPath), headers: authHeaders as Map<String, String>);
+      print(response.statusCode);
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        return new User.fromMap(responseData);
+      } else {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages'][0]);
+      }
+    } catch(e){
+      print(e);
     }
   }
   Future<List<CargoType>> cargoTypesIndexRequest(path) async {
@@ -84,7 +89,8 @@ class ApiService {
           Uri.parse(fullPath), headers: headers, body: json.encode(body));
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
-        return new HttpException(responseData['errors']['full_messages']);
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages'][0]);
       }
       return new Order.fromMap(responseData);
     } catch(e){
@@ -92,6 +98,16 @@ class ApiService {
     }
   }
   Future<List<Order>> orderIndexRequest(path) async {
+    var fullPath = apiUrl + path;
+    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((order) => Order.fromMap(order)).toList();
+    } else {
+      return [];
+    }
+  }
+  Future<List<Order>> usersOrdersIndexRequest(path) async {
     var fullPath = apiUrl + path;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {

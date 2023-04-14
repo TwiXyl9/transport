@@ -32,7 +32,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   onInitialAccountEvent(AccountInitialEvent event, Emitter<AccountState> emit) async {
     var userId = await _sessionDataProvider.getAccountId();
     if (userId != null) {
-      orders = await ApiService().orderIndexRequest(ordersPath);
+      orders = await ApiService().usersOrdersIndexRequest('/users/$userId/orders');
     }
     emit(AccountLoadedState(orders));
   }

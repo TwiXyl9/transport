@@ -5,7 +5,6 @@ class Auth {
   late DateTime? expiryDate;
   late String? uid;
   late String? client;
-  late String? authorization;
   late int? userId;
 
   Auth(this.token, this.expiryDate, this.uid, this.client, this.userId);
