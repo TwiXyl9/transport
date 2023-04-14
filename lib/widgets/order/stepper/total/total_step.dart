@@ -58,7 +58,8 @@ class TotalStep extends StatelessWidget {
                   Text("${car.price} р."),
                 ]
             ),
-            TableRow(
+            if (services.length > 0)
+              TableRow(
                 children: [
                   BoldText(text: "Услуги:"),
                   Container(),

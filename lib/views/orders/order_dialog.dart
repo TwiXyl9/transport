@@ -31,7 +31,7 @@ class _OrderDialogState extends State<OrderDialog> {
           print(state.error);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.error),
+              content: Text("Что-то пошло не так. Заявка не создана"),
               backgroundColor: Theme
                   .of(context)
                   .errorColor,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../components/bold_text.dart';
+
 class TotalPriceTable extends StatelessWidget {
   final double price;
   TotalPriceTable({Key? key,required this.price}) : super(key: key);
@@ -20,9 +22,9 @@ class TotalPriceTable extends StatelessWidget {
         ),
         TableRow(
             children: [
-              Text("Стоимость: "),
+              BoldText(text: "Стоимость: "),
               Container(),
-              Text("${price} р."),
+              BoldText(text: "${price} р."),
             ]
         ),
       ],

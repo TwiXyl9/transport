@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/models/car.dart';
 import 'package:transport/models/http_exception.dart';
-import 'package:transport/models/order_service.dart';
 import 'package:transport/models/service.dart';
 import 'package:transport/models/user.dart';
 import 'package:transport/requests/requests_paths_names.dart';
@@ -84,6 +83,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     try {
       emit(OrderInProcessState());
       var result = await ApiService().createOrderRequest(ordersPath, event.order.shortMapFromFields());
+      print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(OrderCreatedState());
       } else {

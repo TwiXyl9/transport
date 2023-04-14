@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:transport/models/car.dart';
 import 'package:transport/models/order.dart';
 import 'package:transport/models/service.dart';
+import 'package:transport/models/http_exception.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -90,7 +91,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages'][0]);
+        return new HttpException(responseData['errors']['full_messages']);
       }
       return new Order.fromMap(responseData);
     } catch(e){

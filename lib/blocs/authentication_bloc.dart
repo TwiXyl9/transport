@@ -10,6 +10,7 @@ import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/routing/route_names.dart';
 import 'package:transport/services/auth_service.dart';
+import 'package:transport/models/http_exception.dart';
 
 @immutable
 abstract class AuthenticationEvent {}
@@ -70,7 +71,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       emit(AuthenticationInProgressState());
       final result = await AuthService().login(event.email, event.password,);
-      if(result != HttpException){
+      if(result != null && result.runtimeType != HttpException){
         await _sessionDataProvider.setAuthData(jsonEncode(result.mapFromFields()));
         await _sessionDataProvider.setAccountId(result.userId!);
         emit(AuthenticationAuthorizedState());
