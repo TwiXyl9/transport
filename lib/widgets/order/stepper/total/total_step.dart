@@ -4,18 +4,17 @@ import 'package:transport/models/cargo_type.dart';
 import 'package:transport/models/order_service.dart';
 import 'package:transport/widgets/order/stepper/total/total_price_table.dart';
 import 'package:transport/widgets/order/stepper/total/total_services_table.dart';
-
-import '../../../../models/service.dart';
 import '../../../components/bold_text.dart';
 
 class TotalStep extends StatelessWidget {
   final String name;
   final String phone;
   final String dateTime;
+  final double totalPrice;
   final Car car;
   final CargoType cargoType;
   List<OrderService> services;
-  TotalStep({Key? key, required this.name, required this.phone, required this.dateTime, required this.car, required this.cargoType, required this.services}) : super(key: key);
+  TotalStep({Key? key, required this.name, required this.phone, required this.dateTime, required this.totalPrice, required this.car, required this.cargoType, required this.services}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +68,8 @@ class TotalStep extends StatelessWidget {
           ],
         ),
         TotalServicesTable(services: services),
-        TotalPriceTable(price: getTotalPrice()),
+        TotalPriceTable(price: totalPrice),
       ],
     );
-  }
-  double getTotalPrice(){
-    double result = car.price;
-    services.forEach((e) {
-      result += e.amount * e.service.price;
-    });
-    return result;
   }
 }

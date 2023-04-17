@@ -21,11 +21,13 @@ class AccountView extends StatelessWidget {
           width: 100,
           height: 50,
           child: Center(
-            child: Column(
-              children: [
-                state is AccountLoadedState? OrderListView(state.orders) : Container(),
-                CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc)),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  state is AccountLoadedState? OrderListView(state.orders) : Container(),
+                  CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc)),
+                ],
+              ),
             ),
           ),
         );

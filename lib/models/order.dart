@@ -13,18 +13,20 @@ class Order {
   late String name;
   late String phone;
   late String dateTime;
+  late double totalPrice;
   late String? stage;
   late Car car;
   late CargoType cargoType;
   late Route route;
   late List<OrderService> services = [];
-  Order(this.id, this.name, this.phone, this.dateTime, this.stage, this.car, this.cargoType,this.route, this.services, this.user);
+  Order(this.id, this.name, this.phone, this.dateTime, this.stage, this.totalPrice, this.car, this.cargoType,this.route, this.services, this.user);
 
   Order.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
     phone = map['phone'];
     dateTime = map['date'];
+    totalPrice = map['total_price'];
     stage = map['stage'];
     car = Car.fromMap(map['car']);
     cargoType = CargoType.fromMap(map['cargo_type']);
@@ -42,6 +44,7 @@ class Order {
       'name': name,
       'phone': phone,
       'date': dateTime,
+      'total_price': totalPrice,
       'stage': stage,
       'car': car.mapFromFields(),
       'route': route.mapFromFields(),
@@ -54,9 +57,10 @@ class Order {
         'name': name,
         'phone': phone,
         'date': dateTime,
+        'total_price': totalPrice,
         'car_id': car.id,
         'cargo_type_id': cargoType.id,
-        'user_id': user!.id,
+        if (user!.id! > 0) 'user_id': user!.id,
         'route': route.mapFromFields(),
         'order_additional_services_attributes': services.map((e) => e.shortMapFromFields()).toList()
       }

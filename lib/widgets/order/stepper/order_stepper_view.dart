@@ -29,6 +29,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
+  late double totalPrice = 0;
   User user = new User(0,'','');
   Car selectedCar = new Car(0);
   CargoType selectedCargoType = new CargoType(0, '');
@@ -156,8 +157,9 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           name: nameController.text,
           phone: phoneController.text,
           dateTime: dateTimeController.text,
-          cargoType: selectedCargoType.id > 0? selectedCargoType : state.cargoTypes[0],
-          car: selectedCar.id != 0? selectedCar : state.cars[0],
+          totalPrice: totalPrice = getTotalPrice(),
+          cargoType: selectedCargoType.id > 0 ? selectedCargoType : state.cargoTypes[0],
+          car: selectedCar.id != 0 ? selectedCar : state.cars[0],
           services: selectedServices,) : CircularProgressIndicator(),
       ),
     ];
@@ -197,13 +199,23 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       selectedCargoType = val;
     });
   }
+  double getTotalPrice(){
+    double result = selectedCar.id! > 0 ? selectedCar.price : 0;
+    if (selectedServices.length > 0) {
+      selectedServices.forEach((e) {
+        result += e.amount * e.service.price;
+      });
+    }
+
+    return result;
+  }
   void createOrder(OrderBloc bloc) {
     try {
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
       OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
-      Order order = new Order(0, name, phone, dateTime, null, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
+      Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
 
       bloc.add(
           OrderCreateEvent(order)

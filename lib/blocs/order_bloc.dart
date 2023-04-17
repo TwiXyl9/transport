@@ -21,7 +21,6 @@ class OrderInitialEvent extends OrderEvent {}
 class OrderSetCarEvent extends OrderEvent {}
 class OrderCreateEvent extends OrderEvent {
   Order order;
-
   OrderCreateEvent(this.order);
 }
 
@@ -75,6 +74,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         print("Before - ${authHeadersMap}");
         user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
         print("After - ${authHeadersMap}");
+        _sessionDataProvider.deleteAuthData();
+        _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }
       emit(OrderLoadedState(cars, services, user, cargoTypes));
     } catch (e) {

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/views/orders/order_dialog.dart';
 
+import '../../blocs/order_bloc.dart';
+
 class OrderButton extends StatelessWidget {
-  BuildContext parent_context;
-  OrderButton(this.parent_context);
+  BuildContext parentContext;
+  OrderButton(this.parentContext);
 
   Future showOrderDialog() =>
       showDialog(
-        context: parent_context,
+        context: parentContext,
         builder: (BuildContext context) {
+          context.read<OrderBloc>().add(OrderInitialEvent());
           return OrderDialog();
         }
       );

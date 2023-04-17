@@ -27,6 +27,7 @@ class _OrderDialogState extends State<OrderDialog> {
     Widget build(BuildContext context) {
       return BlocListener<OrderBloc, OrderState>(
       listener: (context, state) {
+        print(state);
         if(state is OrderFailureState){
           print(state.error);
           ScaffoldMessenger.of(context).showSnackBar(

@@ -16,8 +16,8 @@ class OrderItemView extends StatelessWidget {
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Номер заказа: ${order.id}", style: TextStyle(fontWeight: FontWeight.bold),),
-                Text("Цена: ${order.cargoType.name} б.р", style: TextStyle(fontSize: 12),),
+                Text("Заказ № ${order.id}", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text("Цена: ${order.totalPrice} б.р", style: TextStyle(fontSize: 12),),
               ],
             ),
           ],
