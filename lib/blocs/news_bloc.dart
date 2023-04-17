@@ -10,6 +10,7 @@ import '../requests/requests_paths_names.dart';
 @immutable
 abstract class NewsEvent {}
 class InitialNewsEvent extends NewsEvent {}
+class CreateNewsEvent extends NewsEvent {}
 
 @immutable
 abstract class NewsState {}
@@ -17,6 +18,12 @@ class NewsInitialState extends NewsState {}
 class NewsLoadedState extends NewsState {
   final List<News> news;
   NewsLoadedState(this.news);
+}
+class NewsCreateInProcessState extends NewsState {}
+class NewsCreatedState extends NewsState {}
+class NewsFailureState extends NewsState {
+  String error;
+  NewsFailureState(this.error);
 }
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {

@@ -64,7 +64,8 @@ class ApiService {
       print(response.statusCode);
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
-        authHeaders['access-token'] = response.headers['access-token']!;
+        print(response.headers);
+        if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new User.fromMap(responseData);
       } else {
         print(responseData);

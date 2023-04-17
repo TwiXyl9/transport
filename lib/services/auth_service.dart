@@ -23,6 +23,7 @@ class AuthService {
       if (response.statusCode != 201 && response.statusCode != 200) {
         return new HttpException(responseData['errors'][0]);
       }
+
       return Auth.fromMap(responseData, response.headers);
     } catch (error) {
       print(error);

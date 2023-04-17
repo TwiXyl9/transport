@@ -2,9 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:transport/blocs/news_bloc.dart';
+import 'package:transport/widgets/components/custom_button.dart';
+
+import '../news/create_news_dialog.dart';
 
 class NewsSlider extends StatelessWidget {
   NewsSlider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+      if (state is NewsLoadedState){
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const Text("Новости"),
+                CustomCarouselSlider(
+                  items: newsToCarouselItem(state.news),
+                  height: 300,
+                  subHeight: 75,
+                  width: 500,
+                  autoplay: false,
+                ),
+                CustomButton(btnText: 'Добавить', onTap:() =>
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CreateNewsDialog();
+                      }
+                      )
+                )
+              ],
+            ),
+          ),
+        );
+      }
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    });
+  }
   List<CarouselItem> newsToCarouselItem(allNews) {
     List<CarouselItem> itemList = [];
     for (var i = 0; i < allNews.length; i++) {
@@ -34,36 +72,5 @@ class NewsSlider extends StatelessWidget {
     return itemList;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is NewsInitialState){
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      if (state is NewsLoadedState){
-        return SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const Text("Новости"),
-                CustomCarouselSlider(
-                  items: newsToCarouselItem(state.news),
-                  height: 300,
-                  subHeight: 75,
-                  width: 500,
-                  autoplay: false,
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    });
-  }
 }
 
