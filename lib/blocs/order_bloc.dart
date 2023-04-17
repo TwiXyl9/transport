@@ -72,7 +72,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var authString = await _sessionDataProvider.getAuthData();
         var authData = Auth.fromJson(jsonDecode(authString!));
         var authHeadersMap = authData.mapFromFields();
+        print("Before - ${authHeadersMap}");
         user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
+        print("After - ${authHeadersMap}");
       }
       emit(OrderLoadedState(cars, services, user, cargoTypes));
     } catch (e) {

@@ -59,11 +59,12 @@ class ApiService {
   Future<dynamic> userShowRequest(String path, authHeaders) async {
     try {
       var fullPath = apiUrl + path;
-      authHeaders.addAll(headers);
-      http.Response response = await http.get(Uri.parse(fullPath), headers: authHeaders as Map<String, String>);
+      Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.get(Uri.parse(fullPath), headers: fullHeaders as Map<String, String>);
       print(response.statusCode);
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
+        authHeaders['access-token'] = response.headers['access-token']!;
         return new User.fromMap(responseData);
       } else {
         print(responseData);
