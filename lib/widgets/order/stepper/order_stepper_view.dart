@@ -40,7 +40,6 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
-          final bloc = context.read<OrderBloc>();
           int lastStep = getSteps(state).length - 1;
           bool isLastStep = (currentStep == lastStep);
           if(state is OrderLoadedState && user.id == 0 && state.user.id != 0){
@@ -58,7 +57,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
               }),
               onStepContinue: () {
                 if (isLastStep) {
-                  createOrder(bloc);
+                  createOrder();
                 } else {
                   if (fieldAreValid(currentStep)) {
                     if (currentStep == lastStep - 1 && !allFieldsValidation()) {
@@ -209,8 +208,9 @@ class _OrderStepperViewState extends State<OrderStepperView> {
 
     return result;
   }
-  void createOrder(OrderBloc bloc) {
+  void createOrder() {
     try {
+      var bloc = context.read<OrderBloc>();
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;

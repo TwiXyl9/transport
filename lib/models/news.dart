@@ -1,19 +1,23 @@
+import 'package:http/http.dart';
+
 class News {
   late int id;
   late String title;
   late String description;
-  late String image;
+  late String imageUrl;
+  late MultipartFile imageFile;
 
-  News(this.id, this.title, this.description, this.image);
+  News(this.id, this.title, this.description, this.imageUrl);
+  News.withFile(this.id, this.title, this.description, this.imageFile);
 
   News.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     title = map['title'];
     description = map['description'];
-    image = map['image_url'];
+    imageUrl = map['image_url'];
   }
 
-  Map<String, dynamic> mapFromFields() {
-    return {'news':{'title': title, 'description': description, 'image': image}};
+  Map<String, String> mapFromFields(){
+    return {'title': title, 'description': description};
   }
 }

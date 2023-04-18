@@ -1,14 +1,17 @@
-import 'dart:io';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
+import 'package:transport/models/news.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/image_picker_view.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../components/custom_text_field.dart';
+import '../error/error_dialog_view.dart';
 
 class CreateNewsDialog extends StatefulWidget {
   const CreateNewsDialog({Key? key}) : super(key: key);
@@ -20,7 +23,7 @@ class CreateNewsDialog extends StatefulWidget {
 class _CreateNewsDialogState extends State<CreateNewsDialog> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  XFile? image;
+  XFile? selectedImage;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
                           }
                       ),
                       SizedBox(height: 20,),
-                      ImagePickerView(image, imageCallback),
+                      ImagePickerView(selectedImage, imageCallback),
                       CustomButton(btnText: 'Создать', onTap: createNews)
                     ],
                   ),
@@ -89,12 +92,29 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
 
   void imageCallback(img){
     setState(() {
-      image = img;
+      selectedImage = img;
     });
   }
-  void createNews(){
+  Future<void> createNews() async {
     if (formKey.currentState!.validate()) {
-
+      try {
+        var bloc = context.read<NewsBloc>();
+        var title = titleController.text;
+        var description = descriptionController.text;
+        final httpImage = http.MultipartFile.fromBytes('news[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
+        var news = new News.withFile(0, title, description, httpImage);
+        bloc.add(
+            CreateNewsEvent(news)
+        );
+        context.read<NewsBloc>().add(InitialNewsEvent());
+        Navigator.of(context).pop();
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
     }
   }
 }

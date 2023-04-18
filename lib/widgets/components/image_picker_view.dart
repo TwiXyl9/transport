@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:transport/widgets/components/custom_button.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ImagePickerView extends StatelessWidget {
   Function callback;
@@ -23,11 +22,8 @@ class ImagePickerView extends StatelessWidget {
         }
       },
       onChanged: (imagePath){
-        callback(imagePath);
+        callback(imagePath![0]);
       },
     );
-  }
-  void pickImage() async {
-    callback( await picker.pickImage(source: ImageSource.gallery));
   }
 }

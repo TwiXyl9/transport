@@ -48,7 +48,7 @@ class NewsSlider extends StatelessWidget {
     for (var i = 0; i < allNews.length; i++) {
       itemList.add(CarouselItem(
         image: NetworkImage(
-          allNews[i].image,
+          allNews[i].imageUrl,
         ),
         boxDecoration: BoxDecoration(
           gradient: LinearGradient(
