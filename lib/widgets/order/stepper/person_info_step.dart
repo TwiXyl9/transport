@@ -15,6 +15,7 @@ class PersonInfoStep extends StatelessWidget {
       key: formKey,
       child: Column(
         children: [
+          SizedBox(height: 20,),
           CustomTextField(
               controller: nameController,
               hint: 'Имя',

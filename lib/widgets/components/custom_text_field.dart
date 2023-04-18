@@ -38,8 +38,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           fillColor: Colors.grey.shade200,
           filled: true,
-          hintText: widget.hint,
-          hintStyle: TextStyle(color: Colors.grey[500]),
+          labelText: widget.hint,
+          labelStyle: TextStyle(color: Colors.grey[500]),
           suffixIcon: widget.type == FieldType.password? IconButton(
               icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
               onPressed: () {

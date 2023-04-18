@@ -105,14 +105,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -158,6 +150,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  flutter_form_builder:
+    dependency: transitive
+    description:
+      name: flutter_form_builder
+      sha256: "9551c7379adc01a3a3a1100057396407c9534ea8adc937d14a0edd96fcd9e1dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.8.0"
   flutter_layout_grid:
     dependency: "direct main"
     description:
@@ -248,54 +248,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  geolocator:
+  form_builder_image_picker:
     dependency: "direct main"
     description:
-      name: geolocator
-      sha256: "5c23f3613f50586c0bbb2b8f970240ae66b3bd992088cf60dd5ee2e6f7dde3a8"
+      name: form_builder_image_picker
+      sha256: "62a3bd4dccef216966b468a6c9f03e8dda3a218e3fe2f0540c7e56f170bcd267"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.2"
-  geolocator_android:
-    dependency: transitive
-    description:
-      name: geolocator_android
-      sha256: "2ba24690aee0a3e1b6b7bd47c2711a50c874e95e4c758346589d35194adf6d6a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.7"
-  geolocator_apple:
-    dependency: transitive
-    description:
-      name: geolocator_apple
-      sha256: "22b60ca3b8c0f58e6a9688ff855ee39ab813ca3f0c0609a48d282f6631266f2e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.5"
-  geolocator_platform_interface:
-    dependency: transitive
-    description:
-      name: geolocator_platform_interface
-      sha256: af4d69231452f9620718588f41acc4cb58312368716bfff2e92e770b46ce6386
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.7"
-  geolocator_web:
-    dependency: transitive
-    description:
-      name: geolocator_web
-      sha256: f68a122da48fcfff68bbc9846bb0b74ef651afe84a1b1f6ec20939de4d6860e1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.6"
-  geolocator_windows:
-    dependency: transitive
-    description:
-      name: geolocator_windows
-      sha256: f5911c88e23f48b598dd506c7c19eff0e001645bdc03bb6fecb9f4549208354d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
+    version: "3.1.0"
   get_it:
     dependency: "direct main"
     description:
@@ -364,10 +324,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.0"
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -677,14 +637,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  yandex_mapkit:
-    dependency: "direct main"
-    description:
-      name: yandex_mapkit
-      sha256: ab4054e41ad84b19192287c3d97060f1eef1cc81431bf6a8ae36e5b522b520a0
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
 sdks:
   dart: ">=2.19.4 <3.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.7.0"
