@@ -18,6 +18,6 @@ class News {
   }
 
   Map<String, String> mapFromFields(){
-    return {'title': title, 'description': description};
+    return {'news[title]': title, 'news[description]': description};
   }
 }

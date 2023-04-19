@@ -20,6 +20,7 @@ class OrderItemView extends StatelessWidget {
                 Text("Цена: ${order.totalPrice} б.р", style: TextStyle(fontSize: 12),),
               ],
             ),
+            Text("Статус: ${order.stage}", style: TextStyle(fontSize: 12),),
           ],
         ),
       ),

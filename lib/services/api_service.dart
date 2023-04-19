@@ -125,13 +125,11 @@ class ApiService {
       var fullPath = apiUrl + path;
       
       var request = http.MultipartRequest('POST', Uri.parse(fullPath))
-        ..fields['news[title]'] = news.title
-        ..fields['news[description]'] = news.description
+        ..fields.addAll(news.mapFromFields())
         ..files.add(news.imageFile);
       print(request.fields);
-      var response = await request.send();
-      var responsed = await http.Response.fromStream(response);
-      final responseData = json.decode(responsed.body);
+      var response = await http.Response.fromStream(await request.send());
+      final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
         return new HttpException(responseData['errors']['full_messages']);

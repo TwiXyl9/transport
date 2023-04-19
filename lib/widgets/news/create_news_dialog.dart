@@ -78,7 +78,7 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
                       ),
                       SizedBox(height: 20,),
                       ImagePickerView(selectedImage, imageCallback),
-                      CustomButton(btnText: 'Создать', onTap: createNews)
+                      CustomButton(btnText: 'Создать', onTap: createNews, btnColor: Colors.green)
                     ],
                   ),
                 ),

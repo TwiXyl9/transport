@@ -27,7 +27,7 @@ class AccountView extends StatelessWidget {
                 child: Column(
                   children: [
                     state is AccountLoadedState? OrderListView(state.orders) : Container(),
-                    CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc)),
+                    CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc), btnColor: Colors.black,),
                   ],
                 ),
               ),

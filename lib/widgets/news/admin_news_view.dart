@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:transport/models/news.dart';
+import 'package:transport/widgets/components/custom_button.dart';
+import 'package:transport/widgets/news/create_news_dialog.dart';
+import 'package:transport/widgets/news/news_list_view.dart';
+
+class AdminNewsView extends StatelessWidget {
+  List<News> allNews;
+  AdminNewsView(this.allNews);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          NewsListView(allNews),
+          CustomButton(btnText: 'Добавить', onTap:() =>
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CreateNewsDialog();
+                  }
+              ),
+              btnColor: Colors.black
+          )
+        ],
+      ),
+    );
+  }
+}

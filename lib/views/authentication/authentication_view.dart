@@ -82,7 +82,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                                     }
                                   }),
                               CustomButton(
-                                btnText: "Войти", onTap: () => signIn(bloc),),
+                                btnText: "Войти", onTap: () => signIn(bloc), btnColor: Colors.black),
                               Container(
                                 child: Text.rich(
                                     TextSpan(

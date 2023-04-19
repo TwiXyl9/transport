@@ -151,7 +151,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                                     return 'Пароли не совпадают';
                                   }
                                 }),
-                            CustomButton(btnText: "Зарегистрироваться", onTap:() => signUp(bloc),),
+                            CustomButton(btnText: "Зарегистрироваться", onTap:() => signUp(bloc), btnColor: Colors.black),
                             Container(
                               child: Text.rich(
                                   TextSpan(

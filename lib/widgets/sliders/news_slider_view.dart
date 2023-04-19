@@ -4,44 +4,31 @@ import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.da
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
+import '../../models/news.dart';
 import '../news/create_news_dialog.dart';
 
 class NewsSlider extends StatelessWidget {
-  NewsSlider({super.key});
+  List<News> allNews;
+  NewsSlider(this.allNews);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-      if (state is NewsLoadedState){
-        return SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const Text("Новости"),
-                CustomCarouselSlider(
-                  items: newsToCarouselItem(state.news),
-                  height: 300,
-                  subHeight: 75,
-                  width: 500,
-                  autoplay: false,
-                ),
-                CustomButton(btnText: 'Добавить', onTap:() =>
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CreateNewsDialog();
-                      }
-                      )
-                )
-              ],
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            const Text("Новости"),
+            CustomCarouselSlider(
+              items: newsToCarouselItem(allNews),
+              height: 300,
+              subHeight: 75,
+              width: 500,
+              autoplay: false,
             ),
-          ),
-        );
-      }
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    });
+          ],
+        ),
+      ),
+    );
   }
   List<CarouselItem> newsToCarouselItem(allNews) {
     List<CarouselItem> itemList = [];
