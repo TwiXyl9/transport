@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/models/news.dart';
 import 'package:transport/widgets/components/custom_button.dart';
@@ -11,6 +12,33 @@ class AdminNewsItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = Provider.of<NewsBloc>(context);
+    void deleteNews(){
+      try {
+        bloc.add(DeleteNewsEvent(news));
+        bloc.add(InitialNewsEvent());
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
+    }
+
+    void updateNews(context){
+      try {
+        var bloc = context.read<NewsBloc>();
+        bloc.add(UpdateNewsEvent(news));
+        context.read<NewsBloc>().add(InitialNewsEvent());
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
+    }
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -75,38 +103,12 @@ class AdminNewsItemView extends StatelessWidget {
                       color: Colors.black.withOpacity(0.5),
                       size: 18,
                     ),
-                    onPressed: () => deleteNews(context)
+                    onPressed: () => deleteNews()
                 )
             ),
           ],
         )
       ),
     );
-  }
-  void deleteNews(context){
-    try {
-      var bloc = context.read<NewsBloc>();
-      bloc.add(DeleteNewsEvent(news));
-      context.read<NewsBloc>().add(InitialNewsEvent());
-    } catch (error) {
-      var errorMessage = error.toString();
-        showDialog(
-          context: context,
-          builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-      );
-    }
-  }
-  void updateNews(context){
-    try {
-      var bloc = context.read<NewsBloc>();
-      bloc.add(UpdateNewsEvent(news));
-      context.read<NewsBloc>().add(InitialNewsEvent());
-    } catch (error) {
-      var errorMessage = error.toString();
-      showDialog(
-          context: context,
-          builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-      );
-    }
   }
 }

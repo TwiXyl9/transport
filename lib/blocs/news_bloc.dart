@@ -39,6 +39,10 @@ class NewsLoadedState extends NewsState {
 }
 class NewsCreateInProcessState extends NewsState {}
 class NewsCreatedState extends NewsState {}
+class NewsDeleteInProcessState extends NewsState {}
+class NewsDeletedState extends NewsState {}
+class NewsUpdateInProcessState extends NewsState {}
+class NewsUpdatedState extends NewsState {}
 class NewsFailureState extends NewsState {
   String error;
   NewsFailureState(this.error);
@@ -53,6 +57,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         await onInitialNewsEvent(event, emit);
       } else if (event is CreateNewsEvent) {
         await onCreateNewsEvent(event, emit);
+      } else if (event is UpdateNewsEvent) {
+        await onUpdateNewsEvent(event, emit);
+      } else if (event is DeleteNewsEvent) {
+        await onDeleteNewsEvent(event, emit);
       }
     }, transformer: sequential());
   }
@@ -84,6 +92,34 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(NewsCreatedState());
+      } else {
+        emit(NewsFailureState(result.toString()));
+      }
+    } catch (e) {
+      emit(NewsFailureState(e.toString()));
+    }
+  }
+  onUpdateNewsEvent(UpdateNewsEvent event, Emitter<NewsState> emit) async {
+    try {
+      emit(NewsUpdateInProcessState());
+      var result = await ApiService().createNewsRequest(newsPath, event.news);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(NewsUpdatedState());
+      } else {
+        emit(NewsFailureState(result.toString()));
+      }
+    } catch (e) {
+      emit(NewsFailureState(e.toString()));
+    }
+  }
+  onDeleteNewsEvent(DeleteNewsEvent event, Emitter<NewsState> emit) async {
+    try {
+      emit(NewsDeleteInProcessState());
+      var result = await ApiService().deleteNewsRequest(newsPath, event.news);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(NewsDeletedState());
       } else {
         emit(NewsFailureState(result.toString()));
       }

@@ -139,4 +139,20 @@ class ApiService {
       print(e);
     }
   }
+  Future<dynamic> deleteNewsRequest(path, news) async {
+    try {
+      var fullPath = apiUrl + path +"/${news.id}";
+
+      http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 204) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      } else {
+        return true;
+      }
+    } catch(e){
+      print(e);
+    }
+  }
 }
