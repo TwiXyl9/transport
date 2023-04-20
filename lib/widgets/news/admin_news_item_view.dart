@@ -27,8 +27,9 @@ class AdminNewsItemView extends StatelessWidget {
         );
       }
     }
-
+ 
     return Card(
+      margin: const EdgeInsets.all(10.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(

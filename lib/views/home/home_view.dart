@@ -13,23 +13,20 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NewsBloc, NewsState>(
         builder: (context, state) {
-          return Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    state is NewsLoadedState ? state.user.id! == 0 ? NewsSlider(state.news) : AdminNewsView(state.news) : CircularProgressIndicator(),
-                  ],
-                ),
-              ),
-
-              state is NewsLoadedState ? state.user.id! == 0 ? Container(
-                  alignment: Alignment.bottomRight,
-                  child: OrderButton(context)
-              ) : Container()  : CircularProgressIndicator(),
-            ],
-          );
+          return state is NewsLoadedState ?
+              state.user.id != 0 ?
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  NewsSlider(state.news),
+                  Container(
+                      alignment: Alignment.bottomRight,
+                      child: OrderButton(context)
+                  )
+                ],
+              ) :
+              AdminNewsView(state.news) :
+          CircularProgressIndicator();
         }
     );
   }
