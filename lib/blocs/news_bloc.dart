@@ -102,7 +102,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   onUpdateNewsEvent(UpdateNewsEvent event, Emitter<NewsState> emit) async {
     try {
       emit(NewsUpdateInProcessState());
-      var result = await ApiService().createNewsRequest(newsPath, event.news);
+      var result = await ApiService().updateNewsRequest(newsPath, event.news);
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(NewsUpdatedState());

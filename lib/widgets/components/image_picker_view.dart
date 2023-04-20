@@ -16,13 +16,14 @@ class ImagePickerView extends StatelessWidget {
       name: 'photos',
       decoration: const InputDecoration(labelText: 'Фото'),
       maxImages: 1,
+      initialValue: image != null? [image] : null,
       validator: (v) {
         if (v == null) {
           return 'Выберите фото';
         }
       },
       onChanged: (imagePath){
-        callback(imagePath![0]);
+        if(imagePath!.length > 0)callback(imagePath![0]);
       },
     );
   }

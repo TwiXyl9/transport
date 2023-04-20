@@ -18,7 +18,7 @@ class AdminNewsView extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CreateNewsDialog();
+                    return CreateNewsDialog(new News(0,'','',''));
                   }
               ),
               btnColor: Colors.black

@@ -155,4 +155,22 @@ class ApiService {
       print(e);
     }
   }
+  Future<dynamic> updateNewsRequest(path, news) async {
+    try {
+      var fullPath = apiUrl + path + '/${news.id}';
+      var request = http.MultipartRequest('PATCH', Uri.parse(fullPath))
+        ..fields.addAll(news.mapFromFields())
+        ..files.add(news.imageFile);
+      print(request.files);
+      var response = await http.Response.fromStream(await request.send());
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 200) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return true;
+    } catch(e){
+      print(e);
+    }
+  }
 }

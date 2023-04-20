@@ -6,6 +6,8 @@ import 'package:transport/models/news.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/error/error_dialog_view.dart';
 
+import 'create_news_dialog.dart';
+
 class AdminNewsItemView extends StatelessWidget {
   final News news;
   AdminNewsItemView(this.news);
@@ -26,19 +28,6 @@ class AdminNewsItemView extends StatelessWidget {
       }
     }
 
-    void updateNews(context){
-      try {
-        var bloc = context.read<NewsBloc>();
-        bloc.add(UpdateNewsEvent(news));
-        context.read<NewsBloc>().add(InitialNewsEvent());
-      } catch (error) {
-        var errorMessage = error.toString();
-        showDialog(
-            context: context,
-            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-        );
-      }
-    }
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -88,7 +77,13 @@ class AdminNewsItemView extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      CustomButton(btnText: "Редактировать", onTap: (){}, btnColor: Colors.blue),
+                      CustomButton(btnText: "Редактировать", onTap:() =>
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CreateNewsDialog(news);
+                              }
+                          ), btnColor: Colors.blue),
                     ],
                   ),
                 ],
