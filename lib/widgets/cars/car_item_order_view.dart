@@ -36,7 +36,7 @@ class CarItemOrderView extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white
                   ),
-                  child: Image.network(car.images[0]),
+                  child: Image.network(car.imagesUrls[0]),
                 ),
                 CarInfoView(car),
               ],

@@ -9,7 +9,6 @@ import 'package:transport/widgets/cars/cars_item_view.dart';
 import '../../widgets/order/order_button.dart';
 class CarsView extends StatelessWidget {
   CarsView({Key? key}) : super(key: key);
-  ApiService api = ApiService();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {

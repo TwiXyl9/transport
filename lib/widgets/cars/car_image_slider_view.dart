@@ -19,7 +19,7 @@ class CarImageSliderView extends StatelessWidget {
                 viewportFraction: 0.5
             ),
             carouselController: carouselController,
-            items: car.images.map((img) {
+            items: car.imagesUrls.map((img) {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
