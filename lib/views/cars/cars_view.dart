@@ -13,12 +13,7 @@ class CarsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
-      if (state is CarsInitial){
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      if (state is CarsLoaded){
+      if (state is CarsLoadedState){
         return Stack(
           alignment: Alignment.bottomRight,
           children: <Widget>[

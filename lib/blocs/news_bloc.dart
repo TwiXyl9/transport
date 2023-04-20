@@ -28,6 +28,7 @@ class UpdateNewsEvent extends NewsEvent {
   News news;
   UpdateNewsEvent(this.news);
 }
+
 @immutable
 abstract class NewsState {}
 class NewsInitialState extends NewsState {}
