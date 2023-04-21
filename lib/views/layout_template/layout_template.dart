@@ -14,13 +14,15 @@ class LayoutTemplate extends StatelessWidget {
       drawer: NavDrawer(),
       backgroundColor: Colors.white,
 
-      body: Container(
-        constraints: BoxConstraints(minWidth: 200, maxHeight: MediaQuery.of(context).size.height),
-        child: Column(
-          children: [
-            NavBar(),
-            Expanded(child: child),
-          ],
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(minWidth: 200, maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: [
+              NavBar(),
+              Expanded(child: child),
+            ],
+          ),
         ),
       ),
     );

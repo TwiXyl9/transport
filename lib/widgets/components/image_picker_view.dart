@@ -7,23 +7,24 @@ import 'package:transport/widgets/components/custom_button.dart';
 
 class ImagePickerView extends StatelessWidget {
   Function callback;
-  XFile? image;
-  ImagePickerView(this.image, this.callback);
+  int maxImages;
+  List<XFile?> images;
+  ImagePickerView(this.images, this.callback, this.maxImages);
   final ImagePicker picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     return FormBuilderImagePicker(
       name: 'photos',
       decoration: const InputDecoration(labelText: 'Фото'),
-      maxImages: 1,
-      initialValue: image != null? [image] : null,
+      maxImages: maxImages,
+      initialValue: images,
       validator: (v) {
-        if (v == null) {
+        if (v!.isEmpty) {
           return 'Выберите фото';
         }
       },
       onChanged: (imagePath){
-        if(imagePath!.length > 0)callback(imagePath![0]);
+        if(imagePath!.length > 0) callback(List<XFile?>.from(imagePath!));
       },
     );
   }

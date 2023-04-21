@@ -13,7 +13,7 @@ class Car {
   late TailType tailType;
   Car(this.id);
   Car.fromData(this.id, this.brand, this.model, this.price, this.imagesUrls);
-  Car.withFiles(this.id, this.brand, this.model, this.price, this.imagesFiles);
+  Car.withFiles(this.id, this.brand, this.model, this.price, this.imagesFiles, this.capacity);
   Car.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     brand = map['brand'];

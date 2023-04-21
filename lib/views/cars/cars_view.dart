@@ -4,7 +4,9 @@ import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/models/car.dart';
 import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
+import 'package:transport/widgets/cars/car_dialog.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
+import 'package:transport/widgets/components/custom_button.dart';
 
 import '../../widgets/order/order_button.dart';
 class CarsView extends StatelessWidget {
@@ -29,13 +31,37 @@ class CarsView extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         crossAxisCount: 1,
                         shrinkWrap: true,
-                        children: state.cars.map((e) => CarsItemView(e)).toList()
+                        children: state.cars.map((e) => CarsItemView(e, state.user.id == 0)).toList()
                     ),
                   ),
                 ),
               ],
             ),
-            OrderButton(context),
+            state.user.id != 0 ?
+            OrderButton(context) :
+            Container(
+                alignment: Alignment.bottomRight,
+                margin: EdgeInsets.all(20),
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.green,
+                  child: IconButton(
+                      onPressed: () => {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CarDialog(new Car(0));
+                            }
+                        ),
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 25,
+                      )
+                  ),
+                )
+            ),
           ]
         );
       }

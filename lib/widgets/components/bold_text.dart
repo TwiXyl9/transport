@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BoldText extends StatelessWidget {
   final String text;
-  BoldText({Key? key, required this.text}) : super(key: key);
+  BoldText(this.text);
 
   @override
   Widget build(BuildContext context) {

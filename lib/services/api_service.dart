@@ -11,6 +11,7 @@ import 'dart:convert';
 
 import '../models/cargo_type.dart';
 import '../models/news.dart';
+import '../models/tail_type.dart';
 import '../models/user.dart';
 import '../requests/requests_config.dart';
 
@@ -18,14 +19,6 @@ class ApiService {
 
   final String apiUrl = baseUrl+"/api/v1";
 
-  Future<http.Response> createNews(String name, String price, String image) async {
-    var body = jsonEncode({
-      "news": {"name": name, "price": price, "image": image}
-    });
-
-    http.Response response = await http.post(Uri.parse(baseUrl), headers: headers, body: body);
-    return response;
-  }
   Future<List<News>> newsIndexRequest(path) async {
     var fullPath = apiUrl + path;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
@@ -190,6 +183,32 @@ class ApiService {
       return new News.fromMap(responseData);
     } catch(e){
       print(e);
+    }
+  }
+  Future<dynamic> deleteCarRequest(path, car) async {
+    try {
+      var fullPath = apiUrl + path +"/${car.id}";
+
+      http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 204) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      } else {
+        return true;
+      }
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<List<TailType>> tailTypesIndexRequest(path) async {
+    var fullPath = apiUrl + path;
+    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((types) => TailType.fromMap(types)).toList();
+    } else {
+      return [];
     }
   }
 }

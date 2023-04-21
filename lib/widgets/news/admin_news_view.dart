@@ -17,16 +17,27 @@ class AdminNewsView extends StatelessWidget {
               child: NewsListView(allNews)
           ),
           Container(
-            alignment: Alignment.bottomCenter,
-            child: CustomButton(btnText: 'Добавить', onTap:() =>
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CreateNewsDialog(new News(0,'','',''));
-                    }
-                ),
-                btnColor: Colors.green
-            ),
+            alignment: Alignment.bottomRight,
+            margin: EdgeInsets.all(20),
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.green,
+              child: IconButton(
+                  onPressed: () => {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CreateNewsDialog(new News(0,'','',''));
+                        }
+                    ),
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                     size: 25,
+                  )
+              ),
+            )
           )
         ],
       ),

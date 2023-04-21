@@ -22,18 +22,24 @@ class CreateNewsDialog extends StatefulWidget {
 }
 
 class _CreateNewsDialogState extends State<CreateNewsDialog> {
+  late News _news;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   XFile? selectedImage;
   final formKey = GlobalKey<FormState>();
   @override
+  void initState() {
+    this._news = widget.news;
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     if (titleController.text.isEmpty && descriptionController.text.isEmpty) {
-      titleController.text = widget.news.title;
-      descriptionController.text = widget.news.description;
+      titleController.text = _news.title;
+      descriptionController.text = _news.description;
     }
-    if (widget.news.id != 0 && selectedImage == null) {
-      selectedImage = new XFile(widget.news.imageUrl);
+    if (_news.id != 0 && selectedImage == null) {
+      selectedImage = new XFile(_news.imageUrl);
     }
     return Dialog(
       insetPadding: EdgeInsets.zero,
@@ -68,8 +74,8 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
                     }
                     ),
                 SizedBox(height: 20,),
-                ImagePickerView(selectedImage, imageCallback),
-                widget.news.id == 0 ?
+                ImagePickerView([selectedImage], imageCallback, 1),
+                _news.id == 0 ?
                 CustomButton(btnText: 'Создать', onTap: createNews, btnColor: Colors.green) :
                 CustomButton(btnText: 'Сохранить', onTap: updateNews, btnColor: Colors.green)
               ],
@@ -80,9 +86,9 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
     );
   }
 
-  void imageCallback(img){
+  void imageCallback(imgs){
     setState(() {
-      selectedImage = img;
+      selectedImage = imgs[0];
     });
   }
   Future<void> createNews() async {
@@ -109,10 +115,10 @@ class _CreateNewsDialogState extends State<CreateNewsDialog> {
   Future<void> updateNews() async {
     if (formKey.currentState!.validate()) {
       try {
-        widget.news.title = titleController.text;
-        widget.news.description = descriptionController.text;
-        widget.news.imageFile = http.MultipartFile.fromBytes('news[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
-        context.read<NewsBloc>().add(UpdateNewsEvent(widget.news));
+        _news.title = titleController.text;
+        _news.description = descriptionController.text;
+        _news.imageFile = http.MultipartFile.fromBytes('news[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
+        context.read<NewsBloc>().add(UpdateNewsEvent(_news));
         context.read<NewsBloc>().add(InitialNewsEvent());
         Navigator.of(context).pop();
       } catch (error) {

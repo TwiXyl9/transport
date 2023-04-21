@@ -22,9 +22,9 @@ class TotalPriceTable extends StatelessWidget {
         ),
         TableRow(
             children: [
-              BoldText(text: "Стоимость: "),
+              BoldText("Стоимость: "),
               Container(),
-              BoldText(text: "${price} р."),
+              BoldText("${price} р."),
             ]
         ),
       ],

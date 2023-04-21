@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum FieldType {text,password}
+enum FieldType {text,password,num}
 
 class CustomTextField extends StatefulWidget {
   final String hint;
@@ -23,34 +23,51 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   late bool _obscure = false;
+  late String _hint;
+  late TextEditingController _controller;
+  late FieldType _type;
+  late String? Function(String?)? _validator;
+  @override
+  void initState() {
+    this._hint = widget.hint;
+    this._controller = widget.controller;
+    this._type = widget.type;
+    this._validator = widget.validator;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      validator: widget.validator,
-      obscureText: widget.type == FieldType.password? !_obscure : _obscure,
-      decoration: InputDecoration(
-          enabledBorder:  OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)
-          ),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400)
-          ),
-          fillColor: Colors.grey.shade200,
-          filled: true,
-          labelText: widget.hint,
-          labelStyle: TextStyle(color: Colors.grey[500]),
-          suffixIcon: widget.type == FieldType.password? IconButton(
-              icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
-              onPressed: () {
-                setState(() {
-                  _obscure = !_obscure;
-                });
-              }) : null
-          ),
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: TextFormField(
+        keyboardType: _type == FieldType.num ? TextInputType.number : TextInputType.text,
+        controller: _controller,
+        validator: _validator,
+        obscureText: _type == FieldType.password? !_obscure : _obscure,
+        decoration: InputDecoration(
+            enabledBorder:  OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white)
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade400)
+            ),
+            fillColor: Colors.grey.shade200,
+            filled: true,
+            labelText: _hint,
+            alignLabelWithHint: true,
+            labelStyle: TextStyle(color: Colors.grey[500]),
+            suffixIcon: _type == FieldType.password? IconButton(
+                icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    _obscure = !_obscure;
+                  });
+                }) : null
+            ),
 
 
-      );
+        ),
+    );
 
   }
 }

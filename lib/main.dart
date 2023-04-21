@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CarsBloc>(
-          create: (context) => CarsBloc()..add(InitialCarEvent()),
+          create: (context) => CarsBloc()..add(InitialCarsEvent()),
         ),
         BlocProvider<NewsBloc>(
           create: (context) => NewsBloc()..add(InitialNewsEvent()),

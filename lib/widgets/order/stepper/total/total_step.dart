@@ -24,35 +24,35 @@ class TotalStep extends StatelessWidget {
           children: [
             TableRow(
               children: [
-                BoldText(text: "Имя:"),
+                BoldText("Имя:"),
                 Text(name),
                 Container()
               ]
             ),
             TableRow(
                 children: [
-                  BoldText(text: "Телефон:"),
+                  BoldText("Телефон:"),
                   Text(phone),
                   Container()
                 ]
             ),
             TableRow(
                 children: [
-                  BoldText(text: "Дата и время:"),
+                  BoldText("Дата и время:"),
                   Text(dateTime),
                   Container()
                 ]
             ),
             TableRow(
                 children: [
-                  BoldText(text: "Тип груза:"),
+                  BoldText("Тип груза:"),
                   Text(cargoType.name),
                   Container()
                 ]
             ),
             TableRow(
                 children: [
-                  BoldText(text: "Машина:"),
+                  BoldText("Машина:"),
                   Text("${car.brand} ${car.model}"),
                   Text("${car.price} р."),
                 ]
@@ -60,7 +60,7 @@ class TotalStep extends StatelessWidget {
             if (services.length > 0)
               TableRow(
                 children: [
-                  BoldText(text: "Услуги:"),
+                  BoldText("Услуги:"),
                   Container(),
                   Container()
                 ]

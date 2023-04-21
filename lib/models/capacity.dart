@@ -6,7 +6,7 @@ class Capacity {
   late int numOfPallets;
   late double loadCapacity;
 
-  Capacity(this.id, this.width, this.height, this.length, this.numOfPallets);
+  Capacity(this.id, this.width, this.height, this.length, this.numOfPallets, this.loadCapacity);
 
   Capacity.fromMap(Map<String, dynamic> map) {
     id = map['id'];

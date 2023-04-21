@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/models/cargo_type.dart';
 import 'package:transport/models/route.dart' as OrderRoute;
+import 'package:transport/widgets/cargo_type/cargo_type_dropdown.dart';
 import 'package:transport/widgets/error/error_dialog_view.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
@@ -15,7 +16,6 @@ import '../../../models/order.dart';
 import '../../../models/order_service.dart';
 import '../../../models/point.dart';
 import '../../../models/user.dart';
-import 'cargo_types_step.dart';
 
 class OrderStepperView extends StatefulWidget {
   const OrderStepperView({Key? key}) : super(key: key);
@@ -130,7 +130,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 2,
         title: Text("Тип груза"),
-        content: state is OrderLoadedState? CargoTypesStep(types: state.cargoTypes, value: selectedCargoType, callback: cargoTypesCallback,) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CircularProgressIndicator(),
       ),
       Step(
           state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,

@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/models/auth.dart';
 import 'package:transport/models/http_exception.dart';
+import 'package:transport/models/tail_type.dart';
 import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
 
@@ -14,7 +15,7 @@ import '../models/user.dart';
 
 @immutable
 abstract class CarsEvent {}
-class InitialCarEvent extends CarsEvent {}
+class InitialCarsEvent extends CarsEvent {}
 class CreateCarEvent extends CarsEvent {
   Car car;
   CreateCarEvent(this.car);
@@ -33,8 +34,9 @@ class CarsInitialState extends CarsState {}
 class CarsLoadInProcessState extends CarsState {}
 class CarsLoadedState extends CarsState {
   final List<Car> cars;
+  final List<TailType> tailTypes;
   final User user;
-  CarsLoadedState(this.cars, this.user);
+  CarsLoadedState(this.cars, this.user, this.tailTypes);
 }
 class CarCreateInProcessState extends CarsState {}
 class CarCreatedState extends CarsState {}
@@ -51,24 +53,26 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   final _sessionDataProvider = SessionDataProvider();
   CarsBloc() : super(CarsInitialState()) {
     on<CarsEvent>((event, emit) async {
-      if (event is InitialCarEvent) {
-        onInitialCarEvent(event, emit);
+      if (event is InitialCarsEvent) {
+        await onInitialCarEvent(event, emit);
       } else if (event is CreateCarEvent) {
-        onCreateCarEvent(event, emit);
+        await onCreateCarEvent(event, emit);
       } else if (event is UpdateCarEvent) {
-        onUpdateCarEvent(event, emit);
+        await onUpdateCarEvent(event, emit);
       } else if (event is DeleteCarEvent) {
-        onDeleteCarEvent(event, emit);
+        await onDeleteCarEvent(event, emit);
       }
     });
   }
-  onInitialCarEvent(InitialCarEvent event, Emitter<CarsState> emit) async {
+  onInitialCarEvent(InitialCarsEvent event, Emitter<CarsState> emit) async {
     List<Car> cars = [];
+    List<TailType> tailTypes = [];
     User user = new User(0,'','');
     try {
       emit(CarsLoadInProcessState());
       var userId = await _sessionDataProvider.getAccountId();
       cars = await ApiService().carsIndexRequest(carsPath);
+      tailTypes = await ApiService().tailTypesIndexRequest(tailTypesPath);
       if (userId != null) {
         var authString = await _sessionDataProvider.getAuthData();
         var authData = Auth.fromJson(jsonDecode(authString!));
@@ -77,7 +81,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         _sessionDataProvider.deleteAuthData();
         _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }
-      emit(CarsLoadedState(cars, user));
+      emit(CarsLoadedState(cars, user, tailTypes));
     } catch (e) {
       emit(CarsFailureState(e.toString()));
     }
@@ -100,6 +104,17 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   }
   onDeleteCarEvent(DeleteCarEvent event, Emitter<CarsState> emit) async {
-
+    try {
+      emit(CarDeleteInProcessState());
+      var result = await ApiService().deleteCarRequest(carsPath, event.car);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(CarDeletedState());
+      } else {
+        emit(CarsFailureState(result.toString()));
+      }
+    } catch (e) {
+      emit(CarsFailureState(e.toString()));
+    }
   }
 }
