@@ -13,7 +13,7 @@ class Car {
   late TailType tailType;
   Car(this.id);
   Car.fromData(this.id, this.brand, this.model, this.price, this.imagesUrls);
-  Car.withFiles(this.id, this.brand, this.model, this.price, this.imagesFiles, this.capacity);
+  Car.withFiles(this.id, this.brand, this.model, this.price, this.imagesFiles, this.capacity, this.tailType);
   Car.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     brand = map['brand'];
@@ -23,8 +23,16 @@ class Car {
     capacity = Capacity.fromMap(map['capacity']);
     tailType = TailType.fromMap(map['tail_type']);
   }
-
   Map<String, dynamic> mapFromFields() {
     return {'brand': brand, 'model': model, 'price': price};
   }
+  Map<String, String> namedMapFromFields() {
+    return {
+      'car[brand]': brand,
+      'car[model]': model,
+      'car[price]': price.toString(),
+      'car[tail_type_id]': tailType.id.toString(),
+    };
+  }
+
 }

@@ -31,7 +31,7 @@ class CarsView extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         crossAxisCount: 1,
                         shrinkWrap: true,
-                        children: state.cars.map((e) => CarsItemView(e, state.user.id == 0)).toList()
+                        children: state.cars.map((e) => CarsItemView(e, state.user.id == 0, state.tailTypes)).toList()
                     ),
                   ),
                 ),
@@ -50,7 +50,7 @@ class CarsView extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CarDialog(new Car(0));
+                              return CarDialog(new Car(0), state.tailTypes);
                             }
                         ),
                       },

@@ -166,13 +166,14 @@ class ApiService {
       print(e);
     }
   }
-  Future<dynamic> createCarRequest(path, car) async {
+  Future<dynamic> createCarRequest(path, Car car) async {
     try {
       var fullPath = apiUrl + path;
 
       var request = http.MultipartRequest('POST', Uri.parse(fullPath))
-        ..fields.addAll(car.mapFromFields())
-        ..files.add(car.imagesFiles);
+        ..fields.addAll(car.namedMapFromFields())
+        ..fields.addAll(car.capacity.namedMapFromFields())
+        ..files.addAll(car.imagesFiles);
       print(request.fields);
       var response = await http.Response.fromStream(await request.send());
       final responseData = json.decode(response.body);
@@ -180,7 +181,7 @@ class ApiService {
         print(responseData);
         return new HttpException(responseData['errors']['full_messages']);
       }
-      return new News.fromMap(responseData);
+      return new Car.fromMap(responseData);
     } catch(e){
       print(e);
     }

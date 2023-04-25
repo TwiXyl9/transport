@@ -20,4 +20,14 @@ class Capacity {
   Map<String, dynamic> mapFromFields() {
     return {'id': id, 'width': width, 'height': height, 'length': length, 'num_of_pallets': numOfPallets, 'load_capacity': loadCapacity};
   }
+
+  Map<String, String> namedMapFromFields() {
+    return {
+      'capacity[width]': width.toString(),
+      'capacity[height]': height.toString(),
+      'capacity[length]': length.toString(),
+      'capacity[num_of_pallets]': numOfPallets.toString(),
+      'capacity[load_capacity]': loadCapacity.toString(),
+    };
+  }
 }

@@ -8,6 +8,7 @@ import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/models/capacity.dart';
 import 'package:transport/models/news.dart';
+import 'package:transport/models/tail_type.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/image_picker_view.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -20,7 +21,8 @@ import '../error/error_dialog_view.dart';
 
 class CarDialog extends StatefulWidget {
   Car car;
-  CarDialog(this.car);
+  List<TailType> tailTypes;
+  CarDialog(this.car, this.tailTypes);
 
   @override
   State<CarDialog> createState() => _CarDialogState();
@@ -28,6 +30,7 @@ class CarDialog extends StatefulWidget {
 
 class _CarDialogState extends State<CarDialog> {
   late Car _car;
+  late List<TailType> _tailTypes;
   TextEditingController brandController = TextEditingController();
   TextEditingController modelController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -39,9 +42,11 @@ class _CarDialogState extends State<CarDialog> {
   TextEditingController loadCapacityController = TextEditingController();
   List<XFile?> selectedImages = [];
   final formKey = GlobalKey<FormState>();
+  TailType selectedTailType = new TailType(0, '');
   @override
   void initState() {
     this._car = widget.car;
+    this._tailTypes = widget.tailTypes;
     super.initState();
   }
   @override
@@ -165,7 +170,7 @@ class _CarDialogState extends State<CarDialog> {
                         }
                       }
                   ),
-                  //TailTypeDropdown(types, value, callback);
+                  TailTypeDropdown(_tailTypes, selectedTailType, tailTypesCallback),
                   SizedBox(height: 20,),
                   ImagePickerView(selectedImages, imageCallback, 10),
                   _car.id == 0 ?
@@ -185,7 +190,11 @@ class _CarDialogState extends State<CarDialog> {
       selectedImages = imgs;
     });
   }
-
+  tailTypesCallback(val){
+    setState(() {
+      selectedTailType = val;
+    });
+  }
   Future<void> createCar() async {
     if (formKey.currentState!.validate()) {
       try {
@@ -198,8 +207,8 @@ class _CarDialogState extends State<CarDialog> {
         var length = double.parse(lengthController.text);
         var numOfPallets = int.parse(numOfPalletsController.text);
         var loadCapacity = double.parse(loadCapacityController.text);
-        final httpImages = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('cars[images][]', await e!.readAsBytes(), filename: e.name)).toList());
-        var car = new Car.withFiles(0, brand, model, price, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity));
+        final httpImages = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name)).toList());
+        var car = new Car.withFiles(0, brand, model, price, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity), selectedTailType);
         context.read<CarsBloc>().add(
             CreateCarEvent(car)
         );

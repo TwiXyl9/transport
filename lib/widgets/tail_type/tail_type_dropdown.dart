@@ -10,14 +10,17 @@ class TailTypeDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-        hint: Text("Выберите тип борта"),
-        value: value.id > 0 ? value : null,
-        isExpanded: true,
-        items: getItems,
-        onChanged: (val)=>{
-          callback(val)
-        }
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: DropdownButton(
+          hint: Text("Выберите тип борта"),
+          value: value.id > 0 ? value : null,
+          isExpanded: true,
+          items: getItems,
+          onChanged: (val)=>{
+            callback(val)
+          }
+      ),
     );
   }
   List<DropdownMenuItem<TailType>> get getItems{
