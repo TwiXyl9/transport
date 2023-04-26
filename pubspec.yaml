@@ -77,7 +77,7 @@ dependencies:
 
   image_picker_for_web: ^2.1.12
 
-  form_builder_image_picker: ^3.1.0
+  form_builder_image_picker: ^3.2.0
 
   get_it:
   # The following adds the Cupertino Icons font to your application.

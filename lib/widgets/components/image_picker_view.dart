@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,9 +16,11 @@ class ImagePickerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderImagePicker(
       name: 'photos',
+
       decoration: const InputDecoration(labelText: 'Фото'),
       maxImages: maxImages,
       initialValue: images,
+      availableImageSources: kIsWeb? const [ImageSourceOption.gallery] : const [ImageSourceOption.gallery, ImageSourceOption.camera],
       validator: (v) {
         if (v!.isEmpty) {
           return 'Выберите фото';
