@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:transport/helpers/input_formatters_helper.dart';
 
-enum FieldType {text,password,num}
+enum FieldType {text, password, num}
 
 class CustomTextField extends StatefulWidget {
   final String hint;
@@ -40,7 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: TextFormField(
-        keyboardType: _type == FieldType.num ? TextInputType.number : TextInputType.text,
+        keyboardType: _type == FieldType.num ? TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
         controller: _controller,
         validator: _validator,
         obscureText: _type == FieldType.password? !_obscure : _obscure,
@@ -64,9 +66,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   });
                 }) : null
             ),
-
-
-        ),
+        inputFormatters: _type == FieldType.num ? numFormatter() : null,
+      ),
     );
 
   }
