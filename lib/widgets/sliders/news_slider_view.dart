@@ -5,7 +5,7 @@ import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
 import '../../models/news.dart';
-import '../news/create_news_dialog.dart';
+import '../news/news_dialog.dart';
 
 class NewsSlider extends StatelessWidget {
   List<News> allNews;

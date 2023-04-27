@@ -11,30 +11,42 @@ class CarImageSliderView extends StatelessWidget {
   Widget build(BuildContext context) {
     CarouselController carouselController = CarouselController();
     return Expanded(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CarouselSlider(
-            options: CarouselOptions(
-                viewportFraction: 0.5
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            car.imagesUrls.length > 1 ?
+            CarouselSlider(
+              options: CarouselOptions(
+                  viewportFraction: 0.5
+              ),
+              carouselController: carouselController,
+              items: car.imagesUrls.map((img) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white
+                      ),
+                      child: Image.network(img),
+                    );
+                  },
+                );
+              }).toList(),
+            ) :
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                color: Colors.white
+              ),
+              child: Image.network(car.imagesUrls.first),
             ),
-            carouselController: carouselController,
-            items: car.imagesUrls.map((img) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white
-                    ),
-                    child: Image.network(img),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

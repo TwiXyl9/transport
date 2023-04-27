@@ -202,6 +202,25 @@ class ApiService {
       print(e);
     }
   }
+  Future<dynamic> updateCarRequest(path, Car car) async {
+    try {
+      var fullPath = apiUrl + path + '/${car.id}';
+      var request = http.MultipartRequest('PATCH', Uri.parse(fullPath))
+        ..fields.addAll(car.namedMapFromFields())
+        ..fields.addAll(car.capacity.namedMapFromFields())
+        ..files.addAll(car.imagesFiles);
+      print(request.files);
+      var response = await http.Response.fromStream(await request.send());
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 200) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return true;
+    } catch(e){
+      print(e);
+    }
+  }
   Future<List<TailType>> tailTypesIndexRequest(path) async {
     var fullPath = apiUrl + path;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);

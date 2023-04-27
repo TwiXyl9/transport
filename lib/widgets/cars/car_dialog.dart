@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
@@ -62,6 +63,7 @@ class _CarDialogState extends State<CarDialog> {
         lengthController.text = _car.capacity.length.toString();
         numOfPalletsController.text = _car.capacity.numOfPallets.toString();
         loadCapacityController.text = _car.capacity.loadCapacity.toString();
+        selectedTailType = _car.tailType;
       }
       if (selectedImages.isEmpty) {
         selectedImages = _car.imagesUrls.map((e) => new XFile(e)).toList();
@@ -188,6 +190,7 @@ class _CarDialogState extends State<CarDialog> {
   void imageCallback(imgs){
     setState(() {
       selectedImages = imgs;
+      print(selectedImages.length);
     });
   }
   tailTypesCallback(val){
@@ -209,9 +212,7 @@ class _CarDialogState extends State<CarDialog> {
         var loadCapacity = double.parse(loadCapacityController.text);
         final httpImages = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name)).toList());
         var car = new Car.withFiles(0, brand, model, price, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity), selectedTailType);
-        context.read<CarsBloc>().add(
-            CreateCarEvent(car)
-        );
+        context.read<CarsBloc>().add(CreateCarEvent(car));
         context.read<CarsBloc>().add(InitialCarsEvent());
         Navigator.of(context).pop();
       } catch (error) {
@@ -225,20 +226,29 @@ class _CarDialogState extends State<CarDialog> {
   }
   Future<void> updateCar() async {
     if (formKey.currentState!.validate()) {
-      // try {
-      //   widget.news.title = titleController.text;
-      //   widget.news.description = descriptionController.text;
-      //   widget.news.imageFile = http.MultipartFile.fromBytes('news[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
-      //   context.read<NewsBloc>().add(UpdateNewsEvent(widget.news));
-      //   context.read<NewsBloc>().add(InitialNewsEvent());
-      //   Navigator.of(context).pop();
-      // } catch (error) {
-      //   var errorMessage = error.toString();
-      //   showDialog(
-      //       context: context,
-      //       builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-      //   );
-      // }
+      try {
+        _car.brand = brandController.text;
+        _car.model = modelController.text;
+        _car.price = double.parse(priceController.text);
+
+        _car.capacity.width = double.parse(widthController.text);
+        _car.capacity.height = double.parse(heightController.text);
+        _car.capacity.length = double.parse(lengthController.text);
+        _car.capacity.numOfPallets = int.parse(numOfPalletsController.text);
+        _car.capacity.loadCapacity = double.parse(loadCapacityController.text);
+        print(selectedImages.length);
+        _car.imagesFiles = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name.isEmpty? path.basename(e.path) : e.name)).toList());
+        print(_car.imagesFiles.length);
+        context.read<CarsBloc>().add(UpdateCarEvent(_car));
+        context.read<CarsBloc>().add(InitialCarsEvent());
+        Navigator.of(context).pop();
+      } catch (error) {
+        var errorMessage = error.toString();
+        showDialog(
+            context: context,
+            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+        );
+      }
     }
   }
   bool allIsEmpty(){

@@ -4,9 +4,9 @@ import '../../models/tail_type.dart';
 
 class TailTypeDropdown extends StatelessWidget {
   List<TailType> types;
-  TailType value;
+  TailType selectedType;
   Function callback;
-  TailTypeDropdown(this.types, this.value, this.callback);
+  TailTypeDropdown(this.types, this.selectedType, this.callback);
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +14,9 @@ class TailTypeDropdown extends StatelessWidget {
       margin: EdgeInsets.all(10.0),
       child: DropdownButton(
           hint: Text("Выберите тип борта"),
-          value: value.id > 0 ? value : null,
-          isExpanded: true,
           items: getItems,
+          value: selectedType.id > 0 ? selectedType : null,
+          isExpanded: true,
           onChanged: (val)=>{
             callback(val)
           }

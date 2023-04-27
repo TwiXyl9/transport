@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:meta/meta.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/models/auth.dart';
@@ -62,7 +63,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       } else if (event is DeleteCarEvent) {
         await onDeleteCarEvent(event, emit);
       }
-    });
+    }, transformer: sequential());
   }
   onInitialCarEvent(InitialCarsEvent event, Emitter<CarsState> emit) async {
     List<Car> cars = [];
@@ -101,7 +102,18 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     }
   }
   onUpdateCarEvent(UpdateCarEvent event, Emitter<CarsState> emit) async {
-
+    try {
+      emit(CarUpdateInProcessState());
+      var result = await ApiService().updateCarRequest(carsPath, event.car);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(CarUpdatedState());
+      } else {
+        emit(CarsFailureState(result.toString()));
+      }
+    } catch (e) {
+      emit(CarsFailureState(e.toString()));
+    }
   }
   onDeleteCarEvent(DeleteCarEvent event, Emitter<CarsState> emit) async {
     try {

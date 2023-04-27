@@ -14,6 +14,7 @@ class CarsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
+      print(state);
       if (state is CarsLoadedState){
         return Stack(
           alignment: Alignment.bottomRight,

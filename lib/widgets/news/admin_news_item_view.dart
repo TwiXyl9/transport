@@ -6,7 +6,7 @@ import 'package:transport/models/news.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/error/error_dialog_view.dart';
 
-import 'create_news_dialog.dart';
+import 'news_dialog.dart';
 
 class AdminNewsItemView extends StatelessWidget {
   final News news;
@@ -82,7 +82,7 @@ class AdminNewsItemView extends StatelessWidget {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return CreateNewsDialog(news);
+                                return NewsDialog(news);
                               }
                           ), btnColor: Colors.blue),
                     ],

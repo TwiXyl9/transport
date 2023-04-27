@@ -13,15 +13,15 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import '../components/custom_text_field.dart';
 import '../error/error_dialog_view.dart';
 
-class CreateNewsDialog extends StatefulWidget {
+class NewsDialog extends StatefulWidget {
   News news;
-  CreateNewsDialog(this.news);
+  NewsDialog(this.news);
 
   @override
-  State<CreateNewsDialog> createState() => _CreateNewsDialogState();
+  State<NewsDialog> createState() => _NewsDialogState();
 }
 
-class _CreateNewsDialogState extends State<CreateNewsDialog> {
+class _NewsDialogState extends State<NewsDialog> {
   late News _news;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();

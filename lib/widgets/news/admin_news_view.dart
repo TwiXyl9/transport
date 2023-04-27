@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport/models/news.dart';
 import 'package:transport/widgets/components/custom_button.dart';
-import 'package:transport/widgets/news/create_news_dialog.dart';
+import 'package:transport/widgets/news/news_dialog.dart';
 import 'package:transport/widgets/news/news_list_view.dart';
 
 class AdminNewsView extends StatelessWidget {
@@ -27,7 +27,7 @@ class AdminNewsView extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return CreateNewsDialog(new News(0,'','',''));
+                          return NewsDialog(new News(0,'','',''));
                         }
                     ),
                   },
