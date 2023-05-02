@@ -60,7 +60,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     List<Car> cars = [];
     List<Service> services = [];
     List<CargoType> cargoTypes = [];
-    User user = new User(0,'','');
+    User user = new User.createGuest();
     try {
       emit(OrderLoadInProcessState());
       cars = await ApiService().carsIndexRequest(carsPath);
@@ -71,9 +71,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         var authString = await _sessionDataProvider.getAuthData();
         var authData = Auth.fromJson(jsonDecode(authString!));
         var authHeadersMap = authData.mapFromFields();
-        print("Before - ${authHeadersMap}");
         user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        print("After - ${authHeadersMap}");
         _sessionDataProvider.deleteAuthData();
         _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }

@@ -13,8 +13,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NewsBloc, NewsState>(
         builder: (context, state) {
+          print(state);
           return state is NewsLoadedState ?
-              state.user.id != 0 ?
+              !state.user.isAdmin() ?
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[

@@ -51,7 +51,6 @@ class NewsFailureState extends NewsState {
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final _sessionDataProvider = SessionDataProvider();
-
   NewsBloc() : super(NewsInitialState()) {
     on<NewsEvent>((event, emit) async {
       if (event is InitialNewsEvent) {
@@ -67,7 +66,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
   onInitialNewsEvent(InitialNewsEvent event, Emitter<NewsState> emit) async {
     List<News> news = [];
-    User user = new User(0,'','');
+    User user = new User.createGuest();
     try {
       emit(NewsLoadInProcessState());
       var userId = await _sessionDataProvider.getAccountId();

@@ -31,6 +31,7 @@ class ApiService {
   }
   Future<List<Car>> carsIndexRequest(path) async {
     var fullPath = apiUrl + path;
+    print('CarsIndex');
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
@@ -58,7 +59,9 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
         print(response.headers);
+        print('Before - ${authHeaders}');
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        print('After - ${authHeaders}');
         return new User.fromMap(responseData);
       } else {
         print(responseData);

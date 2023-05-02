@@ -68,7 +68,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   onInitialCarEvent(InitialCarsEvent event, Emitter<CarsState> emit) async {
     List<Car> cars = [];
     List<TailType> tailTypes = [];
-    User user = new User(0,'','');
+    User user = new User.createGuest();
     try {
       emit(CarsLoadInProcessState());
       var userId = await _sessionDataProvider.getAccountId();

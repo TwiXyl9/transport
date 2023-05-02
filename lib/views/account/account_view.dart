@@ -17,6 +17,7 @@ class AccountView extends StatelessWidget {
 
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, state) {
+        print(state);
         return Container(
           width: 100,
           height: 50,

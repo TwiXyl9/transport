@@ -44,6 +44,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
         },
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
+            print(state);
             final bloc = context.read<AuthenticationBloc>();
             if (state is AuthenticationUnauthorizedState || state is AuthenticationFailureState) {
               return Container(

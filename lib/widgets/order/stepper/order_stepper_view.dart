@@ -30,7 +30,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
   late double totalPrice = 0;
-  User user = new User(0,'','');
+  User user = new User.createGuest();
   Car selectedCar = new Car(0);
   CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();

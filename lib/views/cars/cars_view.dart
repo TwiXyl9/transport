@@ -25,20 +25,17 @@ class CarsView extends StatelessWidget {
                 Expanded(
                   child: Container(
                     constraints: BoxConstraints(minWidth: 300, maxWidth: 800),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10)),
                     child: GridView.count(
                         padding: EdgeInsets.zero,
                         crossAxisCount: 1,
                         shrinkWrap: true,
-                        children: state.cars.map((e) => CarsItemView(e, state.user.id == 0, state.tailTypes)).toList()
+                        children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
                     ),
                   ),
                 ),
               ],
             ),
-            state.user.id != 0 ?
+            !state.user.isAdmin() ?
             OrderButton(context) :
             Container(
                 alignment: Alignment.bottomRight,

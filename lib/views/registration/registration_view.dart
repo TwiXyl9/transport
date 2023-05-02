@@ -66,6 +66,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state){
+        print(state);
         if (state is RegistrationFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
