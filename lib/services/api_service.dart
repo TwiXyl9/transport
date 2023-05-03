@@ -61,11 +61,11 @@ class ApiService {
         print(response.headers);
         print('Before - ${authHeaders}');
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
-        print('After - ${authHeaders}');
+        print('After - $authHeaders');
         return new User.fromMap(responseData);
       } else {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages'][0]);
+        return new HttpException(responseData['errors'][0]);
       }
     } catch(e){
       print(e);

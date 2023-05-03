@@ -40,7 +40,6 @@ class _AuthenticationViewState extends State<AuthenticationView> {
               ),
             );
           }
-
         },
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {

@@ -6,3 +6,4 @@ const String aboutRoute = '/about';
 const String accountRoute = '/account';
 const String authenticationRoute = '/authentication';
 const String registrationRoute = '/registration';
+const String userOrdersRoute = '/account/orders';

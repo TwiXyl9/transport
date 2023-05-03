@@ -87,14 +87,16 @@ class _RegistrationViewState extends State<RegistrationView> {
       child: BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state){
           final bloc = context.read<RegistrationBloc>();
-            return Container(
-                color: Colors.grey[300],
-                child: SafeArea(
-                  child: Center(
-                    child: Container(
-                      constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
-                      child: Form(
-                        key: _formKey,
+          return state is RegistrationImpossibleState? Container() :
+          Container(
+              color: Colors.grey[300],
+              child: SafeArea(
+                child: Center(
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+                    child: Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -146,9 +148,9 @@ class _RegistrationViewState extends State<RegistrationView> {
                                 hint: 'Повтор пароля',
                                 type: FieldType.password,
                                 validator: (val){
-                                  if(!val!.isValidPassword){
+                                  if (!val!.isValidPassword) {
                                     return 'Некорректный пароль';
-                                  }else if(val != passwordController.text){
+                                  } else if (val != passwordController.text) {
                                     return 'Пароли не совпадают';
                                   }
                                 }),
@@ -167,20 +169,20 @@ class _RegistrationViewState extends State<RegistrationView> {
                                               ..onTap = (){
                                                 bloc.add(RegistrationRedirectToAuthEvent());
                                               }
-                                        )
+                                              ),
                                       ]
                                   )
                               ),
                             ),
                             SizedBox(height: 25,),
-
                           ],
                         ),
                       ),
                     ),
                   ),
-                )
-            );
+                ),
+              )
+          );
         },
       )
     );

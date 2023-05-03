@@ -9,13 +9,11 @@ class OrderListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListView(
-          shrinkWrap: true,
-          children: orders.map((e) => OrderItemView(e)).toList(),
-        ),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        shrinkWrap: true,
+        children: orders.map((e) => OrderItemView(e)).toList(),
+      ),
     );
   }
 }

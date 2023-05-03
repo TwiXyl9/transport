@@ -28,14 +28,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc()..add(AuthenticationCheckStatusEvent()),
+        ),
         BlocProvider<CarsBloc>(
           create: (context) => CarsBloc()..add(InitialCarsEvent()),
         ),
         BlocProvider<NewsBloc>(
-          create: (context) => NewsBloc()..add(InitialNewsEvent()),
-        ),
-        BlocProvider<AuthenticationBloc>(
-          create: (context) => AuthenticationBloc()..add(AuthenticationCheckStatusEvent()),
+          create: (context) => NewsBloc(context.read<AuthenticationBloc>())..add(InitialNewsEvent()),
         ),
         BlocProvider<RegistrationBloc>(
           create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           create: (context) => OrderBloc()..add(OrderInitialEvent()),
         ),
         BlocProvider<AccountBloc>(
-          create: (context) => AccountBloc()..add(AccountInitialEvent()),
+          create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(AccountInitialEvent()),
         ),
       ],
       child: MaterialApp(

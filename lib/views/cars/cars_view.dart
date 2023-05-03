@@ -13,56 +13,57 @@ class CarsView extends StatelessWidget {
   CarsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
-      print(state);
-      if (state is CarsLoadedState){
-        return Stack(
-          alignment: Alignment.bottomRight,
-          children: <Widget>[
-            Column(
-              children: [
-                Text("Наш Автопарк"),
-                Expanded(
-                  child: Container(
-                    constraints: BoxConstraints(minWidth: 300, maxWidth: 800),
-                    child: GridView.count(
-                        padding: EdgeInsets.zero,
-                        crossAxisCount: 1,
-                        shrinkWrap: true,
-                        children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+    return BlocBuilder<CarsBloc, CarsState>(builder:
+        (context, state) {
+        print(state);
+        if (state is CarsLoadedState){
+          return Stack(
+            alignment: Alignment.bottomRight,
+            children: <Widget>[
+              Column(
+                children: [
+                  Text("Наш Автопарк"),
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(minWidth: 300, maxWidth: 800),
+                      child: GridView.count(
+                          padding: EdgeInsets.zero,
+                          crossAxisCount: 1,
+                          shrinkWrap: true,
+                          children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            !state.user.isAdmin() ?
-            OrderButton(context) :
-            Container(
-                alignment: Alignment.bottomRight,
-                margin: EdgeInsets.all(20),
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.green,
-                  child: IconButton(
-                      onPressed: () => {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CarDialog(new Car(0), state.tailTypes);
-                            }
-                        ),
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                  ),
-                )
-            ),
-          ]
-        );
-      }
+                ],
+              ),
+              !state.user.isAdmin() ?
+              OrderButton(context) :
+              Container(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.all(20),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.green,
+                    child: IconButton(
+                        onPressed: () => {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CarDialog(new Car(0), state.tailTypes);
+                              }
+                          ),
+                        },
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 25,
+                        )
+                    ),
+                  )
+              ),
+            ]
+          );
+        }
       return Center(
         child: CircularProgressIndicator(),
       );

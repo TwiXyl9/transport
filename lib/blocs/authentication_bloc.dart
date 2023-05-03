@@ -45,6 +45,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   final _sessionDataProvider = SessionDataProvider();
   AuthenticationBloc() : super(AuthenticationInitial()) {
     on<AuthenticationEvent>((event, emit) async {
+      print(event);
       if (event is AuthenticationCheckStatusEvent) {
         await onAuthCheckStatusEvent(event, emit);
       } else if (event is AuthenticationLoginEvent) {
@@ -57,14 +58,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         await onAuthRedirectToRegistrationEvent();
       }
     }, transformer: sequential());
-    add(AuthenticationCheckStatusEvent());
   }
 
   onAuthCheckStatusEvent(AuthenticationCheckStatusEvent event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationInProgressState());
     final authData = await _sessionDataProvider.getAuthData();
-    final newState = authData != null ? AuthenticationAuthorizedState() : AuthenticationUnauthorizedState();
-    emit(newState);
+
+    emit(authData != null ? AuthenticationAuthorizedState() : AuthenticationUnauthorizedState());
   }
 
   onAuthLoginEvent(AuthenticationLoginEvent event, Emitter<AuthenticationState> emit) async {
@@ -79,7 +79,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       } else{
         emit(AuthenticationFailureState(result.toString()));
       }
-
     } catch (e) {
       print(e.toString());
       emit(AuthenticationFailureState(e.toString()));

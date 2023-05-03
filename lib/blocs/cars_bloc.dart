@@ -54,6 +54,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   final _sessionDataProvider = SessionDataProvider();
   CarsBloc() : super(CarsInitialState()) {
     on<CarsEvent>((event, emit) async {
+      print(event);
       if (event is InitialCarsEvent) {
         await onInitialCarEvent(event, emit);
       } else if (event is CreateCarEvent) {

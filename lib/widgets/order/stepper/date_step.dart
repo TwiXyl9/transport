@@ -86,7 +86,7 @@ class _DateStepState extends State<DateStep> {
             pickedTime.minute
         );
         setState(() {
-          _dateController.text = DateFormat('dd.MM.yy, HH:mm').format(pickedDateTime!);
+          _dateController.text = DateFormat('dd.MM.yyyy, HH:mm').format(pickedDateTime!);
         });
       }
     }else{

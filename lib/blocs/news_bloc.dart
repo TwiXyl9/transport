@@ -12,6 +12,8 @@ import '../models/http_exception.dart';
 import '../models/news.dart';
 import '../models/user.dart';
 import '../requests/requests_paths_names.dart';
+import 'account_bloc.dart';
+import 'authentication_bloc.dart';
 
 @immutable
 abstract class NewsEvent {}
@@ -51,8 +53,10 @@ class NewsFailureState extends NewsState {
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final _sessionDataProvider = SessionDataProvider();
-  NewsBloc() : super(NewsInitialState()) {
+  final AuthenticationBloc authBloc;
+  NewsBloc(this.authBloc) : super(NewsInitialState()) {
     on<NewsEvent>((event, emit) async {
+      print(event);
       if (event is InitialNewsEvent) {
         await onInitialNewsEvent(event, emit);
       } else if (event is CreateNewsEvent) {
@@ -75,9 +79,16 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         var authString = await _sessionDataProvider.getAuthData();
         var authData = Auth.fromJson(jsonDecode(authString!));
         var authHeadersMap = authData.mapFromFields();
-        user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        _sessionDataProvider.deleteAuthData();
-        _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
+        var result = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
+        if(result.runtimeType == HttpException){
+          authBloc.add(AuthenticationLogoutEvent());
+          emit(NewsFailureState(result.toString()));
+        } else {
+          user = result;
+          _sessionDataProvider.deleteAuthData();
+          _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
+          emit(NewsLoadedState(news, user));
+        }
       }
       emit(NewsLoadedState(news, user));
     } catch (e) {
