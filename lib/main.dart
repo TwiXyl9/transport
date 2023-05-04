@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:path/path.dart';
 import 'package:transport/blocs/account_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/blocs/cars_bloc.dart';
@@ -9,19 +11,16 @@ import 'package:transport/blocs/registration_bloc.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
-import 'package:transport/routing/route.dart';
-import 'package:transport/routing/route_names.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Prefs.init();
   setupLocator();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(AccountInitialEvent()),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Transport',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -55,11 +54,10 @@ class MyApp extends StatelessWidget {
         builder: (context, child) => LayoutTemplate(
           child: child!,
         ),
-        navigatorKey: locator<NavigationHelper>().navigatorKey,
-        onGenerateRoute: generateRoute,
-        initialRoute: homeRoute,
+        routerConfig: locator<NavigationHelper>().router,
         debugShowCheckedModeBanner: false,
       ),
     );
   }
+
 }

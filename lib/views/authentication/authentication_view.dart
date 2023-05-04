@@ -140,9 +140,6 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                   )
               );
             }
-            if (state is AuthenticationAuthorizedState) {
-              bloc.add(AuthenticationRedirectToHomeEvent());
-            }
             return Container();
           },
         ),

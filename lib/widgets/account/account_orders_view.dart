@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/account_bloc.dart';
-import '../../widgets/order/order_list_view.dart';
+import '../order/order_list_view.dart';
 
 class AccountOrdersView extends StatelessWidget {
   const AccountOrdersView({Key? key}) : super(key: key);

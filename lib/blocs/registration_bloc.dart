@@ -27,7 +27,6 @@ class RegistrationSignUpEvent extends RegistrationEvent {
 @immutable
 abstract class RegistrationState {}
 class RegistrationInitialState extends RegistrationState {}
-class RegistrationImpossibleState extends RegistrationState {}
 class RegistrationInProcessState extends RegistrationState {}
 class RegistrationSuccessState extends RegistrationState {}
 class RegistrationFailureState extends RegistrationState {
@@ -41,9 +40,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(RegistrationInitialState()) {
     on<RegistrationEvent>((event, emit) async {
       print(event);
-      if (event is RegistrationInitialEvent) {
-        await onRegistrationInitialEvent(event, emit);
-      } else if (event is RegistrationSignUpEvent) {
+      if (event is RegistrationSignUpEvent) {
         await onRegistrationSignUpEvent(event, emit);
       } else if (event is RegistrationRedirectToAuthEvent) {
         await onRegistrationRedirectToAuthEvent();
@@ -67,13 +64,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     }
   }
   onRegistrationRedirectToAuthEvent() async {
-    locator<NavigationHelper>().navigateTo(authenticationRoute);
-  }
-  onRegistrationInitialEvent(RegistrationInitialEvent event, Emitter<RegistrationState> emit) async {
-    final authData = await _sessionDataProvider.getAuthData();
-    if (authData != null) {
-      emit(RegistrationImpossibleState());
-      locator<NavigationHelper>().navigateTo(homeRoute);
-    }
+    locator<NavigationHelper>().router.go(authenticationRoute);
   }
 }

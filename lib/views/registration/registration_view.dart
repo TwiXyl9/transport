@@ -7,9 +7,7 @@ import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
-import '../../helpers/navigation_helper.dart';
-import '../../locator.dart';
-import '../../routing/route_names.dart';
+
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({Key? key}) : super(key: key);
@@ -87,8 +85,7 @@ class _RegistrationViewState extends State<RegistrationView> {
       child: BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state){
           final bloc = context.read<RegistrationBloc>();
-          return state is RegistrationImpossibleState? Container() :
-          Container(
+          return Container(
               color: Colors.grey[300],
               child: SafeArea(
                 child: Center(
