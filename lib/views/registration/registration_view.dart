@@ -7,6 +7,8 @@ import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
+import '../../widgets/error/error_dialog_view.dart';
+
 
 
 class RegistrationView extends StatefulWidget {
@@ -25,24 +27,6 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Some error'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
   void signUp(RegistrationBloc bloc) async {
     if(_formKey.currentState!.validate()){
       try {
@@ -55,7 +39,10 @@ class _RegistrationViewState extends State<RegistrationView> {
 
      } catch (error) {
        var errorMessage = error.toString();
-       _showErrorDialog(errorMessage);
+       showDialog(
+           context: context,
+           builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+       );
      }
     }
   }

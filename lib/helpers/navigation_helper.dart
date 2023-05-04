@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 
 import '../data_provider/session_data_provider.dart';
+import '../models/user.dart';
 import '../routing/route_names.dart';
 import '../views/account/account_view.dart';
 import '../views/authentication/authentication_view.dart';
@@ -11,9 +12,11 @@ import '../views/cars/cars_view.dart';
 import '../views/home/home_view.dart';
 import '../views/registration/registration_view.dart';
 import '../widgets/account/account_orders_view.dart';
+import '../widgets/account/account_settings_view.dart';
 
 class NavigationHelper {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   final GoRouter router = GoRouter(
       routes: [
         GoRoute(path: homeRoute, builder: ((context, state) => HomeView())),
@@ -25,6 +28,13 @@ class NavigationHelper {
             builder: ((context, state) => AccountView()),
             routes: [
               GoRoute(path: accountOrdersRoute, builder: ((context, state) => AccountOrdersView())),
+              GoRoute(
+                  path: accountSettingsRoute,
+                  builder: ((context, state){
+                    User user = state.extra as User;
+                    return AccountSettingsView(user);
+                  }
+              )),
             ]
 
         ),
@@ -42,8 +52,8 @@ class NavigationHelper {
     },
   );
 
-  void navigateTo(String routeName){
-    return router.go(routeName);
+  void navigateTo(String routeName, {data = null}){
+    return router.go(routeName, extra: data);
   }
 
   void goBack(){

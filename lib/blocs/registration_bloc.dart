@@ -64,6 +64,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     }
   }
   onRegistrationRedirectToAuthEvent() async {
-    locator<NavigationHelper>().router.go(authenticationRoute);
+    locator<NavigationHelper>().navigateTo(authenticationRoute);
   }
 }

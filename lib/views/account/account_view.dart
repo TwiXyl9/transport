@@ -32,7 +32,7 @@ class AccountView extends StatelessWidget {
                   Text(state.user.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   Text(state.user.email, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   Text(state.user.phone, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  CustomButton(btnText: "Редактировать", onTap:() => logoutClick(bloc), btnColor: Colors.blue,),
+                  CustomButton(btnText: "Редактировать", onTap:() => { locator<NavigationHelper>().navigateTo('$accountPrefixRoute$accountSettingsRoute', data: state.user) }, btnColor: Colors.blue,),
                   CustomButton(btnText: "Заказы", onTap:() => { locator<NavigationHelper>().navigateTo('$accountPrefixRoute$accountOrdersRoute') }, btnColor: Colors.blue,),
                   CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc), btnColor: Colors.black,),
                 ],
