@@ -40,7 +40,7 @@ class NavigationHelper {
       if (isAuth) {
         if (state.fullPath == authenticationRoute || state.fullPath == registrationRoute) return homeRoute;
       } else {
-        if (state.location == accountRoute) return homeRoute;
+        if (state.location.contains(accountRoute)) return homeRoute;
       }
       return state.fullPath;
     },
