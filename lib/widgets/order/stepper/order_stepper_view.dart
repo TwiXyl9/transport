@@ -16,6 +16,7 @@ import '../../../models/order.dart';
 import '../../../models/order_service.dart';
 import '../../../models/point.dart';
 import '../../../models/user.dart';
+import '../../components/custom_circular_progress_indicator.dart';
 
 class OrderStepperView extends StatefulWidget {
   const OrderStepperView({Key? key}) : super(key: key);
@@ -108,7 +109,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
               },
               steps: getSteps(state)
           );
-      }
+        }
     );
   }
 
@@ -130,13 +131,13 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 2,
         title: Text("Тип груза"),
-        content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CircularProgressIndicator(),
+        content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CustomCircularProgressIndicator(),
       ),
       Step(
-          state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
-          isActive: currentStep >= 3,
-          title: Text("Машина"),
-          content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CircularProgressIndicator(),
+        state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
+        isActive: currentStep >= 3,
+        title: Text("Машина"),
+        content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CustomCircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
@@ -146,7 +147,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
             selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
             servicesCallback: servicesCallback,
             services: state.services
-        ) : CircularProgressIndicator(),
+        ) : CustomCircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 5 ? StepState.complete : StepState.indexed,
@@ -159,7 +160,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           totalPrice: totalPrice = getTotalPrice(),
           cargoType: selectedCargoType.id > 0 ? selectedCargoType : state.cargoTypes[0],
           car: selectedCar.id != 0 ? selectedCar : state.cars[0],
-          services: selectedServices,) : CircularProgressIndicator(),
+          services: selectedServices,) : CustomCircularProgressIndicator(),
       ),
     ];
   }
@@ -220,13 +221,13 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       bloc.add(
           OrderCreateEvent(order)
       );
-      } catch (error) {
-        var errorMessage = error.toString();
-        showDialog(
-            context: context,
-            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-        );
-      }
-      Navigator.of(context).pop();
+    } catch (error) {
+      var errorMessage = error.toString();
+      showDialog(
+          context: context,
+          builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+      );
+    }
+    Navigator.of(context).pop();
   }
 }

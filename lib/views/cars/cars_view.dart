@@ -8,6 +8,7 @@ import 'package:transport/widgets/cars/car_dialog.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
+import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../../widgets/order/order_button.dart';
 class CarsView extends StatelessWidget {
   CarsView({Key? key}) : super(key: key);
@@ -15,9 +16,9 @@ class CarsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CarsBloc, CarsState>(builder:
         (context, state) {
-        print(state);
-        if (state is CarsLoadedState){
-          return Stack(
+      print(state);
+      if (state is CarsLoadedState){
+        return Stack(
             alignment: Alignment.bottomRight,
             children: <Widget>[
               Column(
@@ -62,10 +63,10 @@ class CarsView extends StatelessWidget {
                   )
               ),
             ]
-          );
-        }
+        );
+      }
       return Center(
-        child: CircularProgressIndicator(),
+        child: CustomCircularProgressIndicator(),
       );
     });
   }

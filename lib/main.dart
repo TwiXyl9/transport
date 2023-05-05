@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           create: (context) => OrderBloc()..add(OrderInitialEvent()),
         ),
         BlocProvider<AccountBloc>(
-          create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(AccountInitialEvent()),
+          create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(InitialAccountEvent()),
         ),
       ],
       child: MaterialApp.router(

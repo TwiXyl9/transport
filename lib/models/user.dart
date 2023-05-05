@@ -41,4 +41,9 @@ class User {
   Map<String, dynamic> mapFromFields() {
     return {'user':{'name': name, 'phone': phone, 'email': email}};
   }
+
+  Map<String, dynamic> mapForUpdate() {
+    return {'user':{'name': name, 'phone': phone}};
+  }
+
 }

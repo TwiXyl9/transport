@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
+import 'package:transport/widgets/account/account_centered_container.dart';
+import 'package:transport/widgets/account/account_nested_pages_container.dart';
 
+import '../../blocs/account_bloc.dart';
 import '../../models/user.dart';
 import '../components/custom_button.dart';
+import '../components/custom_circular_progress_indicator.dart';
 import '../components/custom_text_field.dart';
 import '../error/error_dialog_view.dart';
 
 class AccountSettingsView extends StatelessWidget {
-  final User user;
-  AccountSettingsView(this.user);
 
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -19,19 +22,13 @@ class AccountSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (nameController.text.isEmpty && phoneController.text.isEmpty) {
-      nameController.text = user.name;
-      phoneController.text = user.phone;
-    }
-    void saveUser() async {
-      if(_formKey.currentState!.validate()){
-        try {
-          final name = nameController.text;
-          final phone = phoneController.text;
-          final email = emailController.text;
-          final password = passwordController.text;
-          final confirmPassword = confirmPasswordController.text;
 
+    void saveUser(user) async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          user.name = nameController.text;
+          user.phone = phoneController.text;
+          context.read<AccountBloc>().add(UpdateAccountEvent(user));
         } catch (error) {
           var errorMessage = error.toString();
           showDialog(
@@ -42,12 +39,15 @@ class AccountSettingsView extends StatelessWidget {
       }
     }
 
-    return Container(
-        color: Colors.grey[300],
-        child: SafeArea(
-          child: Center(
-            child: Container(
-              constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+    return BlocBuilder<AccountBloc, AccountState>(
+      builder: (context, state) {
+        if (state is AccountLoadedState) {
+          if (nameController.text.isEmpty && phoneController.text.isEmpty) {
+            nameController.text = state.user.name;
+            phoneController.text = state.user.phone;
+          }
+          return AccountNestedPagesContainer(
+            child: AccountCenteredContainer(
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -60,7 +60,7 @@ class AccountSettingsView extends StatelessWidget {
                           hint: 'Имя',
                           type: FieldType.text,
                           validator: (val) {
-                            if(!val!.isValidName){
+                            if (!val!.isValidName) {
                               return 'Некорректное имя';
                             }
                           }),
@@ -70,19 +70,21 @@ class AccountSettingsView extends StatelessWidget {
                           hint: 'Телефон',
                           type: FieldType.text,
                           validator: (val) {
-                            if(!val!.isValidPhone){
+                            if (!val!.isValidPhone) {
                               return 'Некорректный номер телефона';
                             }
                           }),
                       SizedBox(height: 20,),
-                      CustomButton(btnText: "Coхранить", onTap:() => saveUser(), btnColor: Colors.black),
+                      CustomButton(btnText: "Coхранить", onTap: () => saveUser(state.user), btnColor: Colors.black),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
-        )
+          );
+        }
+        return CustomCircularProgressIndicator();
+      },
     );
   }
 

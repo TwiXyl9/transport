@@ -119,7 +119,7 @@ class ApiService {
   Future<dynamic> createNewsRequest(path, news) async {
     try {
       var fullPath = apiUrl + path;
-      
+
       var request = http.MultipartRequest('POST', Uri.parse(fullPath))
         ..fields.addAll(news.mapFromFields())
         ..files.add(news.imageFile);
@@ -232,6 +232,22 @@ class ApiService {
       return data.map((types) => TailType.fromMap(types)).toList();
     } else {
       return [];
+    }
+  }
+  Future<dynamic> updateUserRequest(path, User user, authHeaders) async {
+    try {
+      var fullPath = apiUrl + path + '/${user.id}';
+      Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: fullHeaders, body: jsonEncode(user.mapForUpdate()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return new User.fromMap(responseData);
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
     }
   }
 }

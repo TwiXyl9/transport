@@ -11,6 +11,7 @@ import 'package:transport/widgets/services/service_item_view.dart';
 
 import '../../models/service.dart';
 import '../../widgets/components/custom_button.dart';
+import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../../widgets/components/multi_selector.dart';
 import '../../widgets/order/stepper/order_stepper_view.dart';
 
@@ -23,9 +24,9 @@ class OrderDialog extends StatefulWidget {
 
 class _OrderDialogState extends State<OrderDialog> {
 
-    @override
-    Widget build(BuildContext context) {
-      return BlocListener<OrderBloc, OrderState>(
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<OrderBloc, OrderState>(
       listener: (context, state) {
         print(state);
         if(state is OrderFailureState){
@@ -49,7 +50,7 @@ class _OrderDialogState extends State<OrderDialog> {
       child: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
           if (state is OrderLoadInProcessState || state is OrderInProcessState) {
-            return CircularProgressIndicator();
+            return CustomCircularProgressIndicator();
           }
           return Dialog(
             insetPadding: EdgeInsets.zero,

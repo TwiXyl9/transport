@@ -18,27 +18,21 @@ class NavigationHelper {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final GoRouter router = GoRouter(
-      routes: [
-        GoRoute(path: homeRoute, builder: ((context, state) => HomeView())),
-        GoRoute(path: carsRoute, builder: ((context, state) => CarsView())),
-        GoRoute(path: authenticationRoute, builder: ((context, state) => AuthenticationView())),
-        GoRoute(path: registrationRoute, builder: ((context, state) => RegistrationView())),
-        GoRoute(
-            path: accountRoute,
-            builder: ((context, state) => AccountView()),
-            routes: [
-              GoRoute(path: accountOrdersRoute, builder: ((context, state) => AccountOrdersView())),
-              GoRoute(
-                  path: accountSettingsRoute,
-                  builder: ((context, state){
-                    User user = state.extra as User;
-                    return AccountSettingsView(user);
-                  }
-              )),
-            ]
+    routes: [
+      GoRoute(path: homeRoute, builder: ((context, state) => HomeView())),
+      GoRoute(path: carsRoute, builder: ((context, state) => CarsView())),
+      GoRoute(path: authenticationRoute, builder: ((context, state) => AuthenticationView())),
+      GoRoute(path: registrationRoute, builder: ((context, state) => RegistrationView())),
+      GoRoute(
+          path: accountRoute,
+          builder: ((context, state) => AccountView()),
+          routes: [
+            GoRoute(path: accountOrdersRoute, builder: ((context, state) => AccountOrdersView())),
+            GoRoute(path: accountSettingsRoute, builder: ((context, state) => AccountSettingsView())),
+          ]
 
-        ),
-      ],
+      ),
+    ],
     redirect: (context, state) async {
       bool isAuth = await SessionDataProvider().getAccountId() != null;
       print(isAuth);

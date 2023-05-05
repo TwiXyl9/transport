@@ -5,6 +5,8 @@ import 'package:transport/widgets/additional_info/advantages.dart';
 import 'package:transport/widgets/news/admin_news_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
 import 'package:transport/widgets/sliders/news_slider_view.dart';
+
+import '../../widgets/components/custom_circular_progress_indicator.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
@@ -15,19 +17,19 @@ class HomeView extends StatelessWidget {
         builder: (context, state) {
           print(state);
           return state is NewsLoadedState ?
-              !state.user.isAdmin() ?
-              Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  NewsSlider(state.news),
-                  Container(
-                      alignment: Alignment.bottomRight,
-                      child: OrderButton(context)
-                  )
-                ],
-              ) :
-              AdminNewsView(state.news) :
-          CircularProgressIndicator();
+          !state.user.isAdmin() ?
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              NewsSlider(state.news),
+              Container(
+                  alignment: Alignment.bottomRight,
+                  child: OrderButton(context)
+              )
+            ],
+          ) :
+          AdminNewsView(state.news) :
+          CustomCircularProgressIndicator();
         }
     );
   }
