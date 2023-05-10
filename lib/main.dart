@@ -13,6 +13,8 @@ import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 
+import 'blocs/cargo_type_bloc.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Prefs.init();
@@ -44,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AccountBloc>(
           create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(InitialAccountEvent()),
+        ),
+        BlocProvider<CargoTypeBloc>(
+          create: (context) => CargoTypeBloc()..add(InitialCargoTypeEvent()),
         ),
       ],
       child: MaterialApp.router(

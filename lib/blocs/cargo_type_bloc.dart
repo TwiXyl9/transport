@@ -76,7 +76,7 @@ class CargoTypeBloc extends Bloc<CargoTypeEvent, CargoTypeState> {
   onCreateCargoTypeEvent(CreateCargoTypeEvent event, Emitter<CargoTypeState> emit) async {
     try {
       emit(CargoTypeCreateInProcessState());
-      var result = await ApiService().createCargoTypeRequest(newsPath, event.type);
+      var result = await ApiService().createCargoTypeRequest(cargoTypesPath, event.type);
 
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
@@ -91,7 +91,7 @@ class CargoTypeBloc extends Bloc<CargoTypeEvent, CargoTypeState> {
   onUpdateCargoTypeEvent(UpdateCargoTypeEvent event, Emitter<CargoTypeState> emit) async {
     try {
       emit(CargoTypeUpdateInProcessState());
-      var result = await ApiService().updateCargoTypeRequest(newsPath, event.type);
+      var result = await ApiService().updateCargoTypeRequest(cargoTypesPath, event.type);
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(CargoTypeUpdatedState());

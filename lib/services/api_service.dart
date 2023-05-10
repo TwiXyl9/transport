@@ -187,8 +187,8 @@ class ApiService {
       var fullPath = apiUrl + path +"/${data.id}";
 
       http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
-      final responseData = json.decode(response.body);
       if (response.statusCode != 204) {
+        final responseData = json.decode(response.body);
         print(responseData);
         return new HttpException(responseData['errors']['full_messages']);
       } else {
