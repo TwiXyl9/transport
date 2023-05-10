@@ -144,22 +144,6 @@ class ApiService {
       print(e);
     }
   }
-  Future<dynamic> deleteNewsRequest(path, news) async {
-    try {
-      var fullPath = apiUrl + path +"/${news.id}";
-
-      http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
-      final responseData = json.decode(response.body);
-      if (response.statusCode != 204) {
-        print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
-      } else {
-        return true;
-      }
-    } catch(e){
-      print(e);
-    }
-  }
   Future<dynamic> updateNewsRequest(path, news) async {
     try {
       var fullPath = apiUrl + path + '/${news.id}';
@@ -198,9 +182,9 @@ class ApiService {
       print(e);
     }
   }
-  Future<dynamic> deleteCarRequest(path, car) async {
+  Future<dynamic> delete(path, data) async {
     try {
-      var fullPath = apiUrl + path +"/${car.id}";
+      var fullPath = apiUrl + path +"/${data.id}";
 
       http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
       final responseData = json.decode(response.body);
@@ -252,6 +236,36 @@ class ApiService {
       if (response.statusCode == 200) {
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new User.fromMap(responseData);
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> createCargoTypeRequest(path, type) async {
+    try {
+      var fullPath = apiUrl + path;
+      http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: jsonEncode(type.mapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 201) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return new CargoType.fromMap(responseData);
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> updateCargoTypeRequest(path, type) async {
+    try {
+      var fullPath = apiUrl + path + '/${type.id}';
+      //Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: headers, body: jsonEncode(type.mapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+       // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return new CargoType.fromMap(responseData);
       } else {
         return new HttpException(responseData['errors']['full_messages']);
       }

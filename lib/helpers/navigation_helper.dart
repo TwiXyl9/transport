@@ -8,6 +8,7 @@ import '../models/user.dart';
 import '../routing/route_names.dart';
 import '../views/account/account_view.dart';
 import '../views/authentication/authentication_view.dart';
+import '../views/cargo_type/cargo_type_view.dart';
 import '../views/cars/cars_view.dart';
 import '../views/home/home_view.dart';
 import '../views/registration/registration_view.dart';
@@ -21,6 +22,7 @@ class NavigationHelper {
     routes: [
       GoRoute(path: homeRoute, builder: ((context, state) => HomeView())),
       GoRoute(path: carsRoute, builder: ((context, state) => CarsView())),
+      GoRoute(path: cargoTypeRoute, builder: ((context, state) => CargoTypeView())),
       GoRoute(path: authenticationRoute, builder: ((context, state) => AuthenticationView())),
       GoRoute(path: registrationRoute, builder: ((context, state) => RegistrationView())),
       GoRoute(

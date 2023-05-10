@@ -120,7 +120,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   onDeleteCarEvent(DeleteCarEvent event, Emitter<CarsState> emit) async {
     try {
       emit(CarDeleteInProcessState());
-      var result = await ApiService().deleteCarRequest(carsPath, event.car);
+      var result = await ApiService().delete(carsPath, event.car);
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(CarDeletedState());

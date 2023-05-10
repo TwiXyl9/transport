@@ -54,11 +54,15 @@ class NavBarTabletDesktop extends StatelessWidget {
                     state is AuthenticationAuthorizedState ?
                     !state.user.isAdmin()?
                     NavBarItem("Личный кабинет", accountRoute) :
-                    NavBarItem("Выйти", '', callback: logout,) :
+                    Row(
+                      children: [
+                        NavBarItem("Типы груза", cargoTypeRoute,),
+                        SizedBox(width: 20,),
+                        NavBarItem("Выйти", '', callback: logout,)
+                      ],
+                    ) :
                     NavBarItem("Войти", authenticationRoute),
-                    SizedBox(
-                      width: 20,
-                    ),
+                    SizedBox(width: 20,),
                   ],
                 )
               ],

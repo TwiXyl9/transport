@@ -1,6 +1,7 @@
 const String homeRoute = '/';
 const String carsRoute = '/cars';
 const String servicesRoute = '/services';
+const String cargoTypeRoute = '/cargo_type';
 const String contactsRoute = '/contacts';
 const String aboutRoute = '/about';
 const String authenticationRoute = '/authentication';

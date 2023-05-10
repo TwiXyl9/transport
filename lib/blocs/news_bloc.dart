@@ -128,7 +128,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   onDeleteNewsEvent(DeleteNewsEvent event, Emitter<NewsState> emit) async {
     try {
       emit(NewsDeleteInProcessState());
-      var result = await ApiService().deleteNewsRequest(newsPath, event.news);
+      var result = await ApiService().delete(newsPath, event.news);
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(NewsDeletedState());

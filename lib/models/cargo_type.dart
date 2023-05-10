@@ -10,6 +10,6 @@ class CargoType {
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'id' : id, 'name': name,};
+    return {'name': name,};
   }
 }
