@@ -5,13 +5,18 @@ import 'package:transport/helpers/navigation_helper.dart';
 class NavBarItem extends StatelessWidget {
   final String title;
   final String navigationPath;
-  const NavBarItem(this.title, this.navigationPath);
+  late Function? callback;
+  NavBarItem(this.title, this.navigationPath, {this.callback = null});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        locator<NavigationHelper>().navigateTo(navigationPath);
+        if (callback != null) {
+          callback!();
+        } else {
+          locator<NavigationHelper>().navigateTo(navigationPath);
+        }
       },
         child: Text(
             title,

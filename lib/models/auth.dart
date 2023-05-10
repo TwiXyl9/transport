@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:transport/models/user.dart';
 class Auth {
   late String? token;
   late DateTime? expiryDate;
   late String? uid;
   late String? client;
-  late int? userId;
+  late User user;
 
-  Auth(this.token, this.expiryDate, this.uid, this.client, this.userId);
+  Auth(this.token, this.expiryDate, this.uid, this.client, this.user);
 
   Auth.fromMap(data, headers) {
-      userId = data['data']['id'];
+      user = User.fromMap(data['data']);
       token = headers['access-token'];
       uid = headers['uid'];
       client = headers['client'];

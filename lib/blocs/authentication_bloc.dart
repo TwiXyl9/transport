@@ -12,6 +12,8 @@ import 'package:transport/routing/route_names.dart';
 import 'package:transport/services/auth_service.dart';
 import 'package:transport/models/http_exception.dart';
 
+import '../models/user.dart';
+
 @immutable
 abstract class AuthenticationEvent {}
 class AuthenticationLoginEvent extends AuthenticationEvent {
@@ -32,14 +34,15 @@ class AuthenticationRedirectToRegistrationEvent extends AuthenticationEvent {}
 abstract class AuthenticationState {}
 class AuthenticationInitial extends AuthenticationState {}
 class AuthenticationUnauthorizedState extends AuthenticationState {}
-class AuthenticationAuthorizedState extends AuthenticationState {}
+class AuthenticationAuthorizedState extends AuthenticationState {
+  User user;
+  AuthenticationAuthorizedState(this.user);
+}
 class AuthenticationFailureState extends AuthenticationState {
   final String error;
   AuthenticationFailureState(this.error);
 }
 class AuthenticationInProgressState extends AuthenticationState {}
-
-
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final _sessionDataProvider = SessionDataProvider();
@@ -62,9 +65,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   onAuthCheckStatusEvent(AuthenticationCheckStatusEvent event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationInProgressState());
-    final authData = await _sessionDataProvider.getAuthData();
+    final user = await _sessionDataProvider.getUser();
 
-    emit(authData != null ? AuthenticationAuthorizedState() : AuthenticationUnauthorizedState());
+    emit(user != null ? AuthenticationAuthorizedState(user) : AuthenticationUnauthorizedState());
   }
 
   onAuthLoginEvent(AuthenticationLoginEvent event, Emitter<AuthenticationState> emit) async {
@@ -73,8 +76,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       final result = await AuthService().login(event.email, event.password,);
       if(result != null && result.runtimeType != HttpException){
         await _sessionDataProvider.setAuthData(jsonEncode(result.mapFromFields()));
-        await _sessionDataProvider.setAccountId(result.userId!);
-        emit(AuthenticationAuthorizedState());
+        await _sessionDataProvider.setUser(result.user!);
+        emit(AuthenticationAuthorizedState(result.user!));
         onAuthRedirectToHomeEvent();
       } else{
         emit(AuthenticationFailureState(result.toString()));
@@ -88,7 +91,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   onAuthLogoutEvent(AuthenticationLogoutEvent event, Emitter<AuthenticationState> emit) async {
     try {
       await _sessionDataProvider.deleteAuthData();
-      await _sessionDataProvider.deleteAccountId();
+      await _sessionDataProvider.deleteUser();
       emit(AuthenticationUnauthorizedState());
       locator<NavigationHelper>().navigateTo(authenticationRoute);
     } catch (e) {

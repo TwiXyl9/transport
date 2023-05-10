@@ -69,21 +69,22 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   onInitialCarEvent(InitialCarsEvent event, Emitter<CarsState> emit) async {
     List<Car> cars = [];
     List<TailType> tailTypes = [];
-    User user = new User.createGuest();
+    //User user = new User.createGuest();
     try {
       emit(CarsLoadInProcessState());
-      var userId = await _sessionDataProvider.getAccountId();
+      var user = await _sessionDataProvider.getUser();
       cars = await ApiService().carsIndexRequest(carsPath);
       tailTypes = await ApiService().tailTypesIndexRequest(tailTypesPath);
-      if (userId != null) {
-        var authString = await _sessionDataProvider.getAuthData();
-        var authData = Auth.fromJson(jsonDecode(authString!));
-        var authHeadersMap = authData.mapFromFields();
-        user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        _sessionDataProvider.deleteAuthData();
-        _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
+      if (user == null) {
+        user = new User.createGuest();
+        // var authString = await _sessionDataProvider.getAuthData();
+        // var authData = Auth.fromJson(jsonDecode(authString!));
+        // var authHeadersMap = authData.mapFromFields();
+        // user = await ApiService().userShowRequest('/users/${user.id}', authHeadersMap);
+        // _sessionDataProvider.deleteAuthData();
+        // _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }
-      emit(CarsLoadedState(cars, user, tailTypes));
+      emit(CarsLoadedState(cars, user!, tailTypes));
     } catch (e) {
       emit(CarsFailureState(e.toString()));
     }

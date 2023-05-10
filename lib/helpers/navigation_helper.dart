@@ -34,11 +34,11 @@ class NavigationHelper {
       ),
     ],
     redirect: (context, state) async {
-      bool isAuth = await SessionDataProvider().getAccountId() != null;
-      print(isAuth);
+      var user = await SessionDataProvider().getUser();
       print(state.location);
-      if (isAuth) {
-        if (state.fullPath == authenticationRoute || state.fullPath == registrationRoute) return homeRoute;
+      if (user != null) {
+        if (state.location == authenticationRoute || state.location == registrationRoute) return homeRoute;
+        if (user.isAdmin() && state.location.contains(accountRoute)) return homeRoute;
       } else {
         if (state.location.contains(accountRoute)) return homeRoute;
       }

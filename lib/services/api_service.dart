@@ -106,14 +106,23 @@ class ApiService {
       return [];
     }
   }
-  Future<List<Order>> usersOrdersIndexRequest(path) async {
-    var fullPath = apiUrl + path;
-    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((order) => Order.fromMap(order)).toList();
-    } else {
-      return [];
+  Future<dynamic> usersOrdersIndexRequest(path, authHeaders) async {
+    try {
+      var fullPath = apiUrl + path;
+      Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.get(Uri.parse(fullPath), headers: fullHeaders as Map<String, String>);
+      print(response.statusCode);
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        List<dynamic> data = jsonDecode(response.body);
+        return data.map((order) => Order.fromMap(order)).toList();
+      } else {
+        print(responseData);
+        return new HttpException(responseData['errors'][0]);
+      }
+    } catch(e){
+      print(e);
     }
   }
   Future<dynamic> createNewsRequest(path, news) async {

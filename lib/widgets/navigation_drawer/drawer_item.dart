@@ -5,7 +5,8 @@ class DrawerItem extends StatelessWidget {
   final String title;
   final IconData icon;
   final String navigationPath;
-  const DrawerItem(this.title, this.icon, this.navigationPath);
+  late Function? callback;
+  DrawerItem(this.title, this.icon, this.navigationPath, {this.callback = null});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class DrawerItem extends StatelessWidget {
           SizedBox(
             width: 30,
           ),
-          NavBarItem(title, navigationPath),
+          NavBarItem(title, navigationPath, callback: callback,),
         ],
       ),
     );

@@ -70,27 +70,28 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
   onInitialNewsEvent(InitialNewsEvent event, Emitter<NewsState> emit) async {
     List<News> news = [];
-    User user = new User.createGuest();
+    //User user = new User.createGuest();
     try {
       emit(NewsLoadInProcessState());
-      var userId = await _sessionDataProvider.getAccountId();
+      var user = await _sessionDataProvider.getUser();
       news = await ApiService().newsIndexRequest(newsPath);
-      if (userId != null) {
-        var authString = await _sessionDataProvider.getAuthData();
-        var authData = Auth.fromJson(jsonDecode(authString!));
-        var authHeadersMap = authData.mapFromFields();
-        var result = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        if(result.runtimeType == HttpException){
-          authBloc.add(AuthenticationLogoutEvent());
-          emit(NewsFailureState(result.toString()));
-        } else {
-          user = result;
-          _sessionDataProvider.deleteAuthData();
-          _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
-          emit(NewsLoadedState(news, user));
-        }
+      if (user == null) {
+        user = new User.createGuest();
+        // var authString = await _sessionDataProvider.getAuthData();
+        // var authData = Auth.fromJson(jsonDecode(authString!));
+        // var authHeadersMap = authData.mapFromFields();
+        // var result = await ApiService().userShowRequest('/users/${user.id}', authHeadersMap);
+        // if(result.runtimeType == HttpException){
+        //   authBloc.add(AuthenticationLogoutEvent());
+        //   emit(NewsFailureState(result.toString()));
+        // } else {
+        // user = result;
+        // _sessionDataProvider.deleteAuthData();
+        // _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
+        //  emit(NewsLoadedState(news, user));
+        //}
       }
-      emit(NewsLoadedState(news, user));
+      emit(NewsLoadedState(news, user!));
     } catch (e) {
       emit(NewsFailureState(e.toString()));
     }

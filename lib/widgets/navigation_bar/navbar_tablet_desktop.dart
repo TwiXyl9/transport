@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/models/prefs.dart';
 import 'package:transport/routing/route_names.dart';
@@ -11,6 +12,10 @@ class NavBarTabletDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void logout(){
+      var bloc = Provider.of<AuthenticationBloc>(context, listen: false);
+      bloc.add(AuthenticationLogoutEvent());
+    }
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return Container(
@@ -46,7 +51,10 @@ class NavBarTabletDesktop extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    state is AuthenticationAuthorizedState ? NavBarItem("Личный кабинет", accountRoute) :
+                    state is AuthenticationAuthorizedState ?
+                    !state.user.isAdmin()?
+                    NavBarItem("Личный кабинет", accountRoute) :
+                    NavBarItem("Выйти", '', callback: logout,) :
                     NavBarItem("Войти", authenticationRoute),
                     SizedBox(
                       width: 20,
@@ -56,6 +64,7 @@ class NavBarTabletDesktop extends StatelessWidget {
               ],
             )
         );
+
       },
     );
 

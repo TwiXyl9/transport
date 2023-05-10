@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../models/user.dart';
 
 abstract class _Keys {
   static const authData = 'authData';
-  static const accountId = 'account_id';
+  static const user = 'user';
 }
 class SessionDataProvider {
   static const _secureStorage = FlutterSecureStorage();
@@ -17,19 +21,20 @@ class SessionDataProvider {
     return _secureStorage.delete(key: _Keys.authData);
   }
 
-  Future<int?> getAccountId() async {
-    final id = await _secureStorage.read(key: _Keys.accountId);
-    return id != null ? int.tryParse(id) : null;
+  Future<User?> getUser() async {
+    final userData = await _secureStorage.read(key: _Keys.user);
+    if (userData != null) return User.fromMap(jsonDecode(userData)['user']);
+    return null;
   }
 
-  Future<void> setAccountId(int value) {
+  Future<void> setUser(User user) {
     return _secureStorage.write(
-      key: _Keys.accountId,
-      value: value.toString(),
+      key: _Keys.user,
+      value: jsonEncode(user.mapFromFields()),
     );
   }
 
-  Future<void> deleteAccountId() {
-    return _secureStorage.delete(key: _Keys.accountId);
+  Future<void> deleteUser() {
+    return _secureStorage.delete(key: _Keys.user);
   }
 }

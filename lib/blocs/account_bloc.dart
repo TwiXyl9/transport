@@ -60,20 +60,19 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   }
   onInitialAccountEvent(InitialAccountEvent event, Emitter<AccountState> emit) async {
     List<Order> orders = [];
-    User user = new User.createGuest();
-    var userId = await _sessionDataProvider.getAccountId();
-    if (userId != null) {
-      orders = await ApiService().usersOrdersIndexRequest('$usersPath/$userId/$ordersPath');
+    //User user = new User.createGuest();
+    var user = await _sessionDataProvider.getUser(); //проверить что с гостем, передается ли он
+    if (user != null) {
 
       var authString = await _sessionDataProvider.getAuthData();
       var authData = Auth.fromJson(jsonDecode(authString!));
       var authHeadersMap = authData.mapFromFields();
-      var result = await ApiService().userShowRequest('$usersPath/${userId}', authHeadersMap);
+      var result = await ApiService().usersOrdersIndexRequest('$usersPath/${user.id}/$ordersPath', authHeadersMap);
       if(result.runtimeType == HttpException){
         authBloc.add(AuthenticationLogoutEvent());
         emit(AccountFailureState(result.toString()));
       } else {
-        user = result;
+        orders = result;
         _sessionDataProvider.deleteAuthData();
         _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
         emit(AccountLoadedState(user, orders));

@@ -60,21 +60,23 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     List<Car> cars = [];
     List<Service> services = [];
     List<CargoType> cargoTypes = [];
-    User user = new User.createGuest();
+    //User user = new User.createGuest();
     try {
       emit(OrderLoadInProcessState());
       cars = await ApiService().carsIndexRequest(carsPath);
       services = await ApiService().servicesIndexRequest(servicesPath);
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
-      var userId = await _sessionDataProvider.getAccountId();
-      if (userId != null) {
-        var authString = await _sessionDataProvider.getAuthData();
-        var authData = Auth.fromJson(jsonDecode(authString!));
-        var authHeadersMap = authData.mapFromFields();
-        user = await ApiService().userShowRequest('/users/${userId}', authHeadersMap);
-        _sessionDataProvider.deleteAuthData();
-        _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
+      var user = await _sessionDataProvider.getUser();
+      if (user != null) {
+        emit(OrderLoadedState(cars, services, user, cargoTypes));
+        // var authString = await _sessionDataProvider.getAuthData();
+        // var authData = Auth.fromJson(jsonDecode(authString!));
+        // var authHeadersMap = authData.mapFromFields();
+        // user = await ApiService().userShowRequest('/users/${user}', authHeadersMap);
+        // _sessionDataProvider.deleteAuthData();
+        // _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }
+      user = new User.createGuest();
       emit(OrderLoadedState(cars, services, user, cargoTypes));
     } catch (e) {
       emit(OrderFailureState(e.toString()));
