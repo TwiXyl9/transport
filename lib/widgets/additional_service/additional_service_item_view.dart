@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transport/widgets/additional_service/additional_service_dialog.dart';
 
 import '../../blocs/additional_service_bloc.dart';
 import '../../models/service.dart';
@@ -15,7 +16,12 @@ class AdditionalServiceItemView extends StatelessWidget {
     var bloc = Provider.of<AdditionalServiceBloc>(context, listen: false);
 
     void editType(){
-
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+          return AdditionalServiceDialog(service);
+        }
+      );
     }
     void deleteType(){
       bloc.add(DeleteAdditionalServiceEvent(service));
@@ -55,7 +61,8 @@ class AdditionalServiceItemView extends StatelessWidget {
                     icon: Icon(Icons.delete)
                 )
               ],
-            ) : Container(),
+            ) :
+            Container(),
           ],
         )
       ),
