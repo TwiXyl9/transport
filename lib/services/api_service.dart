@@ -299,4 +299,23 @@ class ApiService {
       return [];
     }
   }
+  Future<dynamic> create(path, data) async {
+    try {
+      var fullPath = apiUrl + path;
+
+      var request = http.MultipartRequest('POST', Uri.parse(fullPath))
+        ..fields.addAll(data.mapFromFields())
+        ..files.add(data.imageFile);
+      print(request.fields);
+      var response = await http.Response.fromStream(await request.send());
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 201) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return new News.fromMap(responseData);
+    } catch(e){
+      print(e);
+    }
+  }
 }

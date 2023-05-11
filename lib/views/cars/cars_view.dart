@@ -19,16 +19,8 @@ class CarsView extends StatelessWidget {
         builder: (context, state) {
         print(state);
         if (state is CarsLoadedState){
-          void openCarDialog(){
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CarDialog(new Car(0), state.tailTypes);
-                }
-            );
-          }
           return Stack(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment.center,
             children: <Widget>[
               Column(
                 children: [
@@ -48,7 +40,12 @@ class CarsView extends StatelessWidget {
               ),
               !state.user.isAdmin() ?
               OrderButton(context) :
-              CircularAddButton(openCarDialog),
+              CircularAddButton(() => showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CarDialog(new Car(0), state.tailTypes);
+                  }
+              )),
             ]
           );
        }

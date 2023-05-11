@@ -82,7 +82,7 @@ class AdditionalServiceBloc extends Bloc<AdditionalServiceEvent, AdditionalServi
   onCreateAdditionalServiceEvent(CreateAdditionalServiceEvent event, Emitter<AdditionalServiceState> emit) async {
     try {
       emit(AdditionalServiceCreateInProcessState());
-      var result = await ApiService().createCargoTypeRequest(cargoTypesPath, event.service);
+      var result = await ApiService().create(servicesPath, event.service);
 
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {

@@ -7,7 +7,8 @@ class Service {
   late String imageUrl;
   late MultipartFile imageFile;
 
-  Service(this.id, this.name, this.price, this.imageUrl);
+  Service(this.id);
+  Service.fromData(this.id, this.name, this.price, this.imageUrl);
   Service.withFile(this.id, this.name, this.price, this.imageFile);
   Service.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -16,7 +17,7 @@ class Service {
     imageUrl = map['image_url'];
   }
 
-  Map<String, dynamic> mapFromFields() {
-    return {'service[name]': name, 'service[price]': price};
+  Map<String, String> mapFromFields() {
+    return {'service[name]': name, 'service[price]': price.toString()};
   }
 }
