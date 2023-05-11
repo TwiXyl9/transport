@@ -273,4 +273,30 @@ class ApiService {
       print(e);
     }
   }
+  Future<dynamic> updateAdditionalServiceRequest(path, service) async {
+    try {
+      var fullPath = apiUrl + path + '/${service.id}';
+      //Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: headers, body: jsonEncode(service.mapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return new CargoType.fromMap(responseData);
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<List<Service>> additionalServiceIndexRequest(path) async {
+    var fullPath = apiUrl + path;
+    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((types) => Service.fromMap(types)).toList();
+    } else {
+      return [];
+    }
+  }
 }

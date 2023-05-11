@@ -40,13 +40,16 @@ class CarsItemView extends StatelessWidget {
           CarImageSliderView(car),
           CarInfoView(car),
           if (isAdmin) ...[
-            CustomButton(btnText: "Редактировать", onTap:() =>
-                showDialog(
+            CustomButton(
+                btnText: "Редактировать",
+                onTap:() => showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return CarDialog(car, tailTypes);
                     }
-                ), btnColor: Colors.blue),
+                ),
+                btnColor: Colors.blue
+            ),
             CustomButton(btnText: "Удалить", onTap:() => {deleteCar()} , btnColor: Colors.red),
           ]
 

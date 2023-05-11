@@ -13,6 +13,7 @@ import 'package:transport/locator.dart';
 import 'package:transport/models/prefs.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 
+import 'blocs/additional_service_bloc.dart';
 import 'blocs/cargo_type_bloc.dart';
 
 Future<void> main() async {
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CargoTypeBloc>(
           create: (context) => CargoTypeBloc()..add(InitialCargoTypeEvent()),
+        ),
+        BlocProvider<AdditionalServiceBloc>(
+          create: (context) => AdditionalServiceBloc()..add(InitialAdditionalServiceEvent()),
         ),
       ],
       child: MaterialApp.router(

@@ -1,24 +1,22 @@
+import 'package:http/http.dart';
+
 class Service {
   late int id;
   late String name;
   late double price;
-  late String? errorMsg;
-  Service(this.id, this.name, this.price);
+  late String imageUrl;
+  late MultipartFile imageFile;
 
+  Service(this.id, this.name, this.price, this.imageUrl);
+  Service.withFile(this.id, this.name, this.price, this.imageFile);
   Service.fromMap(Map<String, dynamic> map) {
-    if (map['errors'] != null){
-      errorMsg = map['errors'][0][0];
-      print(errorMsg);
-    } else{
-      errorMsg = null;
-      id = map['id'];
-      name = map['name'];
-      price = map['price'];
-    }
-
+    id = map['id'];
+    name = map['name'];
+    price = map['price'];
+    imageUrl = map['image_url'];
   }
 
   Map<String, dynamic> mapFromFields() {
-    return {'id': id, 'name': name, 'price': price};
+    return {'service[name]': name, 'service[price]': price};
   }
 }

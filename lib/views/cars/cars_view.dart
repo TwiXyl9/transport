@@ -6,6 +6,7 @@ import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
 import 'package:transport/widgets/cars/car_dialog.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
+import 'package:transport/widgets/components/circular_add_button.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
 import '../../widgets/components/custom_circular_progress_indicator.dart';
@@ -14,11 +15,19 @@ class CarsView extends StatelessWidget {
   CarsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CarsBloc, CarsState>(builder:
-        (context, state) {
-      print(state);
-      if (state is CarsLoadedState){
-        return Stack(
+    return BlocBuilder<CarsBloc, CarsState>(
+        builder: (context, state) {
+        print(state);
+        if (state is CarsLoadedState){
+          void openCarDialog(){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CarDialog(new Car(0), state.tailTypes);
+                }
+            );
+          }
+          return Stack(
             alignment: Alignment.bottomRight,
             children: <Widget>[
               Column(
@@ -39,32 +48,10 @@ class CarsView extends StatelessWidget {
               ),
               !state.user.isAdmin() ?
               OrderButton(context) :
-              Container(
-                  alignment: Alignment.bottomRight,
-                  margin: EdgeInsets.all(20),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.green,
-                    child: IconButton(
-                        onPressed: () => {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CarDialog(new Car(0), state.tailTypes);
-                              }
-                          ),
-                        },
-                        icon: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                    ),
-                  )
-              ),
+              CircularAddButton(openCarDialog),
             ]
-        );
-      }
+          );
+       }
       return Center(
         child: CustomCircularProgressIndicator(),
       );
