@@ -1,7 +1,6 @@
 const String homeRoute = '/';
 const String carsRoute = '/cars';
 const String servicesRoute = '/services';
-const String cargoTypeRoute = '/cargo_type';
 const String contactsRoute = '/contacts';
 const String aboutRoute = '/about';
 const String authenticationRoute = '/authentication';
@@ -10,3 +9,6 @@ const String accountRoute = '/account';
 const String accountPrefixRoute = '/account/';
 const String accountOrdersRoute = 'orders';
 const String accountSettingsRoute = 'settings';
+const String adminPrefixRoute = '/admin/';
+const String adminCargoTypeRoute = '${adminPrefixRoute}cargo_type';
+const String adminOrdersRoute = '${adminPrefixRoute}orders';

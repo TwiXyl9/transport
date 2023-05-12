@@ -64,7 +64,7 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
                 SizedBox(height: 20,),
                 CustomTextField(
                     controller: priceController,
-                    hint: 'Цена за час',
+                    hint: 'Цена',
                     type: FieldType.num,
                     validator: (val) {
                       if(val!.isEmpty){

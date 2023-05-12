@@ -5,8 +5,8 @@ import 'package:transport/widgets/components/custom_circular_progress_indicator.
 
 import '../../widgets/cargo_type/cargo_type_list_view.dart';
 
-class CargoTypeView extends StatelessWidget {
-  const CargoTypeView({Key? key}) : super(key: key);
+class AdminCargoTypeView extends StatelessWidget {
+  const AdminCargoTypeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

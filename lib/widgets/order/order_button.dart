@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
-import 'package:transport/views/orders/order_dialog.dart';
+import 'package:transport/widgets/order/order_dialog.dart';
 
 import '../../blocs/order_bloc.dart';
 
@@ -10,14 +11,16 @@ class OrderButton extends StatelessWidget {
   BuildContext parentContext;
   OrderButton(this.parentContext);
 
-  Future showOrderDialog() =>
-      showDialog(
+  void showOrderDialog(){
+    showDialog(
         context: parentContext,
         builder: (BuildContext context) {
-          context.read<OrderBloc>().add(OrderInitialEvent());
+          context.read<OrderBloc>().add(StartCreatingOrderEvent());
           return OrderDialog();
         }
-      );
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {

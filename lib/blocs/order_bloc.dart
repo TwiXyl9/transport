@@ -17,11 +17,11 @@ import '../models/order.dart';
 
 @immutable
 abstract class OrderEvent {}
-class OrderInitialEvent extends OrderEvent {}
-class OrderSetCarEvent extends OrderEvent {}
-class OrderCreateEvent extends OrderEvent {
+class InitialOrderEvent extends OrderEvent {}
+class StartCreatingOrderEvent extends OrderEvent {}
+class CreateOrderEvent extends OrderEvent {
   Order order;
-  OrderCreateEvent(this.order);
+  CreateOrderEvent(this.order);
 }
 
 @immutable
@@ -29,13 +29,19 @@ abstract class OrderState {}
 class OrderInitialState extends OrderState {}
 class OrderLoadInProcessState extends OrderState {}
 class OrderLoadedState extends OrderState {
+  final List<Order> orders;
+  // final List<Service> services;
+  // final List<CargoType> cargoTypes;
+  final User user;
+  OrderLoadedState(this.orders, this.user);
+}
+class OrderCreatingInProcessState extends OrderState {
   final List<Car> cars;
   final List<Service> services;
   final List<CargoType> cargoTypes;
   final User user;
-  OrderLoadedState(this.cars, this.services, this.user, this.cargoTypes);
+  OrderCreatingInProcessState(this.cars, this.services, this.cargoTypes, this.user);
 }
-class OrderInProcessState extends OrderState {}
 class OrderCreatedState extends OrderState {}
 class OrderFailureState extends OrderState {
   String error;
@@ -47,16 +53,35 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   OrderBloc() : super(OrderInitialState()) {
     on<OrderEvent>((event, emit) async {
-      if (event is OrderInitialEvent) {
-        await onOrderInitialEvent(event, emit);
-      } else if (event is OrderCreateEvent) {
-        await onOrderCreateEvent(event, emit);
-      } else if (event is OrderSetCarEvent) {
-        await onOrderSetCarEvent(event, emit);
+      if (event is InitialOrderEvent) {
+        await onInitialOrderEvent(event, emit);
+      } else if (event is CreateOrderEvent) {
+        await onCreateOrderEvent(event, emit);
+      } else if (event is StartCreatingOrderEvent) {
+        await onStartCreatingOrderEvent(event, emit);
       }
     }, transformer: sequential());
   }
-  onOrderInitialEvent(OrderInitialEvent event, Emitter<OrderState> emit) async {
+  onInitialOrderEvent(InitialOrderEvent event, Emitter<OrderState> emit) async {
+    List<Order> orders = [];
+    // List<Service> services = [];
+    // List<CargoType> cargoTypes = [];
+    //User user = new User.createGuest();
+    try {
+      emit(OrderLoadInProcessState());
+      orders = await ApiService().orderIndexRequest(ordersPath);
+      //cars = await ApiService().carsIndexRequest(carsPath);
+      //services = await ApiService().servicesIndexRequest(servicesPath);
+      //cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
+      var user = await _sessionDataProvider.getUser();
+      if (user == null) user = new User.createGuest();
+      emit(OrderLoadedState(orders, user));
+    } catch (e) {
+      print(e.toString());
+      emit(OrderFailureState(e.toString()));
+    }
+  }
+  onStartCreatingOrderEvent(StartCreatingOrderEvent event, Emitter<OrderState> emit) async {
     List<Car> cars = [];
     List<Service> services = [];
     List<CargoType> cargoTypes = [];
@@ -67,24 +92,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       services = await ApiService().servicesIndexRequest(servicesPath);
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
       var user = await _sessionDataProvider.getUser();
-      if (user != null) {
-        emit(OrderLoadedState(cars, services, user, cargoTypes));
-        // var authString = await _sessionDataProvider.getAuthData();
-        // var authData = Auth.fromJson(jsonDecode(authString!));
-        // var authHeadersMap = authData.mapFromFields();
-        // user = await ApiService().userShowRequest('/users/${user}', authHeadersMap);
-        // _sessionDataProvider.deleteAuthData();
-        // _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
-      }
-      user = new User.createGuest();
-      emit(OrderLoadedState(cars, services, user, cargoTypes));
+      if (user == null) user = new User.createGuest();
+      emit(OrderCreatingInProcessState(cars, services, cargoTypes, user));
     } catch (e) {
       emit(OrderFailureState(e.toString()));
     }
   }
-  onOrderCreateEvent(OrderCreateEvent event, Emitter<OrderState> emit) async {
+  onCreateOrderEvent(CreateOrderEvent event, Emitter<OrderState> emit) async {
     try {
-      emit(OrderInProcessState());
       var result = await ApiService().createOrderRequest(ordersPath, event.order.shortMapFromFields());
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
@@ -95,9 +110,5 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     } catch (e) {
       emit(OrderFailureState(e.toString()));
     }
-  }
-
-  onOrderSetCarEvent(OrderSetCarEvent event, Emitter<OrderState> emit) {
-
   }
 }

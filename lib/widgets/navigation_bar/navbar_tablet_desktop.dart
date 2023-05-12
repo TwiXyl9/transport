@@ -56,7 +56,9 @@ class NavBarTabletDesktop extends StatelessWidget {
                     NavBarItem("Личный кабинет", accountRoute) :
                     Row(
                       children: [
-                        NavBarItem("Типы груза", cargoTypeRoute,),
+                        NavBarItem("Заказы", adminOrdersRoute,),
+                        SizedBox(width: 20,),
+                        NavBarItem("Типы груза", adminCargoTypeRoute,),
                         SizedBox(width: 20,),
                         NavBarItem("Выйти", '', callback: logout,)
                       ],

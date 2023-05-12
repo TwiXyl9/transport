@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
         ),
         BlocProvider<OrderBloc>(
-          create: (context) => OrderBloc()..add(OrderInitialEvent()),
+          create: (context) => OrderBloc()..add(InitialOrderEvent()),
         ),
         BlocProvider<AccountBloc>(
           create: (context) => AccountBloc(context.read<AuthenticationBloc>())..add(InitialAccountEvent()),

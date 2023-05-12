@@ -5,14 +5,15 @@ import '../../models/order.dart';
 
 class OrderListView extends StatelessWidget {
   final List<Order> orders;
-  OrderListView(this.orders);
+  final bool isAdmin;
+  OrderListView(this.orders, this.isAdmin);
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: ListView(
         shrinkWrap: true,
-        children: orders.map((e) => OrderItemView(e)).toList(),
+        children: orders.map((e) => OrderItemView(e, isAdmin)).toList(),
       ),
     );
   }

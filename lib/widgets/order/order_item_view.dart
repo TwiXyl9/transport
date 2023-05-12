@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:transport/models/order.dart';
+import 'package:transport/widgets/components/custom_button.dart';
+import 'package:transport/widgets/order/admin_order_dialog.dart';
 
 import '../components/bold_text.dart';
 
 class OrderItemView extends StatelessWidget {
   final Order order;
-  OrderItemView(this.order);
+  final bool isAdmin;
+  OrderItemView(this.order, this.isAdmin);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,13 @@ class OrderItemView extends StatelessWidget {
               ],
             ),
             Text("Статус: ${order.stage}", style: TextStyle(fontSize: 12),),
+            isAdmin? CustomButton(btnText: "Подробнее", onTap: (){
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AdminOrderDialog(order);
+                });
+              }, btnColor: Colors.blueAccent) : Container()
           ],
         ),
       ),

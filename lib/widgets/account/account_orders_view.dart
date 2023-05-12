@@ -19,7 +19,7 @@ class AccountOrdersView extends StatelessWidget {
           AccountNestedPagesContainer(
               child: AccountCenteredContainer(
                   child: state.orders.length > 0?
-                  OrderListView(state.orders) :
+                  OrderListView(state.orders, state.user.isAdmin()) :
                   Column(
                     children: [
                       Text("У вас пока нет заказов!", style: TextStyle(fontSize: 24),),

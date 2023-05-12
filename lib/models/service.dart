@@ -16,6 +16,11 @@ class Service {
     price = map['price'];
     imageUrl = map['image_url'];
   }
+  Service.fromMapWithoutImage(Map<String, dynamic> map) {
+    id = map['id'];
+    name = map['name'];
+    price = map['price'];
+  }
 
   Map<String, String> mapFromFields() {
     return {'service[name]': name, 'service[price]': price.toString()};

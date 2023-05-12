@@ -43,7 +43,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         builder: (context, state) {
           int lastStep = getSteps(state).length - 1;
           bool isLastStep = (currentStep == lastStep);
-          if(state is OrderLoadedState && user.id == 0 && state.user.id != 0){
+          if(state is OrderCreatingInProcessState && user.id == 0 && state.user.id != 0){
             user = state.user!;
             nameController.text = user.name;
             phoneController.text = user.phone;
@@ -131,19 +131,19 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 2,
         title: Text("Тип груза"),
-        content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CustomCircularProgressIndicator(),
+        content: state is OrderCreatingInProcessState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CustomCircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 3,
         title: Text("Машина"),
-        content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CustomCircularProgressIndicator(),
+        content: state is OrderCreatingInProcessState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CustomCircularProgressIndicator(),
       ),
       Step(
         state: currentStep > 4 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 4,
         title: Text("Дополнительные услуги"),
-        content: state is OrderLoadedState? ServicesStep(
+        content: state is OrderCreatingInProcessState? ServicesStep(
             selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
             servicesCallback: servicesCallback,
             services: state.services
@@ -153,7 +153,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         state: currentStep > 5 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 5,
         title: Text("Итог"),
-        content: state is OrderLoadedState? TotalStep(
+        content: state is OrderCreatingInProcessState? TotalStep(
           name: nameController.text,
           phone: phoneController.text,
           dateTime: dateTimeController.text,
@@ -217,10 +217,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       var dateTime = dateTimeController.text;
       OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
       Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
-
-      bloc.add(
-          OrderCreateEvent(order)
-      );
+      bloc.add(CreateOrderEvent(order));
     } catch (error) {
       var errorMessage = error.toString();
       showDialog(

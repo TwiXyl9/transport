@@ -10,10 +10,10 @@ import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/services/service_item_view.dart';
 
 import '../../models/service.dart';
-import '../../widgets/components/custom_button.dart';
-import '../../widgets/components/custom_circular_progress_indicator.dart';
-import '../../widgets/components/multi_selector.dart';
-import '../../widgets/order/stepper/order_stepper_view.dart';
+import '../components/custom_button.dart';
+import '../components/custom_circular_progress_indicator.dart';
+import '../components/multi_selector.dart';
+import 'stepper/order_stepper_view.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class _OrderDialogState extends State<OrderDialog> {
       },
       child: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
-          if (state is OrderLoadInProcessState || state is OrderInProcessState) {
+          if (state is OrderLoadInProcessState) {
             return CustomCircularProgressIndicator();
           }
           return Dialog(

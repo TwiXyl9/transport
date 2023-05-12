@@ -9,7 +9,7 @@ class OrderService {
   OrderService.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     amount = map['amount'];
-    service = Service.fromMap(map['additional_service']);
+    service = Service.fromMapWithoutImage(map['additional_service']);
   }
   Map<String, int> shortMapFromFields() {
     return {'amount': amount, 'additional_service_id': service.id};

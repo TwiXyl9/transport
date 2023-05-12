@@ -54,13 +54,13 @@ class _DateStepState extends State<DateStep> {
 
   Future<DateTime?> pickDate() => showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _dateController.text.isEmpty? DateTime.now() : DateFormat('dd.MM.yyyy, HH:mm').parse(_dateController.text),
       firstDate:DateTime.now(),
       lastDate: DateTime(2101)
   );
 
   Future<TimeOfDay?> pickTime() => showTimePicker(
-      initialTime: TimeOfDay.now(),
+      initialTime: _dateController.text.isEmpty? TimeOfDay.now() : TimeOfDay.fromDateTime(DateFormat('dd.MM.yyyy, HH:mm').parse(_dateController.text)),
       context: context,
       builder: (context, childWidget) {
         return MediaQuery(
@@ -89,7 +89,7 @@ class _DateStepState extends State<DateStep> {
           _dateController.text = DateFormat('dd.MM.yyyy, HH:mm').format(pickedDateTime!);
         });
       }
-    }else{
+    } else{
       print("Date is not selected");
     }
   }

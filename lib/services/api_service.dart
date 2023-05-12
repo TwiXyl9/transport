@@ -88,10 +88,9 @@ class ApiService {
           Uri.parse(fullPath), headers: headers, body: json.encode(body));
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
-        print(responseData);
         return new HttpException(responseData['errors']['full_messages']);
       }
-      return new Order.fromMap(responseData);
+      return true;
     } catch(e){
       print(e);
     }
@@ -294,7 +293,7 @@ class ApiService {
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      return data.map((types) => Service.fromMap(types)).toList();
+      return data.map((type) => Service.fromMap(type)).toList();
     } else {
       return [];
     }
