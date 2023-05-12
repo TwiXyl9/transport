@@ -17,4 +17,6 @@ class OrderService {
   Map<String, dynamic> mapFromFields() {
     return {'amount': amount, 'additional_service': service.mapFromFields()};
   }
+
+  bool operator ==(Object other) => other is OrderService && other.id == id;
 }

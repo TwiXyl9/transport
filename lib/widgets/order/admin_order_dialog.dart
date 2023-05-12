@@ -5,6 +5,7 @@ import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
+import 'package:transport/widgets/order/stepper/services_step.dart';
 
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
@@ -51,6 +52,8 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         dateTimeController.text = _order.dateTime;
         selectedCargoType = _order.cargoType;
         selectedCar = _order.car;
+        selectedServices = _order.services;
+        print(selectedServices.length);
       }
     }
 
@@ -76,7 +79,12 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                         Text("Выберите тип груза"),
                         CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,),
                         SizedBox(height: 20,),
-                        CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars)
+                        CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars),
+                        ServicesStep(
+                            selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
+                            servicesCallback: servicesCallback,
+                            services: state.services
+                        )
                       ],
                     ) :
                     CustomCircularProgressIndicator(),

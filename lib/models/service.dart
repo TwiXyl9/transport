@@ -25,4 +25,5 @@ class Service {
   Map<String, String> mapFromFields() {
     return {'service[name]': name, 'service[price]': price.toString()};
   }
+  bool operator ==(Object other) => other is Service && other.id == id;
 }
