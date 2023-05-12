@@ -75,8 +75,8 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
                 SizedBox(height: 20,),
                 ImagePickerView([selectedImage], imageCallback, 1),
                 _service.id == 0 ?
-                CustomButton(btnText: 'Создать', onTap: createNews, btnColor: Colors.green) :
-                CustomButton(btnText: 'Сохранить', onTap: updateNews, btnColor: Colors.green)
+                CustomButton(btnText: 'Создать', onTap: createService, btnColor: Colors.green) :
+                CustomButton(btnText: 'Сохранить', onTap: updateService, btnColor: Colors.green)
               ],
             ),
           ),
@@ -89,7 +89,7 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
       selectedImage = imgs[0];
     });
   }
-  Future<void> createNews() async {
+  Future<void> createService() async {
     if (formKey.currentState!.validate()) {
       try {
         var name = nameController.text;
@@ -110,7 +110,7 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
       }
     }
   }
-  Future<void> updateNews() async {
+  Future<void> updateService() async {
     if (formKey.currentState!.validate()) {
       try {
         _service.name = nameController.text;

@@ -27,7 +27,7 @@ class CarsView extends StatelessWidget {
                   Text("Наш Автопарк"),
                   Expanded(
                     child: Container(
-                      constraints: BoxConstraints(minWidth: 300, maxWidth: 800),
+                      constraints: BoxConstraints(minWidth: 300),
                       child: GridView.count(
                           padding: EdgeInsets.zero,
                           crossAxisCount: 1,
