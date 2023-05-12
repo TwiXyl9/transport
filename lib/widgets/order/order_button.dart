@@ -15,7 +15,6 @@ class OrderButton extends StatelessWidget {
     showDialog(
         context: parentContext,
         builder: (BuildContext context) {
-          context.read<OrderBloc>().add(StartCreatingOrderEvent());
           return OrderDialog();
         }
     );

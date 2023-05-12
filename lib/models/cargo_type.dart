@@ -12,4 +12,6 @@ class CargoType {
   Map<String, dynamic> mapFromFields() {
     return {'name': name,};
   }
+
+  bool operator ==(Object other) => other is CargoType && other.id == id;
 }

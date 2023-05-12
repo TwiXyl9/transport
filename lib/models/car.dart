@@ -35,4 +35,6 @@ class Car {
     };
   }
 
+  bool operator ==(Object other) => other is Car && other.id == id;
+
 }
