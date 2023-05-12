@@ -206,7 +206,6 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         result += e.amount * e.service.price;
       });
     }
-
     return result;
   }
   void createOrder() {

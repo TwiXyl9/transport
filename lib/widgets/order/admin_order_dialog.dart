@@ -6,6 +6,8 @@ import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
+import 'package:transport/widgets/order/stepper/total/total_step.dart';
+import 'package:transport/widgets/order/total_table_view.dart';
 
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
@@ -80,11 +82,17 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                         CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,),
                         SizedBox(height: 20,),
                         CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars),
+                        SizedBox(height: 20,),
                         ServicesStep(
                             selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
                             servicesCallback: servicesCallback,
                             services: state.services
-                        )
+                        ),
+                        SizedBox(height: 20,),
+                        TotalTableView(
+                          selectedCar.id != 0 ? selectedCar : state.cars[0],
+                          selectedServices,
+                          totalPrice = getTotalPrice(),)
                       ],
                     ) :
                     CustomCircularProgressIndicator(),
@@ -117,5 +125,14 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
     return nameController.text.isEmpty && phoneController.text.isEmpty &&
         dateTimeController.text.isEmpty && selectedCar.id == 0 &&
         selectedCargoType.id == 0 && selectedServices.isEmpty;
+  }
+  double getTotalPrice(){
+    double result = selectedCar.id! > 0 ? selectedCar.price : 0;
+    if (selectedServices.length > 0) {
+      selectedServices.forEach((e) {
+        result += e.amount * e.service.price;
+      });
+    }
+    return result;
   }
 }
