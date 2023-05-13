@@ -8,7 +8,8 @@ class User {
   late String phone;
   late String email;
   late String role;
-  User(this.id, this.name, this.phone, this.role);
+
+  User(this.id);
   User.createGuest(){
     id = 0;
     name = '';

@@ -100,9 +100,26 @@ class ApiService {
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
+      print(response.body);
       return data.map((order) => Order.fromMap(order)).toList();
     } else {
       return [];
+    }
+  }
+  Future<dynamic> updateOrderRequest(path, order) async {
+    try {
+      var fullPath = apiUrl + path + '/${order.id}';
+      //Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: headers, body: jsonEncode(order.shortMapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return true;
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
     }
   }
   Future<dynamic> usersOrdersIndexRequest(path, authHeaders) async {
@@ -177,22 +194,6 @@ class ApiService {
         return new HttpException(responseData['errors']['full_messages']);
       }
       return new Car.fromMap(responseData);
-    } catch(e){
-      print(e);
-    }
-  }
-  Future<dynamic> delete(path, data) async {
-    try {
-      var fullPath = apiUrl + path +"/${data.id}";
-
-      http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
-      if (response.statusCode != 204) {
-        final responseData = json.decode(response.body);
-        print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
-      } else {
-        return true;
-      }
     } catch(e){
       print(e);
     }
@@ -317,7 +318,7 @@ class ApiService {
       print(e);
     }
   }
-  Future<dynamic> update(path, data) async {
+  Future<dynamic> updateWithFiles(path, data) async {
     try {
       var fullPath = apiUrl + path + '/${data.id}';
       var request = http.MultipartRequest('PATCH', Uri.parse(fullPath))
@@ -331,6 +332,38 @@ class ApiService {
         return new HttpException(responseData['errors']['full_messages']);
       }
       return true;
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> delete(path, data) async {
+    try {
+      var fullPath = apiUrl + path +"/${data.id}";
+
+      http.Response response = await http.delete(Uri.parse(fullPath), headers: headers);
+      if (response.statusCode != 204) {
+        final responseData = json.decode(response.body);
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      } else {
+        return true;
+      }
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> update(path, order) async {
+    try {
+      var fullPath = apiUrl + path + '/${order.id}';
+      //Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: headers, body: jsonEncode(order.shortMapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return true;
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
     } catch(e){
       print(e);
     }

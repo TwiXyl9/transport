@@ -24,7 +24,14 @@ class CreateOrderEvent extends OrderEvent {
   Order order;
   CreateOrderEvent(this.order);
 }
-
+class UpdateOrderEvent extends OrderEvent {
+  Order order;
+  UpdateOrderEvent(this.order);
+}
+class DeleteOrderEvent extends OrderEvent {
+  Order order;
+  DeleteOrderEvent(this.order);
+}
 @immutable
 abstract class OrderState {}
 class OrderInitialState extends OrderState {}
@@ -45,6 +52,8 @@ class OrderLoadedState extends OrderState {
 //   OrderCreatingInProcessState(this.cars, this.services, this.cargoTypes, this.user);
 // }
 class OrderCreatedState extends OrderState {}
+class OrderUpdatedState extends OrderState {}
+class OrderDeletedState extends OrderState {}
 class OrderFailureState extends OrderState {
   String error;
   OrderFailureState(this.error);
@@ -60,11 +69,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       } else if (event is CreateOrderEvent) {
         await onCreateOrderEvent(event, emit);
       }
-      // else if (event is StartCreatingOrderEvent) {
-      //   await onStartCreatingOrderEvent(event, emit);
-      // }else if (event is StartUpdatingOrderEvent) {
-      //   await onStartUpdatingOrderEvent(event, emit);
-      // }
+      else if (event is UpdateOrderEvent) {
+        await onUpdateOrderEvent(event, emit);
+      } else if (event is DeleteOrderEvent) {
+        await onDeleteOrderEvent(event, emit);
+      }
     }, transformer: sequential());
   }
   onInitialOrderEvent(InitialOrderEvent event, Emitter<OrderState> emit) async {
@@ -110,6 +119,34 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(OrderCreatedState());
+      } else {
+        emit(OrderFailureState(result.toString()));
+      }
+    } catch (e) {
+      emit(OrderFailureState(e.toString()));
+    }
+  }
+  onUpdateOrderEvent(UpdateOrderEvent event, Emitter<OrderState> emit) async {
+    try {
+      var result = await ApiService().updateOrderRequest(ordersPath, event.order);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(OrderUpdatedState());
+      } else {
+        print(result.toString());
+        emit(OrderFailureState(result.toString()));
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(OrderFailureState(e.toString()));
+    }
+  }
+  onDeleteOrderEvent(DeleteOrderEvent event, Emitter<OrderState> emit) async {
+    try {
+      var result = await ApiService().delete(ordersPath, event.order);
+      print(result.runtimeType);
+      if (result.runtimeType != HttpException) {
+        emit(OrderDeletedState());
       } else {
         emit(OrderFailureState(result.toString()));
       }

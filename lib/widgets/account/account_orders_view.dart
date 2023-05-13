@@ -21,6 +21,7 @@ class AccountOrdersView extends StatelessWidget {
                   child: state.orders.length > 0?
                   OrderListView(state.orders, state.user.isAdmin()) :
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("У вас пока нет заказов!", style: TextStyle(fontSize: 24),),
                       OrderButton(context),

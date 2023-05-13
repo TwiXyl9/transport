@@ -29,6 +29,7 @@ class Order {
     totalPrice = map['total_price'];
     stage = map['stage'];
     car = Car.fromMap(map['car']);
+    user = User(map['user_id']);
     cargoType = CargoType.fromMap(map['cargo_type']);
     route = Route.fromMap(map['route']);
     List<dynamic> servicesMap = map['order_additional_services'];
@@ -60,7 +61,7 @@ class Order {
         'total_price': totalPrice,
         'car_id': car.id,
         'cargo_type_id': cargoType.id,
-        if (user!.id! > 0) 'user_id': user!.id,
+        if (user!.id != null && user!.id! > 0) 'user_id': user!.id,
         'route': route.mapFromFields(),
         'order_additional_services_attributes': services.map((e) => e.shortMapFromFields()).toList()
       }

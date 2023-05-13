@@ -8,16 +8,18 @@ import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
 import 'package:transport/widgets/order/stepper/total/total_step.dart';
 import 'package:transport/widgets/order/total_table_view.dart';
-
+import 'package:transport/models/route.dart' as OrderRoute;
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
 import '../../models/order.dart';
 import '../../models/order_service.dart';
+import '../../models/point.dart';
 import '../../models/user.dart';
 import '../cargo_type/cargo_type_dropdown.dart';
 import '../components/custom_button.dart';
 import '../components/custom_circular_progress_indicator.dart';
 import '../components/custom_text_field.dart';
+import '../error/error_dialog_view.dart';
 
 class AdminOrderDialog extends StatefulWidget {
   final Order order;
@@ -96,7 +98,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                       ],
                     ) :
                     CustomCircularProgressIndicator(),
-                    CustomButton(btnText: 'Сохранить', onTap: (){}, btnColor: Colors.green)
+                    CustomButton(btnText: 'Сохранить', onTap: saveOrder, btnColor: Colors.green)
                   ],
                 ),
               ),
@@ -134,5 +136,27 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
       });
     }
     return result;
+  }
+  void saveOrder() {
+    try {
+      var bloc = context.read<OrderBloc>();
+      _order.name = nameController.text;
+      _order.phone = phoneController.text;
+      _order.dateTime = dateTimeController.text;
+      _order.totalPrice = totalPrice;
+      _order.cargoType = selectedCargoType;
+      _order.car = selectedCar;
+      _order.services = selectedServices.where((e) => e.amount > 0).toList();
+      //OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
+      //Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
+      bloc.add(UpdateOrderEvent(_order));
+    } catch (error) {
+      var errorMessage = error.toString();
+      showDialog(
+          context: context,
+          builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
+      );
+    }
+    Navigator.of(context).pop();
   }
 }
