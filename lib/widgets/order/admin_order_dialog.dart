@@ -147,8 +147,6 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
       _order.cargoType = selectedCargoType;
       _order.car = selectedCar;
       _order.services = selectedServices.where((e) => e.amount > 0).toList();
-      //OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
-      //Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
       bloc.add(UpdateOrderEvent(_order));
     } catch (error) {
       var errorMessage = error.toString();
