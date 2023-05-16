@@ -10,6 +10,7 @@ import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/components/image_container.dart';
 import 'package:transport/helpers/validation_helper.dart';
 
+
 import '../../widgets/error/error_dialog_view.dart';
 
 class AuthenticationView extends StatefulWidget {

@@ -7,7 +7,7 @@ class DropdownSortingView extends StatelessWidget {
   String value;
   DropdownSortingView(this.callback, this.value);
 
-  List<String> sortBy = ['По дате выполнения', 'По новизне'];
+  List<String> sortBy = ['По дате выполнения', 'По новизне', 'По цене'];
   @override
   Widget build(BuildContext context) {
     return DropdownButton(

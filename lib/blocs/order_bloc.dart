@@ -18,8 +18,6 @@ import '../models/order.dart';
 @immutable
 abstract class OrderEvent {}
 class InitialOrderEvent extends OrderEvent {}
-//class StartCreatingOrderEvent extends OrderEvent {}
-//class StartUpdatingOrderEvent extends OrderEvent {}
 class CreateOrderEvent extends OrderEvent {
   Order order;
   CreateOrderEvent(this.order);
@@ -68,8 +66,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         await onInitialOrderEvent(event, emit);
       } else if (event is CreateOrderEvent) {
         await onCreateOrderEvent(event, emit);
-      }
-      else if (event is UpdateOrderEvent) {
+      } else if (event is UpdateOrderEvent) {
         await onUpdateOrderEvent(event, emit);
       } else if (event is DeleteOrderEvent) {
         await onDeleteOrderEvent(event, emit);
@@ -126,6 +123,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderFailureState(e.toString()));
     }
   }
+
   onUpdateOrderEvent(UpdateOrderEvent event, Emitter<OrderState> emit) async {
     try {
       var result = await ApiService().updateOrderRequest(ordersPath, event.order);

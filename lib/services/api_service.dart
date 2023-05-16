@@ -31,7 +31,6 @@ class ApiService {
   }
   Future<List<Car>> carsIndexRequest(path) async {
     var fullPath = apiUrl + path;
-    print('CarsIndex');
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);

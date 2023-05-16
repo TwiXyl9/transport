@@ -19,6 +19,7 @@ class Order {
   late CargoType cargoType;
   late Route route;
   late List<OrderService> services = [];
+  late DateTime created_at;
   Order(this.id, this.name, this.phone, this.dateTime, this.stage, this.totalPrice, this.car, this.cargoType,this.route, this.services, this.user);
 
   Order.fromMap(Map<String, dynamic> map) {
@@ -26,6 +27,7 @@ class Order {
     name = map['name'];
     phone = map['phone'];
     dateTime = map['date'];
+    created_at = DateTime.parse(map['created_at']);
     totalPrice = map['total_price'];
     stage = map['stage'];
     car = Car.fromMap(map['car']);
