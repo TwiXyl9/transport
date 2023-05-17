@@ -18,7 +18,7 @@ class OrderListView extends StatefulWidget {
 
 class _OrderListViewState extends State<OrderListView> {
   var selectedSort = "По новизне";
-  MultiSelectController<String> stageController = MultiSelectController();
+  List<String> selectedStages = [];
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -52,12 +52,12 @@ class _OrderListViewState extends State<OrderListView> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return FilterDialog(stageController, stagesCallback);
+          return FilterDialog(selectedStages, stagesCallback);
         }
     );
   }
-  void stagesCallback(controller){
-    print(stageController.getSelectedItems());
-
+  void stagesCallback(stages){
+    selectedStages = stages;
+    print(selectedStages);
   }
 }

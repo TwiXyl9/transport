@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transport/widgets/additional_service/additional_service_dialog.dart';
@@ -23,6 +24,7 @@ class AdditionalServiceItemView extends StatelessWidget {
         }
       );
     }
+
     void deleteType(){
       bloc.add(DeleteAdditionalServiceEvent(service));
       bloc.add(InitialAdditionalServiceEvent());
@@ -30,22 +32,33 @@ class AdditionalServiceItemView extends StatelessWidget {
 
     return Card(
       child: Container(
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: 200,
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                  color: Colors.white
-              ),
-              child: Image.network(service.imageUrl),
-            ),
-            Column(
+            Row(
               children: [
-                Text(service.name),
-                Text('${service.price} б.р.')
+                Container(
+                  width: 200,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white
+                  ),
+                  child: Image.network(service.imageUrl, height: 100, fit: BoxFit.scaleDown,),
+                ),
+                Container(
+
+                 // constraints: BoxConstraints(minWidth:100, maxWidth: 200),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(service.name),
+                      Text(service.description, textAlign: TextAlign.justify,),
+                      Text('${service.price} б.р.')
+                    ],
+                  ),
+                ),
               ],
             ),
             user.isAdmin()?

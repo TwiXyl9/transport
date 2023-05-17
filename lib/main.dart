@@ -24,7 +24,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -60,10 +59,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        builder: (context, child) => LayoutTemplate(
-          child: child!,
-        ),
         routerConfig: locator<NavigationHelper>().router,
+        builder: (context, child) => Overlay(
+          initialEntries: [
+            OverlayEntry(
+              builder: (context) => LayoutTemplate(child: child!),
+            ),
+          ],
+        ),
         debugShowCheckedModeBanner: false,
       ),
     );

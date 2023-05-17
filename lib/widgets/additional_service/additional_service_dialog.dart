@@ -22,6 +22,7 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
   late Service _service;
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   XFile? selectedImage;
   final formKey = GlobalKey<FormState>();
   @override
@@ -32,9 +33,10 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
   @override
   Widget build(BuildContext context) {
     if (_service.id != 0) {
-      if (nameController.text.isEmpty && priceController.text.isEmpty) {
+      if (nameController.text.isEmpty && priceController.text.isEmpty && descriptionController.text.isEmpty) {
         nameController.text = _service.name;
         priceController.text = _service.price.toString();
+        descriptionController.text = _service.description;
       }
       if (_service.id != 0 && selectedImage == null) {
         selectedImage = new XFile(_service.imageUrl);
@@ -58,6 +60,17 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
                     validator: (val) {
                       if(val!.isEmpty){
                         return 'Заполните название!';
+                      }
+                    }
+                ),
+                SizedBox(height: 20,),
+                CustomTextField(
+                    controller: descriptionController,
+                    hint: 'Описание',
+                    type: FieldType.text,
+                    validator: (val) {
+                      if(val!.isEmpty){
+                        return 'Заполните описание!';
                       }
                     }
                 ),
@@ -94,8 +107,9 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
       try {
         var name = nameController.text;
         var price = double.parse(priceController.text);
+        var description = descriptionController.text;
         final httpImage = http.MultipartFile.fromBytes('service[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
-        var service = new Service.withFile(0, name, price, httpImage);
+        var service = new Service.withFile(0, name, description, price, httpImage);
         context.read<AdditionalServiceBloc>().add(
             CreateAdditionalServiceEvent(service)
         );
@@ -114,7 +128,8 @@ class _AdditionalServiceDialogState extends State<AdditionalServiceDialog> {
     if (formKey.currentState!.validate()) {
       try {
         _service.name = nameController.text;
-        _service.price = double.parse(priceController.text);;
+        _service.price = double.parse(priceController.text);
+        _service.description = descriptionController.text;
         _service.imageFile = http.MultipartFile.fromBytes('service[image]', await selectedImage!.readAsBytes(), filename: selectedImage!.name);
         context.read<AdditionalServiceBloc>().add(UpdateAdditionalServiceEvent(_service));
         context.read<AdditionalServiceBloc>().add(InitialAdditionalServiceEvent());

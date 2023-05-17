@@ -20,17 +20,19 @@ class AdditionalServiceView extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
+            state.services.length > 0 ?
             Container(
-              constraints: BoxConstraints(minWidth: 300, maxWidth: 500),
+              constraints: BoxConstraints(minWidth: 300, maxWidth: 600),
               child: SingleChildScrollView(
                   child: AdditionalServiceListView(state.services, state.user)
               ),
-            ),
+            ) :
+            Center(child: Text('У компании пока нет услуг! Создайте первую!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
             state.user.isAdmin() ?
             CircularAddButton(() => showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AdditionalServiceDialog( new Service(0));
+                  return AdditionalServiceDialog(new Service(0));
                 }
             )) :
             Container(),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/models/prefs.dart';
 import 'package:transport/routing/route_names.dart';
+import 'package:transport/widgets/navigation_bar/custom_admin_navigation_menu.dart';
 import 'package:transport/widgets/navigation_bar/navbar_item.dart';
 import 'package:transport/widgets/navigation_bar/navbar_logo.dart';
 
@@ -56,11 +57,12 @@ class NavBarTabletDesktop extends StatelessWidget {
                     NavBarItem("Личный кабинет", accountRoute) :
                     Row(
                       children: [
+                        CustomAdminNavigationMenu(),
                         NavBarItem("Заказы", adminOrdersRoute,),
                         SizedBox(width: 20,),
                         NavBarItem("Типы груза", adminCargoTypeRoute,),
                         SizedBox(width: 20,),
-                        NavBarItem("Выйти", '', callback: logout,)
+                        NavBarItem("Выйти", '', callback: logout,),
                       ],
                     ) :
                     NavBarItem("Войти", authenticationRoute),

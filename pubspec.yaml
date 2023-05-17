@@ -57,6 +57,8 @@ dependencies:
 
   bottom_picker: ^2.0.1
 
+  dropdown_button2: ^2.1.2
+
   intl: ^0.17.0
 
   time_picker_widget: ^1.0.0+10

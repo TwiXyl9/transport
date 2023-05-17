@@ -8,18 +8,19 @@ import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import '../../config/order_stages_config.dart';
 
 class FilterDialog extends StatelessWidget {
-  MultiSelectController<String> stageController;
+  List<String> selectedStages;
   Function callback;
-  FilterDialog(this.stageController, this.callback);
+  FilterDialog(this.selectedStages, this.callback);
 
   @override
   Widget build(BuildContext context) {
 
     void clearFilter() {
-      stageController.deselectAll();
+
     }
 
     void applyFilter() {
+      callback(selectedStages);
       Navigator.of(context).pop();
     }
 
@@ -42,32 +43,39 @@ class FilterDialog extends StatelessWidget {
               SizedBox(height: 10,),
               Text("Статусы заявок", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),),
               SizedBox(height: 10,),
-              MultiSelectContainer(
-                controller: stageController,
-                itemsDecoration: MultiSelectDecorations(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          Colors.blueAccent.withOpacity(0.1),
-                          Colors.yellow.withOpacity(0.1),
-                        ]),
-                        border: Border.all(color: Colors.blue[200]!),
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                  prefix: MultiSelectPrefix(
-                      selectedPrefix: const Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 14,
-                        ),
-                      ),
-                  ),
-                  items: stages.map((e) => MultiSelectCard(value: e, label: e)).toList(),
-                  onChange: (allSelectedItems, selectedItem) {
-                    print(stageController.getSelectedItems());
-                  }
+              MultiSelectDialogField(
+                items: stages.map((e) => MultiSelectItem(e, e)).toList(),
+                listType: MultiSelectListType.CHIP,
+                onConfirm: (values) {
+                  selectedStages = stages;
+                },
               ),
+              // MultiSelectContainer(
+              //   controller: stageController,
+              //   itemsDecoration: MultiSelectDecorations(
+              //       decoration: BoxDecoration(
+              //           gradient: LinearGradient(colors: [
+              //             Colors.blueAccent.withOpacity(0.1),
+              //             Colors.yellow.withOpacity(0.1),
+              //           ]),
+              //           border: Border.all(color: Colors.blue[200]!),
+              //           borderRadius: BorderRadius.circular(20)),
+              //     ),
+              //     prefix: MultiSelectPrefix(
+              //         selectedPrefix: const Padding(
+              //           padding: EdgeInsets.only(right: 5),
+              //           child: Icon(
+              //             Icons.check,
+              //             color: Colors.white,
+              //             size: 14,
+              //           ),
+              //         ),
+              //     ),
+              //     items: stages.map((e) => MultiSelectCard(value: e, label: e)).toList(),
+              //     onChange: (allSelectedItems, selectedItem) {
+              //       print(stageController.getSelectedItems());
+              //     }
+              // ),
               Divider(),
               Text("Машины", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),),
               SizedBox(height: 10,),

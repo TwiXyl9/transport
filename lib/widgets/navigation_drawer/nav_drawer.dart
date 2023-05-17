@@ -30,7 +30,7 @@ class NavDrawer extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   DrawerItem("Автопарк", Icons.directions_car, carsRoute),
-                  DrawerItem("Услуги", Icons.sell, aboutRoute),
+                  DrawerItem("Услуги", Icons.sell, servicesRoute),
                   DrawerItem("Контаты", Icons.contact_phone, carsRoute),
                   DrawerItem("О Нас", Icons.info, aboutRoute),
                   state is AuthenticationAuthorizedState ?
