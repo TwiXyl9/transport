@@ -4,7 +4,9 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
+import 'package:transport/services/oauth_service.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 import 'package:transport/widgets/components/image_container.dart';
@@ -125,13 +127,10 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 50,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ImageContainer(
-                                      imgPath: 'lib/assets/facebook_logo.png'),
-                                ],
+                              SizedBox(height: 25,),
+                              SignInButton(
+                                Buttons.Google,
+                                onPressed: googleSignIn,
                               )
                             ],
                           ),
@@ -148,6 +147,10 @@ class _AuthenticationViewState extends State<AuthenticationView> {
     );
   }
 
+  Future googleSignIn() async {
+    var user = await GoogleSignInApi.Login();
+    print(user);
+  }
   Future<void> signIn(AuthenticationBloc bloc) async {
     if(_formKey.currentState!.validate()){
       try {

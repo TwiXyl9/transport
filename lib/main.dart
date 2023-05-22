@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart';
 import 'package:transport/blocs/account_bloc.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
         title: 'Transport',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.interTextTheme(
+            Theme.of(context).textTheme
+          )
         ),
         routerConfig: locator<NavigationHelper>().router,
         builder: (context, child) => Overlay(
