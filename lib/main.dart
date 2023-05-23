@@ -55,24 +55,26 @@ class MyApp extends StatelessWidget {
           create: (context) => AdditionalServiceBloc()..add(InitialAdditionalServiceEvent()),
         ),
       ],
-      child: MaterialApp.router(
-        title: 'Transport',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.interTextTheme(
-            Theme.of(context).textTheme
-          )
+      child: MaterialApp(
+        home: MaterialApp.router(
+          title: 'Transport',
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              textTheme: GoogleFonts.interTextTheme(
+                  Theme.of(context).textTheme
+              )
+          ),
+          routerConfig: locator<NavigationHelper>().router,
+          builder: (context, child) => Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (context) => LayoutTemplate(child: child!),
+              ),
+            ],
+          ),
+          debugShowCheckedModeBanner: false,
         ),
-        routerConfig: locator<NavigationHelper>().router,
-        builder: (context, child) => Overlay(
-          initialEntries: [
-            OverlayEntry(
-              builder: (context) => LayoutTemplate(child: child!),
-            ),
-          ],
-        ),
-        debugShowCheckedModeBanner: false,
-      ),
+      )
     );
   }
 

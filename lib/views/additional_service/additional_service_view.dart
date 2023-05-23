@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/widgets/centered_view/centered_view.dart';
 
 import '../../blocs/additional_service_bloc.dart';
 import '../../models/service.dart';
@@ -21,11 +22,8 @@ class AdditionalServiceView extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             state.services.length > 0 ?
-            Container(
-              constraints: BoxConstraints(minWidth: 300, maxWidth: 600),
-              child: SingleChildScrollView(
-                  child: AdditionalServiceListView(state.services, state.user)
-              ),
+            CenteredView(
+              child: AdditionalServiceListView(state.services, state.user),
             ) :
             Center(child: Text('У компании пока нет услуг! Создайте первую!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
             state.user.isAdmin() ?

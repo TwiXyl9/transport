@@ -6,6 +6,7 @@ import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
 import 'package:transport/widgets/cars/car_dialog.dart';
 import 'package:transport/widgets/cars/cars_item_view.dart';
+import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/components/circular_add_button.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
@@ -22,21 +23,12 @@ class CarsView extends StatelessWidget {
           return Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              Column(
-                children: [
-                  Text("Наш Автопарк"),
-                  Expanded(
-                    child: Container(
-                      constraints: BoxConstraints(minWidth: 300),
-                      child: GridView.count(
-                          padding: EdgeInsets.zero,
-                          crossAxisCount: 1,
-                          shrinkWrap: true,
-                          children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
-                      ),
-                    ),
-                  ),
-                ],
+              CenteredView(
+                child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+                ),
               ),
               !state.user.isAdmin() ?
               OrderButton(context) :

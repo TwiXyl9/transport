@@ -20,6 +20,7 @@ class CarsItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     void deleteCar(){
       final bloc = Provider.of<CarsBloc>(context, listen: false);
       try {
@@ -33,6 +34,7 @@ class CarsItemView extends StatelessWidget {
         );
       }
     }
+
     return Card(
       elevation: 12,
       child: Column(

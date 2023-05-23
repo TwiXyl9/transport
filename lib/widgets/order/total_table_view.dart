@@ -22,7 +22,7 @@ class TotalTableView extends StatelessWidget {
                 children: [
                   BoldText("Машина:"),
                   Text("${car.brand} ${car.model}"),
-                  Text("${car.price} р."),
+                  Text("${car.pricePerHour} р."),
                 ]
             ),
             if (services.length > 0)

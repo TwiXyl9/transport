@@ -6,6 +6,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:transport/blocs/registration_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/services/oauth_service.dart';
+import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
 
@@ -74,122 +75,120 @@ class _RegistrationViewState extends State<RegistrationView> {
       child: BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state){
           final bloc = context.read<RegistrationBloc>();
-          return SingleChildScrollView(
-            child: Container(
-                color: Colors.grey[300],
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 25,),
-                          Text("Регистрация", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                          SizedBox(height: 15,),
-                          CustomTextField(
-                              controller: nameController,
-                              hint: 'Имя',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidName){
-                                  return 'Некорректное имя';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: phoneController,
-                              hint: 'Телефон',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidPhone){
-                                  return 'Некорректный номер телефона';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: emailController,
-                              hint: 'Email',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidEmail){
-                                  return 'Некорректный email';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: passwordController,
-                              hint: 'Пароль',
-                              type: FieldType.password,
-                              validator: (val){
-                                if(!val!.isValidPassword){
-                                  return 'Некорректный пароль';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: confirmPasswordController,
-                              hint: 'Повтор пароля',
-                              type: FieldType.password,
-                              validator: (val){
-                                if (!val!.isValidPassword) {
-                                  return 'Некорректный пароль';
-                                } else if (val != passwordController.text) {
-                                  return 'Пароли не совпадают';
-                                }
-                              }),
-                          CustomButton(btnText: "Зарегистрироваться", onTap:() => signUp(bloc), btnColor: Colors.black),
-                          Container(
-                            child: Text.rich(
-                                TextSpan(
-                                    children: [
-                                      TextSpan(text: "У вас уже есть аккаунта? "),
-                                      TextSpan(
-                                          text: "Войти",
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.bold),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = (){
-                                              bloc.add(RegistrationRedirectToAuthEvent());
-                                            }
-                                            ),
-                                    ]
+          return Container(
+            color: Colors.grey[300],
+            child: CenteredView(
+              child: Container(
+                  constraints: BoxConstraints(maxWidth: 400),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 25,),
+                        Text("Регистрация", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                        SizedBox(height: 15,),
+                        CustomTextField(
+                            controller: nameController,
+                            hint: 'Имя',
+                            type: FieldType.text,
+                            validator: (val) {
+                              if(!val!.isValidName){
+                                return 'Некорректное имя';
+                              }
+                            }),
+                        SizedBox(height: 10,),
+                        CustomTextField(
+                            controller: phoneController,
+                            hint: 'Телефон',
+                            type: FieldType.text,
+                            validator: (val) {
+                              if(!val!.isValidPhone){
+                                return 'Некорректный номер телефона';
+                              }
+                            }),
+                        SizedBox(height: 10,),
+                        CustomTextField(
+                            controller: emailController,
+                            hint: 'Email',
+                            type: FieldType.text,
+                            validator: (val) {
+                              if(!val!.isValidEmail){
+                                return 'Некорректный email';
+                              }
+                            }),
+                        SizedBox(height: 10,),
+                        CustomTextField(
+                            controller: passwordController,
+                            hint: 'Пароль',
+                            type: FieldType.password,
+                            validator: (val){
+                              if(!val!.isValidPassword){
+                                return 'Некорректный пароль';
+                              }
+                            }),
+                        SizedBox(height: 10,),
+                        CustomTextField(
+                            controller: confirmPasswordController,
+                            hint: 'Повтор пароля',
+                            type: FieldType.password,
+                            validator: (val){
+                              if (!val!.isValidPassword) {
+                                return 'Некорректный пароль';
+                              } else if (val != passwordController.text) {
+                                return 'Пароли не совпадают';
+                              }
+                            }),
+                        CustomButton(btnText: "Зарегистрироваться", onTap:() => signUp(bloc), btnColor: Colors.black),
+                        Container(
+                          child: Text.rich(
+                              TextSpan(
+                                  children: [
+                                    TextSpan(text: "У вас уже есть аккаунта? "),
+                                    TextSpan(
+                                        text: "Войти",
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = (){
+                                            bloc.add(RegistrationRedirectToAuthEvent());
+                                          }
+                                          ),
+                                  ]
+                              )
+                          ),
+                        ),
+                        SizedBox(height: 15,),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Divider(
+                                  thickness: 0.5,
+                                  color: Colors.grey[400],
                                 )
                             ),
-                          ),
-                          SizedBox(height: 15,),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Divider(
-                                    thickness: 0.5,
-                                    color: Colors.grey[400],
-                                  )
-                              ),
-                              Text('Или зарегистрируйтесь с помощью',
-                                style: TextStyle(color: Colors.grey[700]),
-                              ),
-                              Expanded(
-                                  child: Divider(
-                                    thickness: 0.5,
-                                    color: Colors.grey[400],
-                                  )
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 17,),
-                          SignInButton(
-                            Buttons.Google,
-                            onPressed: googleSignUp,
-                          ),
-                          SizedBox(height: 25,),
-                        ],
-                      ),
+                            Text('Или зарегистрируйтесь с помощью',
+                              style: TextStyle(color: Colors.grey[700]),
+                            ),
+                            Expanded(
+                                child: Divider(
+                                  thickness: 0.5,
+                                  color: Colors.grey[400],
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 17,),
+                        SignInButton(
+                          Buttons.Google,
+                          onPressed: googleSignUp,
+                        ),
+                        SizedBox(height: 25,),
+                      ],
                     ),
-                  ),
-                )
+                  )
+              ),
             ),
           );
         },

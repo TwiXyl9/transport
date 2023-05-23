@@ -13,16 +13,12 @@ class LayoutTemplate extends StatelessWidget {
     return Scaffold(
       drawer: NavDrawer(),
       backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          constraints: BoxConstraints(minWidth: 200, maxHeight: MediaQuery.of(context).size.height),
-          child: Column(
-            children: [
-              NavBar(),
-              Expanded(child: child),
-            ],
-          ),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          NavBar(),
+          Expanded(child: child),
+        ],
       ),
     );
   }

@@ -34,7 +34,8 @@ class _CarDialogState extends State<CarDialog> {
   late List<TailType> _tailTypes;
   TextEditingController brandController = TextEditingController();
   TextEditingController modelController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  TextEditingController pricePerHourController = TextEditingController();
+  TextEditingController pricePerKilometerController = TextEditingController();
 
   TextEditingController widthController = TextEditingController();
   TextEditingController heightController = TextEditingController();
@@ -56,7 +57,8 @@ class _CarDialogState extends State<CarDialog> {
       if (allIsEmpty()) {
         brandController.text = _car.brand;
         modelController.text = _car.model;
-        priceController.text = _car.price.toString();
+        pricePerHourController.text = _car.pricePerHour.toString();
+        pricePerKilometerController.text = _car.pricePerKilometer.toString();
 
         widthController.text = _car.capacity.width.toString();
         heightController.text = _car.capacity.height.toString();
@@ -105,8 +107,18 @@ class _CarDialogState extends State<CarDialog> {
                       }
                   ),
                   CustomTextField(
-                      controller: priceController,
+                      controller: pricePerHourController,
                       hint: 'Цена за час',
+                      type: FieldType.num,
+                      validator: (val) {
+                        if(val!.isEmpty){
+                          return 'Введите значение!';
+                        }
+                      }
+                  ),
+                  CustomTextField(
+                      controller: pricePerKilometerController,
+                      hint: 'Цена за киллометр',
                       type: FieldType.num,
                       validator: (val) {
                         if(val!.isEmpty){
@@ -203,7 +215,8 @@ class _CarDialogState extends State<CarDialog> {
       try {
         var brand = brandController.text;
         var model = modelController.text;
-        var price = double.parse(priceController.text);
+        var pricePerHour = double.parse(pricePerHourController.text);
+        var pricePerKilometer = double.parse(pricePerKilometerController.text);
 
         var width = double.parse(widthController.text);
         var height = double.parse(heightController.text);
@@ -211,7 +224,7 @@ class _CarDialogState extends State<CarDialog> {
         var numOfPallets = int.parse(numOfPalletsController.text);
         var loadCapacity = double.parse(loadCapacityController.text);
         final httpImages = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name)).toList());
-        var car = new Car.withFiles(0, brand, model, price, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity), selectedTailType);
+        var car = new Car.withFiles(0, brand, model, pricePerHour, pricePerKilometer, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity), selectedTailType);
         context.read<CarsBloc>().add(CreateCarEvent(car));
         context.read<CarsBloc>().add(InitialCarsEvent());
         Navigator.of(context).pop();
@@ -229,7 +242,8 @@ class _CarDialogState extends State<CarDialog> {
       try {
         _car.brand = brandController.text;
         _car.model = modelController.text;
-        _car.price = double.parse(priceController.text);
+        _car.pricePerHour = double.parse(pricePerHourController.text);
+        _car.pricePerKilometer = double.parse(pricePerKilometerController.text);
 
         _car.capacity.width = double.parse(widthController.text);
         _car.capacity.height = double.parse(heightController.text);
@@ -253,8 +267,9 @@ class _CarDialogState extends State<CarDialog> {
   }
   bool allIsEmpty(){
     return brandController.text.isEmpty && modelController.text.isEmpty &&
-        priceController.text.isEmpty && widthController.text.isEmpty &&
-        heightController.text.isEmpty && lengthController.text.isEmpty &&
-        numOfPalletsController.text.isEmpty && loadCapacityController.text.isEmpty;
+        pricePerHourController.text.isEmpty && pricePerKilometerController.text.isEmpty &&
+        widthController.text.isEmpty && heightController.text.isEmpty &&
+        lengthController.text.isEmpty && numOfPalletsController.text.isEmpty &&
+        loadCapacityController.text.isEmpty;
   }
 }

@@ -129,7 +129,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         selectedCargoType.id == 0 && selectedServices.isEmpty;
   }
   double getTotalPrice(){
-    double result = selectedCar.id! > 0 ? selectedCar.price : 0;
+    double result = selectedCar.id! > 0 ? selectedCar.pricePerHour : 0;
     if (selectedServices.length > 0) {
       selectedServices.forEach((e) {
         result += e.amount * e.service.price;
