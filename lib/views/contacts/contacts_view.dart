@@ -11,6 +11,7 @@ class ContactsView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(height: 10,),
           Text('КОНТАКТЫ', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
           Divider(
             thickness: 0.5,
