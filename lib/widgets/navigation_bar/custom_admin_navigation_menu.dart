@@ -16,18 +16,23 @@ class _CustomAdminNavigationMenuState extends State<CustomAdminNavigationMenu> {
   var items = {
     'Заказы' : adminOrdersRoute,
     'Тип груза' : adminCargoTypeRoute,
+    'Тип борта' : adminTailTypeRoute,
   };
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       tooltip: '',
-        itemBuilder: (context) => [
-          PopupMenuItem(child: Text('1')),
-          PopupMenuItem(child: Text('2')),
-          PopupMenuItem(child: Text('3')),
-        ]
+        itemBuilder: (context) => items.entries.map((e) =>
+            PopupMenuItem(
+                child: Text(e.key,),
+                onTap: () => goToPage(e.value),
+            )
+        ).toList()
     );
+  }
+  void goToPage(route) {
+    locator<NavigationHelper>().navigateTo(route);
   }
 }
 

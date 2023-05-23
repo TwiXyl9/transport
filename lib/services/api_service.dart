@@ -272,6 +272,36 @@ class ApiService {
       print(e);
     }
   }
+  Future<dynamic> createTailTypeRequest(path, type) async {
+    try {
+      var fullPath = apiUrl + path;
+      http.Response response = await http.post(Uri.parse(fullPath), headers: headers, body: jsonEncode(type.mapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode != 201) {
+        print(responseData);
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+      return new TailType.fromMap(responseData);
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> updateTailTypeRequest(path, type) async {
+    try {
+      var fullPath = apiUrl + path + '/${type.id}';
+      //Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
+      http.Response response = await http.patch(Uri.parse(fullPath), headers: headers, body: jsonEncode(type.mapFromFields()));
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
+        return new TailType.fromMap(responseData);
+      } else {
+        return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
+    }
+  }
   Future<dynamic> updateAdditionalServiceRequest(path, service) async {
     try {
       var fullPath = apiUrl + path + '/${service.id}';

@@ -16,6 +16,7 @@ import '../views/contacts/contacts_view.dart';
 import '../views/home/home_view.dart';
 import '../views/orders/admin_orders_view.dart';
 import '../views/registration/registration_view.dart';
+import '../views/tail_type/admin_tail_type_view.dart';
 import '../widgets/account/account_orders_view.dart';
 import '../widgets/account/account_settings_view.dart';
 
@@ -27,6 +28,7 @@ class NavigationHelper {
       GoRoute(path: homeRoute, builder: ((context, state) => HomeView())),
       GoRoute(path: carsRoute, builder: ((context, state) => CarsView())),
       GoRoute(path: adminCargoTypeRoute, builder: ((context, state) => AdminCargoTypeView())),
+      GoRoute(path: adminTailTypeRoute, builder: ((context, state) => AdminTailTypeView())),
       GoRoute(path: adminOrdersRoute, builder: ((context, state) => AdminOrdersView())),
       GoRoute(path: authenticationRoute, builder: ((context, state) => AuthenticationView())),
       GoRoute(path: registrationRoute, builder: ((context, state) => RegistrationView())),

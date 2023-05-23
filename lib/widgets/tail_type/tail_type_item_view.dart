@@ -3,19 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:transport/models/car.dart';
 
 import '../../blocs/cargo_type_bloc.dart';
+import '../../blocs/tail_type_bloc.dart';
 import '../../models/cargo_type.dart';
+import '../../models/tail_type.dart';
 
-class CargoTypeItemView extends StatefulWidget {
-  CargoType type;
-  CargoTypeItemView(this.type);
+class TailTypeItemView extends StatefulWidget {
+  TailType type;
+  TailTypeItemView(this.type);
 
   @override
-  State<CargoTypeItemView> createState() => _CargoTypeItemViewState();
+  State<TailTypeItemView> createState() => _TailTypeItemViewState();
 }
 
-class _CargoTypeItemViewState extends State<CargoTypeItemView> {
+class _TailTypeItemViewState extends State<TailTypeItemView> {
   bool isEditable = false;
-  late CargoType _type;
+  late TailType _type;
   @override
   void initState() {
     _type = widget.type;
@@ -23,7 +25,7 @@ class _CargoTypeItemViewState extends State<CargoTypeItemView> {
   }
   @override
   Widget build(BuildContext context) {
-    var bloc = Provider.of<CargoTypeBloc>(context, listen: false);
+    var bloc = Provider.of<TailTypeBloc>(context, listen: false);
     TextEditingController nameController = TextEditingController(text: _type.name);
     final formKey = GlobalKey<FormState>();
 
@@ -33,15 +35,15 @@ class _CargoTypeItemViewState extends State<CargoTypeItemView> {
       });
     }
     void deleteType(){
-      bloc.add(DeleteCargoTypeEvent(_type));
-      bloc.add(InitialCargoTypeEvent());
+      bloc.add(DeleteTailTypeEvent(_type));
+      bloc.add(InitialTailTypeEvent());
     }
     void doneEdit(){
       if (formKey.currentState!.validate()) {
         if (_type.name != nameController.text) {
           _type.name = nameController.text;
-          bloc.add(UpdateCargoTypeEvent(_type));
-          bloc.add(InitialCargoTypeEvent());
+          bloc.add(UpdateTailTypeEvent(_type));
+          bloc.add(InitialTailTypeEvent());
         }
         setState(() {
           isEditable = !isEditable;
@@ -64,7 +66,7 @@ class _CargoTypeItemViewState extends State<CargoTypeItemView> {
             Form(
               key: formKey,
               child: Container(
-                width: 150,
+                  width: 150,
                   child: TextFormField(
                     controller: nameController,
                     validator: (val) {
