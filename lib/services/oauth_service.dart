@@ -1,8 +1,9 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:transport/config/secrets.dart';
 
 class GoogleSignInApi{
   static final _googleSignIn = GoogleSignIn(
-    clientId: "1065041387667-9s3piggc339ttudh5hrnsscclk1p66qh.apps.googleusercontent.com",
+    clientId: Secrets.CLIENT_ID,
     scopes: <String>[
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',

@@ -45,6 +45,20 @@ class TotalStep extends StatelessWidget {
             ),
             TableRow(
                 children: [
+                  BoldText("Точка погрузки:"),
+                  Text("Гродно, ул. Дубко 20"),
+                  Container()
+                ]
+            ),
+            TableRow(
+                children: [
+                  BoldText("Точка выгрузки:"),
+                  Text("Гродно, ул. Ожешко 22"),
+                  Container()
+                ]
+            ),
+            TableRow(
+                children: [
                   BoldText("Тип груза:"),
                   Text(cargoType.name),
                   Container()

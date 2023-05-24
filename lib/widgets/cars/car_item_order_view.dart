@@ -32,7 +32,7 @@ class CarItemOrderView extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  height: 130,
+                  height: 110,
                   decoration: BoxDecoration(
                     color: Colors.white
                   ),

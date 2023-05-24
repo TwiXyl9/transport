@@ -17,6 +17,7 @@ import '../../../models/order_service.dart';
 import '../../../models/point.dart';
 import '../../../models/user.dart';
 import '../../components/custom_circular_progress_indicator.dart';
+import '../../map/map_view.dart';
 
 class OrderStepperView extends StatefulWidget {
   const OrderStepperView({Key? key}) : super(key: key);
@@ -92,7 +93,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      if(currentStep!=0) ...[
+                      if (currentStep!=0) ...[
                         ElevatedButton(
                           child: Text("Назад"),
                           onPressed: details.onStepCancel,
@@ -128,20 +129,26 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           content: DateStep(dateFormKey, dateTimeController)
       ),
       Step(
-        state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
-        isActive: currentStep >= 2,
+          state: currentStep > 2 ? fieldAreValid(1) ? StepState.complete : StepState.error : StepState.indexed,
+          isActive: currentStep >= 2,
+          title: Text("Маршрут"),
+          content: MapView()
+      ),
+      Step(
+        state: currentStep > 3 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
+        isActive: currentStep >= 3,
         title: Text("Тип груза"),
         content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CustomCircularProgressIndicator(),
       ),
       Step(
-        state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
-        isActive: currentStep >= 3,
+        state: currentStep > 4 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
+        isActive: currentStep >= 4,
         title: Text("Машина"),
         content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CustomCircularProgressIndicator(),
       ),
       Step(
-        state: currentStep > 4 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 4,
+        state: currentStep > 5 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 5,
         title: Text("Дополнительные услуги"),
         content: state is OrderLoadedState? ServicesStep(
             selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
@@ -150,8 +157,8 @@ class _OrderStepperViewState extends State<OrderStepperView> {
         ) : CustomCircularProgressIndicator(),
       ),
       Step(
-        state: currentStep > 5 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 5,
+        state: currentStep > 6 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 6,
         title: Text("Итог"),
         content: state is OrderLoadedState? TotalStep(
           name: nameController.text,
@@ -179,7 +186,10 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   }
   bool allFieldsValidation(){
     bool result = true;
-    if (!dateFormKey.currentState!.validate() || !personInfoFormKey.currentState!.validate() || selectedCar.id == 0 || selectedCargoType.id < 1) {
+    if (!dateFormKey.currentState!.validate() ||
+        !personInfoFormKey.currentState!.validate() ||
+        selectedCar.id == 0 ||
+        selectedCargoType.id < 1) {
       result = false;
     }
     return result;

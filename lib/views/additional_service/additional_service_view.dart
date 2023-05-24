@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
+import 'package:transport/widgets/order/order_button.dart';
 
 import '../../blocs/additional_service_bloc.dart';
 import '../../models/service.dart';
@@ -33,7 +34,7 @@ class AdditionalServiceView extends StatelessWidget {
                   return AdditionalServiceDialog(new Service(0));
                 }
             )) :
-            Container(),
+            OrderButton(context),
           ],
         ) :
         CustomCircularProgressIndicator();

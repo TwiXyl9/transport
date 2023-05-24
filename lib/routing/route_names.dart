@@ -13,3 +13,4 @@ const String adminPrefixRoute = '/admin/';
 const String adminCargoTypeRoute = '${adminPrefixRoute}cargo_type';
 const String adminOrdersRoute = '${adminPrefixRoute}orders';
 const String adminTailTypeRoute = '${adminPrefixRoute}tail_type';
+const String adminStatisticsRoute = '${adminPrefixRoute}statistics';
