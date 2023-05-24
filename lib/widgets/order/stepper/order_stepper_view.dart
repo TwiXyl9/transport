@@ -129,19 +129,19 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           content: DateStep(dateFormKey, dateTimeController)
       ),
       Step(
-          state: currentStep > 2 ? fieldAreValid(1) ? StepState.complete : StepState.error : StepState.indexed,
+          state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
           isActive: currentStep >= 2,
           title: Text("Маршрут"),
           content: MapView()
       ),
       Step(
-        state: currentStep > 3 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
+        state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 3,
         title: Text("Тип груза"),
         content: state is OrderLoadedState? CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,) : CustomCircularProgressIndicator(),
       ),
       Step(
-        state: currentStep > 4 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
+        state: currentStep > 4 ? fieldAreValid(4) ? StepState.complete : StepState.error : StepState.indexed,
         isActive: currentStep >= 4,
         title: Text("Машина"),
         content: state is OrderLoadedState? CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars) : CustomCircularProgressIndicator(),
@@ -177,9 +177,9 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       result = false;
     } else if (stepNum == 1 && !dateFormKey.currentState!.validate()) {
       result = false;
-    } else if (stepNum == 2 && selectedCargoType.id == 0) {
+    } else if (stepNum == 3 && selectedCargoType.id == 0) {
       result = false;
-    } else if (stepNum == 3 && selectedCar.id == 0) {
+    } else if (stepNum == 4 && selectedCar.id == 0) {
       result = false;
     }
     return result;
