@@ -21,7 +21,7 @@ class _OrderListViewState extends State<OrderListView> {
   List<String> selectedStages = [];
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
         Container(
           alignment: Alignment.topCenter,

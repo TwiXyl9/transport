@@ -11,39 +11,53 @@ import 'package:transport/widgets/components/circular_add_button.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 
 import '../../widgets/components/custom_circular_progress_indicator.dart';
+import '../../widgets/components/page_header_text.dart';
 import '../../widgets/order/order_button.dart';
+import '../layout_template/layout_template.dart';
 class CarsView extends StatelessWidget {
   CarsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CarsBloc, CarsState>(
-        builder: (context, state) {
-        print(state);
-        if (state is CarsLoadedState){
-          return Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              CenteredView(
-                child: ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+    return LayoutTemplate(
+      child: BlocBuilder<CarsBloc, CarsState>(
+          builder: (context, state) {
+          print(state);
+          if (state is CarsLoadedState){
+            return Column(
+              children: [
+                PageHeaderText(text: "Наш автопарк"),
+                SizedBox(height: 10,),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: ListView(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 1,
+                      right: 1,
+                      child: !state.user.isAdmin() ?
+                      OrderButton(context) :
+                      CircularAddButton(() => showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CarDialog(new Car(0), state.tailTypes);
+                          }
+                      )),
+                    ),
+                  ]
                 ),
-              ),
-              !state.user.isAdmin() ?
-              OrderButton(context) :
-              CircularAddButton(() => showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CarDialog(new Car(0), state.tailTypes);
-                  }
-              )),
-            ]
-          );
-       }
-      return Center(
-        child: CustomCircularProgressIndicator(),
-      );
-    });
+              ],
+            );
+         }
+        return Center(
+          child: CustomCircularProgressIndicator(),
+        );
+      }),
+    );
   }
 }

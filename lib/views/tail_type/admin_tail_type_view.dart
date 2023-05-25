@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 
 import '../../blocs/tail_type_bloc.dart';
 import '../../widgets/cargo_type/cargo_type_list_view.dart';
@@ -11,19 +12,19 @@ class AdminTailTypeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TailTypeBloc, TailTypeState>(
-      builder: (context, state) {
-        return state is TailTypeLoadedState?
-        Center(
-          child: Container(
-            constraints: BoxConstraints(minWidth: 300, maxWidth: 500),
-            child: SingleChildScrollView(
-                child: TailTypeListView(state.types)
+    return LayoutTemplate(
+      child: BlocBuilder<TailTypeBloc, TailTypeState>(
+        builder: (context, state) {
+          return state is TailTypeLoadedState?
+          Center(
+            child: Container(
+              constraints: BoxConstraints(minWidth: 300, maxWidth: 500),
+              child: TailTypeListView(state.types),
             ),
-          ),
-        ) :
-        CustomCircularProgressIndicator();
-      },
+          ) :
+          CustomCircularProgressIndicator();
+        },
+      ),
     );
   }
 }

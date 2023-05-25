@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
               )
           ),
           routerConfig: locator<NavigationHelper>().router,
-          builder: (context, child) => LayoutTemplate(child: child!),
 
           debugShowCheckedModeBanner: false,
       ),

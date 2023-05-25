@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
 
@@ -15,30 +16,29 @@ class AdditionalServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdditionalServiceBloc, AdditionalServiceState>(
-      builder: (context, state) {
-        print(state);
-        return state is AdditionalServiceLoadedState?
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            state.services.length > 0 ?
-            CenteredView(
-              child: AdditionalServiceListView(state.services, state.user),
-            ) :
-            Center(child: Text('У компании пока нет услуг! Создайте первую!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
-            state.user.isAdmin() ?
-            CircularAddButton(() => showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AdditionalServiceDialog(new Service(0));
-                }
-            )) :
-            OrderButton(context),
-          ],
-        ) :
-        CustomCircularProgressIndicator();
-      },
+    return LayoutTemplate(
+      child: BlocBuilder<AdditionalServiceBloc, AdditionalServiceState>(
+        builder: (context, state) {
+          print(state);
+          return state is AdditionalServiceLoadedState?
+          Column(
+            children: [
+              state.services.length > 0 ?
+              AdditionalServiceListView(state.services, state.user) :
+              Center(child: Text('У компании пока нет услуг! Создайте первую!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
+              state.user.isAdmin() ?
+              CircularAddButton(() => showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AdditionalServiceDialog(new Service(0));
+                  }
+              )) :
+              OrderButton(context),
+            ],
+          ) :
+          CustomCircularProgressIndicator();
+        },
+      ),
     );
   }
 }

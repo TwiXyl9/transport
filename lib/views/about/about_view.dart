@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 
 import '../../widgets/centered_view/centered_view.dart';
 
 class AboutView extends StatelessWidget {
-  const AboutView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CenteredView(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
+    return LayoutTemplate(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,8 +39,8 @@ class AboutView extends StatelessWidget {
             SizedBox(height: 10,),
             Text('Что делает нас особенными?',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20
               ),
             ),
             SizedBox(height: 5,),
@@ -87,8 +85,7 @@ class AboutView extends StatelessWidget {
             SizedBox(height: 15,),
 
           ],
-        ),
-      ),
+        )
     );
   }
 }

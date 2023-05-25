@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/widgets/components/custom_button.dart';
+import 'package:transport/widgets/components/page_header_text.dart';
 import 'package:transport/widgets/tail_type/tail_type_item_view.dart';
 
 import '../../blocs/cargo_type_bloc.dart';
@@ -37,6 +38,8 @@ class TailTypeListView extends StatelessWidget {
     }
     return Column(
       children: [
+        PageHeaderText(text: "Типы борта"),
+        SizedBox(height: 10,),
         ListView(
           shrinkWrap: true,
           children: types.map((e) => TailTypeItemView(e)).toList(),

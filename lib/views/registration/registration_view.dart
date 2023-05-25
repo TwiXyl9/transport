@@ -6,6 +6,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:transport/blocs/registration_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/services/oauth_service.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
@@ -72,12 +73,12 @@ class _RegistrationViewState extends State<RegistrationView> {
           ).show(context);
         }
       },
-      child: BlocBuilder<RegistrationBloc, RegistrationState>(
-        builder: (context, state){
-          final bloc = context.read<RegistrationBloc>();
-          return Container(
-            color: Colors.grey[300],
-            child: CenteredView(
+      child: LayoutTemplate(
+        child: BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state){
+            final bloc = context.read<RegistrationBloc>();
+            return Container(
+              color: Colors.grey[300],
               child: Container(
                   constraints: BoxConstraints(maxWidth: 400),
                   child: Form(
@@ -189,9 +190,9 @@ class _RegistrationViewState extends State<RegistrationView> {
                     ),
                   )
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       )
     );
   }

@@ -9,35 +9,38 @@ import 'package:transport/widgets/order/order_button.dart';
 import 'package:transport/widgets/sliders/news_slider_view.dart';
 
 import '../../widgets/components/custom_circular_progress_indicator.dart';
+import '../layout_template/layout_template.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(
-        builder: (context, state) {
-          print(state);
-          return state is NewsLoadedState ?
-          !state.user.isAdmin() ?
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Column(
-                children: [
-                  NewsSlider(state.news),
-                  OrderProcessWidget(),
-                ],
-              ),
-              Container(
-                  alignment: Alignment.bottomRight,
-                  child: OrderButton(context)
-              )
-            ],
-          ) :
-          AdminNewsView(state.news) :
-          CustomCircularProgressIndicator();
-        }
+    return LayoutTemplate(
+      child: BlocBuilder<NewsBloc, NewsState>(
+          builder: (context, state) {
+            print(state);
+            return state is NewsLoadedState ?
+            !state.user.isAdmin() ?
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Column(
+                  children: [
+                    NewsSlider(state.news),
+                    //OrderProcessWidget(),
+                  ],
+                ),
+                Container(
+                    alignment: Alignment.bottomRight,
+                    child: OrderButton(context)
+                )
+              ],
+            ) :
+            AdminNewsView(state.news) :
+            CustomCircularProgressIndicator();
+          }
+      ),
     );
   }
 }

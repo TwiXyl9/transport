@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/widgets/components/custom_button.dart';
+import 'package:transport/widgets/components/page_header_text.dart';
 
 import '../../blocs/cargo_type_bloc.dart';
 import '../../models/cargo_type.dart';
@@ -35,6 +36,8 @@ class CargoTypeListView extends StatelessWidget {
     }
     return Column(
       children: [
+        PageHeaderText(text: "Типы груза"),
+        SizedBox(height: 10,),
         ListView(
           shrinkWrap: true,
           children: types.map((e) => CargoTypeItemView(e)).toList(),
