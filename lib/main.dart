@@ -59,8 +59,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AdditionalServiceBloc()..add(InitialAdditionalServiceEvent()),
         ),
       ],
-      child: MaterialApp(
-        home: MaterialApp.router(
+      child: MaterialApp.router(
           title: 'Transport',
           theme: ThemeData(
               primarySwatch: Colors.blue,
@@ -69,17 +68,10 @@ class MyApp extends StatelessWidget {
               )
           ),
           routerConfig: locator<NavigationHelper>().router,
-          builder: (context, child) => Overlay(
-            initialEntries: [
-              OverlayEntry(
-                builder: (context) => LayoutTemplate(child: child!),
-              ),
-            ],
-          ),
+          builder: (context, child) => LayoutTemplate(child: child!),
+
           debugShowCheckedModeBanner: false,
-        ),
-        debugShowCheckedModeBanner: false,
-      )
+      ),
     );
   }
 

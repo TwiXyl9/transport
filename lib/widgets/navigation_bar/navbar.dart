@@ -10,9 +10,28 @@ class NavBar extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: NavBarMobile(),
-      tablet: NavBarTabletDesktop(),
+    // return ScreenTypeLayout(
+    //   mobile: NavBarMobile(),
+    //   tablet: NavBarTabletDesktop(),
+    // );
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.lightBlue.shade400,
+                Colors.blue.shade800,
+              ],
+            )
+        ),
+        height: 50,
+        child: ScreenTypeLayout(
+          mobile: NavBarMobile(),
+          tablet: NavBarTabletDesktop(),
+        ),
+      )
     );
   }
 }

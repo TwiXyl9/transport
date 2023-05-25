@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/widgets/additional_info/advantages.dart';
+import 'package:transport/widgets/additional_info/order_process.dart';
+import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/news/admin_news_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
 import 'package:transport/widgets/sliders/news_slider_view.dart';
@@ -21,7 +23,12 @@ class HomeView extends StatelessWidget {
           Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              NewsSlider(state.news),
+              Column(
+                children: [
+                  NewsSlider(state.news),
+                  OrderProcessWidget(),
+                ],
+              ),
               Container(
                   alignment: Alignment.bottomRight,
                   child: OrderButton(context)

@@ -10,37 +10,33 @@ class AdminNewsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-              child: NewsListView(allNews)
-          ),
-          Container(
-            alignment: Alignment.bottomRight,
-            margin: EdgeInsets.all(20),
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.green,
-              child: IconButton(
-                  onPressed: () => {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return NewsDialog(new News(0,'','',''));
-                        }
-                    ),
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                     size: 25,
-                  )
-              ),
-            )
+    return Stack(
+      children: [
+        NewsListView(allNews),
+        Container(
+          alignment: Alignment.bottomRight,
+          margin: EdgeInsets.all(20),
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.green,
+            child: IconButton(
+                onPressed: () => {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return NewsDialog(new News(0,'','',''));
+                      }
+                  ),
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                   size: 25,
+                )
+            ),
           )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

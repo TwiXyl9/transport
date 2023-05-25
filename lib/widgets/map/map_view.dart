@@ -24,9 +24,12 @@ class _MapViewState extends State<MapView> {
   LatLng _center = LatLng(53.677839, 23.829529);
   GoogleMapsPlaces _places = GoogleMapsPlaces(
     apiKey: Secrets.API_KEY,
-    baseUrl: kIsWeb ?
-    'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api'
-      : null);
+    baseUrl: 'https://maps.googleapis.com/maps/api',
+    apiHeaders: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Access-Control-Allow-Origin' : '*',
+    }
+  );
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: Secrets.API_KEY);
   final List<Polyline> polyline = [];
   List<LatLng> routeCoords = [];
@@ -197,11 +200,16 @@ class _MapViewState extends State<MapView> {
                                 Prediction? p = await PlacesAutocomplete.show(
                                     context: context,
                                     apiKey: key,
+                                    offset: 0,
+                                    strictbounds: false,
+                                    types: [],
+                                    radius: 1000,
                                     mode: Mode.overlay,
-                                    language: "en",
+                                    language: "ru",
                                     components: [
-                                      new Component(Component.country, "en")
-                                    ]);
+                                      new Component(Component.country, "ru")
+                                    ]
+                                );
                                 displayPredictionArrival(p!);
                               },
                               //onEditingComplete: searchAndNavigate,
