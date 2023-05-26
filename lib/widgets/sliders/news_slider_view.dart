@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:transport/blocs/news_bloc.dart';
 import 'package:transport/widgets/components/custom_button.dart';
+import 'package:transport/widgets/components/page_header_text.dart';
 
 import '../../models/news.dart';
 import '../news/news_dialog.dart';
@@ -17,7 +18,8 @@ class NewsSlider extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            const Text("Новости"),
+            PageHeaderText(text: 'Новости'),
+            SizedBox(height: 10,),
             CustomCarouselSlider(
               items: newsToCarouselItem(allNews),
               height: 300,

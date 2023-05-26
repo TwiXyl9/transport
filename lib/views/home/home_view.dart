@@ -22,19 +22,11 @@ class HomeView extends StatelessWidget {
             print(state);
             return state is NewsLoadedState ?
             !state.user.isAdmin() ?
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Column(
-                  children: [
-                    NewsSlider(state.news),
-                    //OrderProcessWidget(),
-                  ],
-                ),
-                Container(
-                    alignment: Alignment.bottomRight,
-                    child: OrderButton(context)
-                )
+            Column(
+              children: [
+                NewsSlider(state.news),
+                SizedBox(height: 20,),
+                OrderProcessWidget(),
               ],
             ) :
             AdminNewsView(state.news) :

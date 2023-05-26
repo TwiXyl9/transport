@@ -78,7 +78,10 @@ class _RegistrationViewState extends State<RegistrationView> {
           builder: (context, state){
             final bloc = context.read<RegistrationBloc>();
             return Container(
-              color: Colors.grey[300],
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10)
+              ),
               child: Container(
                   constraints: BoxConstraints(maxWidth: 400),
                   child: Form(

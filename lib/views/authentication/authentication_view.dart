@@ -51,7 +51,10 @@ class _AuthenticationViewState extends State<AuthenticationView> {
               final bloc = context.read<AuthenticationBloc>();
               if (state is AuthenticationUnauthorizedState || state is AuthenticationFailureState) {
                 return Container(
-                    color: Colors.grey[300],
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300], 
+                      borderRadius: BorderRadius.circular(10)
+                    ),
                     child: SafeArea(
                       child: Center(
                         child: Container(
@@ -132,7 +135,8 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                                 SignInButton(
                                   Buttons.Google,
                                   onPressed: googleSignIn,
-                                )
+                                ),
+                                SizedBox(height: 30,),
                               ],
                             ),
                           ),
