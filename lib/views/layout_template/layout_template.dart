@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport/views/contacts/contacts_view.dart';
 import 'package:transport/widgets/contacts/contact_button.dart';
+import 'package:transport/widgets/layout_template/layout_additional_panel.dart';
 import 'package:transport/widgets/navigation_bar/navbar.dart';
 import 'package:transport/widgets/navigation_drawer/nav_drawer.dart';
 import 'package:transport/widgets/order/order_button.dart';
@@ -30,42 +31,7 @@ class LayoutTemplate extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 23),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
-                          image: AssetImage('lib/assets/images/hrodno2.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Грузоперевозки\nпо городу Гродно',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  color: Colors.white
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                OrderButton(context),
-                                SizedBox(width: 10,),
-                                ContactButton()
-                              ],
-                            ),
-
-                          ],
-                        ),
-                      ),
-                    ),
+                    LayoutAdditionalPanel(),
                     Container(
                       padding: EdgeInsets.all(20),
                       child: Center(
