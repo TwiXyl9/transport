@@ -42,7 +42,7 @@ class LayoutTemplate extends StatelessWidget {
                           ),
                           margin: EdgeInsets.symmetric(horizontal: 40),
                           padding: EdgeInsets.all(20),
-                          constraints: BoxConstraints(minWidth: 200, maxWidth: 800),
+                          constraints: BoxConstraints(maxWidth: 800),
                           child: child
 
                         ),

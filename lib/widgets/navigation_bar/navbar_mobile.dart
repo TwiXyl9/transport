@@ -16,9 +16,12 @@ class _NavBarMobileState extends State<NavBarMobile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          IconButton(onPressed: () {
-            Scaffold.of(context).openDrawer();
-          }, icon: Icon(Icons.menu)),
+          IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(Icons.menu, color: Colors.white,)
+          ),
           NavBarLogo(),
         ],
       ),

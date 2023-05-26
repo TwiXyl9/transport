@@ -18,7 +18,7 @@ class DrawerItem extends StatelessWidget {
           SizedBox(
             width: 30,
           ),
-          NavBarItem(title, navigationPath, callback: callback,),
+          NavBarItem(title, navigationPath, callback: callback, color: Colors.black,),
         ],
       ),
     );

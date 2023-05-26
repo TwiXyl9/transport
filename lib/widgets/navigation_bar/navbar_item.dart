@@ -6,7 +6,8 @@ class NavBarItem extends StatelessWidget {
   final String title;
   final String navigationPath;
   late Function? callback;
-  NavBarItem(this.title, this.navigationPath, {this.callback = null});
+  late Color color;
+  NavBarItem(this.title, this.navigationPath, {this.callback = null, this.color = Colors.white});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,10 @@ class NavBarItem extends StatelessWidget {
       },
         child: Text(
             title,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(
+                fontSize: 14,
+                color: color
+            ),
         )
     );
 

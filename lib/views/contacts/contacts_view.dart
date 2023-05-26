@@ -18,56 +18,46 @@ class ContactsView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 10,),
-              Text('КОНТАКТЫ', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+              Text('КОНТАКТЫ', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              SizedBox(height: 15,),
+              Text('ИП Айрапетов с 2017 года развивает свой бизнес в области грузоперевозок.'
+                  ' За это время было профессионально оказано большое количество услуг.'
+                  ' Наша организация обслуживает не только частных лиц, но и коммерческие организации, розничные магазины,'
+                  ' производственные предприятия и другие бизнесы, требующие перевозки грузов.',),
+              SizedBox(height: 15,),
               Divider(
                 thickness: 0.5,
                 color: Colors.grey[400],
               ),
-              Text('ИП Айрапетов с 2017 года развивает свой бизнес в области грузоперевозок.'
-                  ' За это время было профессионально оказано большое количество услуг.'
-                  ' Наша организация обслуживает не только частных лиц, но и коммерческие организации, розничные магазины,'
-                  ' производственные предприятия и другие бизнесы, требующие перевозки грузов.'),
               SizedBox(height: 15,),
-              Text.rich(
-                  TextSpan(
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          text: "Электронная почта : ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        TextSpan(text: "grant199494@mail.ru",),
-                      ]
-                  )
-              ),
-              SizedBox(height: 15,),
-              Text.rich(
-                  TextSpan(
+                        SizedBox(height: 15,),
+                        _infoBlock("Название", "ИП Айрапетов Г. Ю."),
+                        SizedBox(height: 15,),
+                        _infoBlock("УНП", "591922986"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          text: "Телефон : ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        TextSpan(text: "+375 (29) 28-08-724",),
-                      ]
-                  )
-              ),
-              SizedBox(height: 15,),
-              Text.rich(
-                  TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "УНП : ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        TextSpan(text: "591922986",),
-                      ]
-                  )
+                        SizedBox(height: 15,),
+                        _infoBlock("Электронная почта", "grant199494@mail.ru"),
+                        SizedBox(height: 15,),
+                        _infoBlock("Телефон", "+375 (29) 28-08-724"),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 15,),
               Divider(
@@ -121,5 +111,29 @@ class ContactsView extends StatelessWidget {
         )
     );
 
+  }
+  Widget _infoBlock(String blocName, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "$blocName : ",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: Color(0xFF72716E)
+          ),
+        ),
+        SizedBox(height: 5,),
+        Text(
+            content,
+            style: TextStyle(
+            fontSize: 16,
+              color: Color(0xFFCF4F4C)
+          ),
+            overflow: TextOverflow.ellipsis
+        ),
+      ]
+    );
   }
 }
