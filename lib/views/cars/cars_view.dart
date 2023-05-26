@@ -40,14 +40,14 @@ class CarsView extends StatelessWidget {
                     Positioned(
                       bottom: 1,
                       right: 1,
-                      child: !state.user.isAdmin() ?
-                      OrderButton(context) :
+                      child: state.user.isAdmin() ?
                       CircularAddButton(() => showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return CarDialog(new Car(0), state.tailTypes);
                           }
-                      )),
+                      )) :
+                      Container(),
                     ),
                   ]
                 ),

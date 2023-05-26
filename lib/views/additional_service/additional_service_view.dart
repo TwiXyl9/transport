@@ -33,7 +33,7 @@ class AdditionalServiceView extends StatelessWidget {
                     return AdditionalServiceDialog(new Service(0));
                   }
               )) :
-              OrderButton(context),
+              Container(),
             ],
           ) :
           CustomCircularProgressIndicator();
