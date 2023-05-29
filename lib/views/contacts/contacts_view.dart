@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactsView extends StatelessWidget {
 
@@ -37,10 +39,10 @@ class ContactsView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 15,),
                         _infoBlock("Название", "ИП Айрапетов Г. Ю."),
                         SizedBox(height: 15,),
                         _infoBlock("УНП", "591922986"),
+                        SizedBox(height: 15,),
                       ],
                     ),
                   ),
@@ -50,12 +52,52 @@ class ContactsView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 15,),
                         _infoBlock("Электронная почта", "grant199494@mail.ru"),
                         SizedBox(height: 15,),
                         _infoBlock("Телефон", "+375 (29) 28-08-724"),
                       ],
                     ),
+                  ),
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        var url = Uri.parse("tg://t.me/TwiXyl9");
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                      icon: Icon(Icons.telegram)
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        var url = Uri.parse("https://instagram.com/ulik_julik02?igshid=MmIzYWVlNDQ5Yg==");
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                      icon: Icon(FontAwesomeIcons.instagram)
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        var url = Uri.parse("https://www.facebook.com/profile.php?id=100010204966384");
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                      icon: Icon(FontAwesomeIcons.facebook)
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        var url = Uri.parse("https://vk.com/idgrasha");
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                      icon: Image.asset('lib/assets/images/vk_logo_50.png',)
                   ),
                 ],
               ),

@@ -47,31 +47,31 @@ class AdditionalServiceItemView extends StatelessWidget {
                   ),
                   child: Image.network(service.imageUrl, height: 100, fit: BoxFit.scaleDown,),
                 ),
-                Container(
-
-                 // constraints: BoxConstraints(minWidth:100, maxWidth: 200),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(service.name),
-                      Text(service.description, textAlign: TextAlign.justify,),
-                      Text('${service.price} б.р.')
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(service.name),
+                    Text(service.description, softWrap: true,),
+                    Text('${service.price} б.р.')
+                  ],
                 ),
               ],
             ),
             user.isAdmin()?
             Row(
               children: [
-                IconButton(
-                    onPressed: editType,
-                    icon: Icon(Icons.edit)
+                Expanded(
+                  child: IconButton(
+                      onPressed: editType,
+                      icon: Icon(Icons.edit)
+                  ),
                 ),
                 SizedBox(width: 10,),
-                IconButton(
-                    onPressed: deleteType,
-                    icon: Icon(Icons.delete)
+                Expanded(
+                  child: IconButton(
+                      onPressed: deleteType,
+                      icon: Icon(Icons.delete)
+                  ),
                 )
               ],
             ) :
