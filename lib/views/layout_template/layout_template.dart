@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport/views/contacts/contacts_view.dart';
 import 'package:transport/widgets/contacts/contact_button.dart';
+import 'package:transport/widgets/footer/footer_view.dart';
 import 'package:transport/widgets/layout_template/layout_additional_panel.dart';
 import 'package:transport/widgets/navigation_bar/navbar.dart';
 import 'package:transport/widgets/navigation_drawer/nav_drawer.dart';
@@ -32,6 +33,7 @@ class LayoutTemplate extends StatelessWidget {
                 child: Column(
                   children: [
                     LayoutAdditionalPanel(),
+                    FooterView(),
                     Container(
                       padding: EdgeInsets.all(20),
                       child: Center(
@@ -48,6 +50,7 @@ class LayoutTemplate extends StatelessWidget {
                         ),
                       ),
                     ),
+                    FooterView(),
                   ],
                 ),
               ),

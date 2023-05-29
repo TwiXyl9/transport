@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
+import 'package:transport/widgets/contacts/social_media_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactsView extends StatelessWidget {
@@ -60,47 +61,7 @@ class ContactsView extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        var url = Uri.parse("tg://t.me/TwiXyl9");
-                        if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                        }
-                      },
-                      icon: Icon(Icons.telegram)
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        var url = Uri.parse("https://instagram.com/ulik_julik02?igshid=MmIzYWVlNDQ5Yg==");
-                        if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                        }
-                      },
-                      icon: Icon(FontAwesomeIcons.instagram)
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        var url = Uri.parse("https://www.facebook.com/profile.php?id=100010204966384");
-                        if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                        }
-                      },
-                      icon: Icon(FontAwesomeIcons.facebook)
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        var url = Uri.parse("https://vk.com/idgrasha");
-                        if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                        }
-                      },
-                      icon: Image.asset('lib/assets/images/vk_logo_50.png',)
-                  ),
-                ],
-              ),
+              SocialMediaView(color: Colors.black),
               SizedBox(height: 15,),
               Divider(
                 thickness: 0.5,

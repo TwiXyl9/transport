@@ -19,62 +19,63 @@ class NavBarTabletDesktop extends StatelessWidget {
     }
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            NavBarLogo(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                NavBarItem("Автопарк", carsRoute),
-                SizedBox(
-                  width: 20,
-                ),
-                NavBarItem("Услуги", servicesRoute),
-                SizedBox(
-                  width: 20,
-                ),
+        return Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              NavBarLogo(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  NavBarItem("Автопарк", carsRoute),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  NavBarItem("Услуги", servicesRoute),
+                  SizedBox(
+                    width: 20,
+                  ),
 
-                state is AuthenticationAuthorizedState ?
-                !state.user.isAdmin()?
-                Row(
-                  children: [
-                    NavBarItem("Контакты", contactsRoute),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    NavBarItem("О Нас", aboutRoute),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    NavBarItem("Личный кабинет", accountRoute),
-                  ],
-                ) :
-                Row(
-                  children: [
-                    CustomAdminNavigationMenu(),
-                    SizedBox(width: 20,),
-                    NavBarItem("Выйти", '', callback: logout,),
-                  ],
-                ) :
-                Row(
-                  children: [
-                    NavBarItem("Контакты", contactsRoute),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    NavBarItem("О Нас", aboutRoute),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    NavBarItem("Войти", authenticationRoute),
-                  ],
-                ),
-                SizedBox(width: 20,),
-              ],
-            )
-          ],
+                  state is AuthenticationAuthorizedState ?
+                  !state.user.isAdmin()?
+                  Row(
+                    children: [
+                      NavBarItem("Контакты", contactsRoute),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      NavBarItem("О Нас", aboutRoute),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      NavBarItem("Личный кабинет", accountRoute),
+                    ],
+                  ) :
+                  Row(
+                    children: [
+                      CustomAdminNavigationMenu(),
+                      SizedBox(width: 20,),
+                      NavBarItem("Выйти", '', callback: logout,),
+                    ],
+                  ) :
+                  Row(
+                    children: [
+                      NavBarItem("Контакты", contactsRoute),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      NavBarItem("О Нас", aboutRoute),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      NavBarItem("Войти", authenticationRoute),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         );
 
       },

@@ -12,6 +12,7 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomLeft,
