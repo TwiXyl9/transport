@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/views/contacts/contacts_view.dart';
 import 'package:transport/widgets/contacts/contact_button.dart';
 import 'package:transport/widgets/footer/footer_view.dart';
@@ -32,7 +33,15 @@ class LayoutTemplate extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    LayoutAdditionalPanel(),
+                    FutureBuilder(
+                        future: SessionDataProvider().getUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (!snapshot.data!.isAdmin()) return LayoutAdditionalPanel();
+                          }
+                          return Container();
+                        }
+                    ),
                     Container(
                       padding: EdgeInsets.all(20),
                       child: Center(
@@ -45,7 +54,6 @@ class LayoutTemplate extends StatelessWidget {
                           padding: EdgeInsets.all(20),
                           constraints: BoxConstraints(maxWidth: 800),
                           child: child
-
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../models/news.dart';
+import 'news_item_view.dart';
 
 class NewsSlider extends StatefulWidget {
   List<News> allNews;
@@ -29,56 +30,7 @@ class _NewsSliderState extends State<NewsSlider> {
               width: 500,
               height: 300,
               child: CarouselSlider(
-                items: _news.map((e) => Container(
-                    margin: EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      child: Stack(
-                        children: <Widget>[
-                          Image.network(e.imageUrl, fit: BoxFit.cover, width: 500, height: 300,),
-                          Positioned(
-                            bottom: 0.0,
-                            left: 0.0,
-                            right: 0.0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: FractionalOffset.bottomCenter,
-                                  end: FractionalOffset.topCenter,
-                                  colors: [
-                                    Colors.blueAccent.withOpacity(1),
-                                    Colors.black.withOpacity(.3),
-                                  ],
-                                  stops: const [0.0, 1.0],
-                                ),
-                              ),
-                              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    e.title ,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(),
-                                  Text(
-                                    e.description ,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ),
-                  )).toList(),
+                items: _news.map((e) => NewsItemView(e)).toList(),
                 carouselController: _controller,
                 options: CarouselOptions(
                     autoPlay: true,

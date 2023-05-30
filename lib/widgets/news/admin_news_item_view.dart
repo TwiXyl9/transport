@@ -7,6 +7,7 @@ import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/error/error_dialog_view.dart';
 
 import 'news_dialog.dart';
+import 'news_item_view.dart';
 
 class AdminNewsItemView extends StatelessWidget {
   final News news;
@@ -27,83 +28,36 @@ class AdminNewsItemView extends StatelessWidget {
         );
       }
     }
- 
     return Card(
-      margin: const EdgeInsets.all(10.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
+      child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              NewsItemView(news),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 200,
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          Container(
-                              alignment: Alignment.center,
-                              child: Image.network(news.imageUrl)
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(5.0),
-                              alignment: Alignment.bottomLeft,
-                              height: 75,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: FractionalOffset.bottomCenter,
-                                  end: FractionalOffset.topCenter,
-                                  colors: [
-                                    Colors.blueAccent.withOpacity(1),
-                                    Colors.black.withOpacity(.3),
-                                  ],
-                                  stops: const [0.0, 1.0],
-                                ),
-                              ),
-                              child: Text(news.title + '\n \n' + news.description,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  IconButton(
+                      onPressed: (){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return NewsDialog(news);
+                            }
+                        );
+                      },
+                      icon: Icon(Icons.edit)
                   ),
-                  Column(
-                    children: [
-                      CustomButton(btnText: "Редактировать", onTap:() =>
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return NewsDialog(news);
-                              }
-                          ), btnColor: Colors.blue),
-                    ],
-                  ),
+                  SizedBox(width: 10,),
+                  IconButton(
+                      onPressed: deleteNews,
+                      icon: Icon(Icons.delete)
+                  )
                 ],
               ),
-            ),
-            Positioned(
-                right: -10,
-                top: -9,
-                child: IconButton(
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.black.withOpacity(0.5),
-                      size: 18,
-                    ),
-                    onPressed: () => deleteNews()
-                )
-            ),
-          ],
-        )
+            ],
+          )
       ),
     );
   }

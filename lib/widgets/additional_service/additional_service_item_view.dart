@@ -60,18 +60,14 @@ class AdditionalServiceItemView extends StatelessWidget {
             user.isAdmin()?
             Row(
               children: [
-                Expanded(
-                  child: IconButton(
-                      onPressed: editType,
-                      icon: Icon(Icons.edit)
-                  ),
+                IconButton(
+                    onPressed: editType,
+                    icon: Icon(Icons.edit)
                 ),
                 SizedBox(width: 10,),
-                Expanded(
-                  child: IconButton(
-                      onPressed: deleteType,
-                      icon: Icon(Icons.delete)
-                  ),
+                IconButton(
+                    onPressed: deleteType,
+                    icon: Icon(Icons.delete)
                 )
               ],
             ) :
