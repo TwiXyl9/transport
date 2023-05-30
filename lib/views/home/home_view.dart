@@ -6,7 +6,7 @@ import 'package:transport/widgets/additional_info/order_process.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/news/admin_news_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
-import 'package:transport/widgets/sliders/news_slider_view.dart';
+import 'package:transport/widgets/news/news_slider_view.dart';
 
 import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../layout_template/layout_template.dart';

@@ -21,12 +21,12 @@ class AccountNestedPagesContainer extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: IconButton(
                   onPressed: goBack,
-                  icon: const Icon(Icons.arrow_back)
+                  icon: const Icon(Icons.arrow_back, color: Colors.white)
               ),
             ),
           ],
         ),
-        Expanded(child: child)
+        child
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/blocs/account_bloc.dart';
 import 'package:transport/routing/route_names.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/account/account_centered_container.dart';
 import 'package:transport/widgets/components/bold_text.dart';
 import 'package:transport/widgets/components/custom_button.dart';
@@ -22,8 +23,8 @@ class AccountView extends StatelessWidget {
       builder: (context, state) {
         print(state);
         return state is AccountLoadedState?
-        AccountCenteredContainer(
-          child: SingleChildScrollView(
+        LayoutTemplate(
+          child: AccountCenteredContainer(
             child: Column(
               children: [
                 Text('Профиль', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),

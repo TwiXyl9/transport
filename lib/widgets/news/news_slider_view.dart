@@ -6,7 +6,7 @@ import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/page_header_text.dart';
 
 import '../../models/news.dart';
-import '../news/news_dialog.dart';
+import 'news_dialog.dart';
 
 class NewsSlider extends StatelessWidget {
   List<News> allNews;
@@ -25,7 +25,7 @@ class NewsSlider extends StatelessWidget {
               height: 300,
               subHeight: 75,
               width: 500,
-              autoplay: false,
+              autoplay: true,
             ),
           ],
         ),

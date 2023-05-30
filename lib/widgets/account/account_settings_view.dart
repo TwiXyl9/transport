@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
+import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/account/account_centered_container.dart';
 import 'package:transport/widgets/account/account_nested_pages_container.dart';
 
@@ -46,37 +47,39 @@ class AccountSettingsView extends StatelessWidget {
             nameController.text = state.user.name;
             phoneController.text = state.user.phone;
           }
-          return AccountNestedPagesContainer(
-            child: AccountCenteredContainer(
-              child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 30,),
-                      CustomTextField(
-                          controller: nameController,
-                          hint: 'Имя',
-                          type: FieldType.text,
-                          validator: (val) {
-                            if (!val!.isValidName) {
-                              return 'Некорректное имя';
-                            }
-                          }),
-                      SizedBox(height: 20,),
-                      CustomTextField(
-                          controller: phoneController,
-                          hint: 'Телефон',
-                          type: FieldType.text,
-                          validator: (val) {
-                            if (!val!.isValidPhone) {
-                              return 'Некорректный номер телефона';
-                            }
-                          }),
-                      SizedBox(height: 20,),
-                      CustomButton(btnText: "Coхранить", onTap: () => saveUser(state.user), btnColor: Colors.black),
-                    ],
+          return LayoutTemplate(
+            child: AccountNestedPagesContainer(
+              child: AccountCenteredContainer(
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 30,),
+                        CustomTextField(
+                            controller: nameController,
+                            hint: 'Имя',
+                            type: FieldType.text,
+                            validator: (val) {
+                              if (!val!.isValidName) {
+                                return 'Некорректное имя';
+                              }
+                            }),
+                        SizedBox(height: 20,),
+                        CustomTextField(
+                            controller: phoneController,
+                            hint: 'Телефон',
+                            type: FieldType.text,
+                            validator: (val) {
+                              if (!val!.isValidPhone) {
+                                return 'Некорректный номер телефона';
+                              }
+                            }),
+                        SizedBox(height: 20,),
+                        CustomButton(btnText: "Coхранить", onTap: () => saveUser(state.user), btnColor: Colors.black),
+                      ],
+                    ),
                   ),
                 ),
               ),

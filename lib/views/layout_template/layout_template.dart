@@ -33,7 +33,6 @@ class LayoutTemplate extends StatelessWidget {
                 child: Column(
                   children: [
                     LayoutAdditionalPanel(),
-                    FooterView(),
                     Container(
                       padding: EdgeInsets.all(20),
                       child: Center(

@@ -36,7 +36,7 @@ class _OrderListViewState extends State<OrderListView> {
             ),
           ),
         ),
-        FilterButtonView(openFilterDialog)
+        //FilterButtonView(openFilterDialog)
       ],
     );
   }
@@ -48,14 +48,14 @@ class _OrderListViewState extends State<OrderListView> {
       if (val == "По новизне") widget.orders.sort((a, b) => a.created_at.compareTo(b.created_at));
     });
   }
-  void openFilterDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return FilterDialog(selectedStages, stagesCallback);
-        }
-    );
-  }
+  // void openFilterDialog() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return FilterDialog(selectedStages, stagesCallback);
+  //       }
+  //   );
+  // }
   void stagesCallback(stages){
     selectedStages = stages;
     print(selectedStages);
