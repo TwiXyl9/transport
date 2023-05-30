@@ -6,6 +6,16 @@ class PageHeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white));
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+        child: Text(
+            text,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white
+            )
+        )
+    );
   }
 }

@@ -15,7 +15,6 @@ class AdditionalServiceListView extends StatelessWidget {
     return Column(
       children: [
         PageHeaderText(text: "Дополнительные услуги"),
-        SizedBox(height: 10,),
         ListView(
           shrinkWrap: true,
           children: services.map((e) => AdditionalServiceItemView(e, user)).toList(),

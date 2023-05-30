@@ -9,6 +9,7 @@ import 'package:transport/widgets/order/order_button.dart';
 import 'package:transport/widgets/news/news_slider_view.dart';
 
 import '../../widgets/components/custom_circular_progress_indicator.dart';
+import '../../widgets/components/page_header_text.dart';
 import '../layout_template/layout_template.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -24,6 +25,7 @@ class HomeView extends StatelessWidget {
             !state.user.isAdmin() ?
             Column(
               children: [
+                PageHeaderText(text: 'Новости'),
                 NewsSlider(state.news),
                 SizedBox(height: 20,),
                 OrderProcessWidget(),

@@ -26,7 +26,6 @@ class CarsView extends StatelessWidget {
             return Column(
               children: [
                 PageHeaderText(text: "Наш автопарк"),
-                SizedBox(height: 10,),
                 Stack(
                   children: <Widget>[
                     Align(
