@@ -23,42 +23,48 @@ class LayoutTemplate extends StatelessWidget {
           NavBar(),
           Expanded(
             child: Container(
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('lib/assets/images/fon.jpeg'),
                   fit: BoxFit.cover,
                 ),
               ),
-              constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FutureBuilder(
-                        future: SessionDataProvider().getUser(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data!.isAdmin()) return Container();
+                child: Container(
+                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height -50),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FutureBuilder(
+                          future: SessionDataProvider().getUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.isAdmin()) return Container();
+                            }
+                            return LayoutAdditionalPanel();
                           }
-                          return LayoutAdditionalPanel();
-                        }
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black26.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black26.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            padding: EdgeInsets.all(20),
+                            constraints: BoxConstraints(maxWidth: 800),
+                            child: child
                           ),
-                          margin: EdgeInsets.symmetric(horizontal: 40),
-                          padding: EdgeInsets.all(20),
-                          constraints: BoxConstraints(maxWidth: 800),
-                          child: child
                         ),
                       ),
-                    ),
-                    FooterView(),
-                  ],
+                      FooterView(),
+                    ],
+                  ),
                 ),
               ),
             ),
