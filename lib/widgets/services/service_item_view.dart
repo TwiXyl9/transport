@@ -29,12 +29,14 @@ class _ServiceItemViewState extends State<ServiceItemView> {
   @override
   Widget build(BuildContext context) {
     int count = _selectedServices.firstWhere((e) => e.service == _service).amount;
+
     setCountCallback(val){
       setState(() {
         _selectedServices.firstWhere((e) => e.service == _service).amount = val;
         _servicesCallback(_selectedServices);
       });
     }
+
     return Card(
       elevation: 6,
       child: Padding(

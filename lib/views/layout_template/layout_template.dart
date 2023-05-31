@@ -37,9 +37,9 @@ class LayoutTemplate extends StatelessWidget {
                         future: SessionDataProvider().getUser(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            if (!snapshot.data!.isAdmin()) return LayoutAdditionalPanel();
+                            if (snapshot.data!.isAdmin()) return Container();
                           }
-                          return Container();
+                          return LayoutAdditionalPanel();
                         }
                     ),
                     Container(

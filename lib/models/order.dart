@@ -61,6 +61,7 @@ class Order {
         'phone': phone,
         'date': dateTime,
         'total_price': totalPrice,
+        'stage': stage,
         'car_id': car.id,
         'cargo_type_id': cargoType.id,
         if (user!.id != null && user!.id! > 0) 'user_id': user!.id,

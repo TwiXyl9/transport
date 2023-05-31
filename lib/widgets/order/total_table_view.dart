@@ -16,6 +16,8 @@ class TotalTableView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text("Итого"),
+        SizedBox(height: 20,),
         Table(
           children: [
             TableRow(

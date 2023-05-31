@@ -22,16 +22,20 @@ class HomeView extends StatelessWidget {
           builder: (context, state) {
             print(state);
             return state is NewsLoadedState ?
-            !state.user.isAdmin() ?
-            Column(
-              children: [
-                PageHeaderText(text: 'Новости'),
-                NewsSlider(state.news),
-                SizedBox(height: 20,),
-                OrderProcessWidget(),
-              ],
-            ) :
-            AdminNewsView(state.news) :
+                Column(
+                  children: [
+                    PageHeaderText(text: 'Новости'),
+                    !state.user.isAdmin() ?
+                    Column(
+                      children: [
+                        NewsSlider(state.news),
+                        SizedBox(height: 20,),
+                        OrderProcessWidget(),
+                      ],
+                    ) :
+                    AdminNewsView(state.news)
+                  ],
+                ) :
             CustomCircularProgressIndicator();
           }
       ),

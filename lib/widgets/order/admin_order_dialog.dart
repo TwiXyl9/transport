@@ -9,6 +9,7 @@ import 'package:transport/widgets/order/stepper/services_step.dart';
 import 'package:transport/widgets/order/stepper/total/total_step.dart';
 import 'package:transport/widgets/order/total_table_view.dart';
 import 'package:transport/models/route.dart' as OrderRoute;
+import 'package:transport/widgets/status/status_dropdown.dart';
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
 import '../../models/order.dart';
@@ -34,6 +35,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
+  String selectedStage = '';
   late double totalPrice = 0;
   User user = new User.createGuest();
   Car selectedCar = new Car(0);
@@ -55,6 +57,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         phoneController.text = _order.phone;
         dateTimeController.text = _order.dateTime;
         selectedCargoType = _order.cargoType;
+        selectedStage = _order.stage!;
         selectedCar = _order.car;
         selectedServices = _order.services;
         print(selectedServices.length);
@@ -73,6 +76,8 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    Text("Статус"),
+                    StatusDropdown(selectedStage, stagesCallback),
                     PersonInfoStep(formKey, nameController, phoneController),
                     SizedBox(height: 20,),
                     DateStep(dateFormKey, dateTimeController),
@@ -80,7 +85,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                     state is OrderLoadedState?
                     Column(
                       children: [
-                        Text("Выберите тип груза"),
+                        Text("Тип груза"),
                         CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,),
                         SizedBox(height: 20,),
                         CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars),
@@ -107,6 +112,11 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         );
       },
     );
+  }
+  stagesCallback(val) {
+    setState(() {
+      selectedStage = val;
+    });
   }
   carsCallback(val) {
     setState(() {
@@ -144,9 +154,11 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
       _order.phone = phoneController.text;
       _order.dateTime = dateTimeController.text;
       _order.totalPrice = totalPrice;
+      _order.stage = selectedStage;
       _order.cargoType = selectedCargoType;
       _order.car = selectedCar;
       _order.services = selectedServices.where((e) => e.amount > 0).toList();
+      print(_order.services.length);
       bloc.add(UpdateOrderEvent(_order));
     } catch (error) {
       var errorMessage = error.toString();

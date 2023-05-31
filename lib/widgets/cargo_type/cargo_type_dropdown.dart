@@ -11,20 +11,12 @@ class CargoTypeDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButton(
         hint: Text("Выберите груз"),
+        items: types.map((e) => DropdownMenuItem(child: Text(e.name), value: e,)).toList(),
         value: value.id > 0 ? value : null,
         isExpanded: true,
-        items: getItems,
         onChanged: (val)=>{
           callback(val)
         }
     );
-  }
-  List<DropdownMenuItem<CargoType>> get getItems{
-    List<DropdownMenuItem<CargoType>> menuItems = [];
-    types.forEach((type) {
-      var item = DropdownMenuItem(child: Text(type.name), value: type,);
-      menuItems.add(item);
-    });
-    return menuItems;
   }
 }
