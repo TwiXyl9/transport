@@ -6,6 +6,7 @@ import 'package:transport/routing/route_names.dart';
 import 'package:transport/widgets/navigation_drawer/drawer_item.dart';
 
 import '../../blocs/authentication_bloc.dart';
+import '../navigation_bar/custom_admin_navigation_menu.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -31,13 +32,32 @@ class NavDrawer extends StatelessWidget {
                 children: <Widget>[
                   DrawerItem("Автопарк", Icons.directions_car, carsRoute),
                   DrawerItem("Услуги", Icons.sell, servicesRoute),
-                  DrawerItem("Контаты", Icons.contact_phone, carsRoute),
-                  DrawerItem("О Нас", Icons.info, aboutRoute),
                   state is AuthenticationAuthorizedState ?
                   !state.user.isAdmin()?
-                  DrawerItem("Личный кабинет", Icons.person, accountRoute) :
-                  DrawerItem("Выйти", Icons.logout, '', callback: logout) :
-                  DrawerItem("Войти", Icons.login, authenticationRoute),
+                  Column(
+                    children: [
+                      DrawerItem("Контаты", Icons.contact_phone, carsRoute),
+                      DrawerItem("О Нас", Icons.info, aboutRoute),
+                      DrawerItem("Личный кабинет", Icons.person, accountRoute),
+                    ],
+                  ) :
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 84, top: 60),
+                        child: CustomAdminNavigationMenu(),
+                      ),
+                      DrawerItem("Выйти", Icons.logout, '', callback: logout)
+                    ],
+                  ) :
+                  Column(
+                    children: [
+                      DrawerItem("Контакты", Icons.contact_phone, carsRoute),
+                      DrawerItem("О Нас", Icons.info, aboutRoute),
+                      DrawerItem("Войти", Icons.login, authenticationRoute),
+                    ],
+                  ),
                 ],
               ),
             )
