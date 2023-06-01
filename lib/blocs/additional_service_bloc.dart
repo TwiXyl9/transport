@@ -97,7 +97,7 @@ class AdditionalServiceBloc extends Bloc<AdditionalServiceEvent, AdditionalServi
   onUpdateAdditionalServiceEvent(UpdateAdditionalServiceEvent event, Emitter<AdditionalServiceState> emit) async {
     try {
       emit(AdditionalServiceUpdateInProcessState());
-      var result = await ApiService().update(servicesPath, event.service);
+      var result = await ApiService().updateWithFiles(servicesPath, event.service);
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(AdditionalServiceUpdatedState());

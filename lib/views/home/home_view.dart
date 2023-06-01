@@ -33,7 +33,9 @@ class HomeView extends StatelessWidget {
                         OrderProcessWidget(),
                       ],
                     ) :
-                    AdminNewsView(state.news)
+                    state.news.length > 0 ?
+                    AdminNewsView(state.news) :
+                    PageHeaderText(text: 'У компании пока нет услуг! Создайте первую!')
                   ],
                 ) :
             CustomCircularProgressIndicator();

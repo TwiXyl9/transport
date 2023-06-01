@@ -33,7 +33,7 @@ class LayoutTemplate extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
                 child: Container(
-                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height -50),
+                  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 50),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
