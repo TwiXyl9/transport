@@ -5,16 +5,30 @@ import 'package:transport/models/order_service.dart';
 import 'package:transport/widgets/order/stepper/total/total_price_table.dart';
 import 'package:transport/widgets/order/stepper/total/total_services_table.dart';
 import '../../../components/bold_text.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class TotalStep extends StatelessWidget {
   final String name;
   final String phone;
   final String dateTime;
+  final PlaceDetails departure;
+  final PlaceDetails arrival;
   final double totalPrice;
   final Car car;
   final CargoType cargoType;
   List<OrderService> services;
-  TotalStep({Key? key, required this.name, required this.phone, required this.dateTime, required this.totalPrice, required this.car, required this.cargoType, required this.services}) : super(key: key);
+  TotalStep({
+    Key? key,
+    required this.name,
+    required this.phone,
+    required this.dateTime,
+    required this.departure,
+    required this.arrival,
+    required this.totalPrice,
+    required this.car,
+    required this.cargoType,
+    required this.services
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +60,14 @@ class TotalStep extends StatelessWidget {
             TableRow(
                 children: [
                   BoldText("Точка погрузки:"),
-                  Text("Гродно, ул. Дубко 20"),
+                  Text(departure.formattedAddress != null? departure.formattedAddress! : ""),
                   Container()
                 ]
             ),
             TableRow(
                 children: [
                   BoldText("Точка выгрузки:"),
-                  Text("Гродно, ул. Ожешко 22"),
+                  Text(arrival.formattedAddress != null? arrival.formattedAddress! : ""),
                   Container()
                 ]
             ),

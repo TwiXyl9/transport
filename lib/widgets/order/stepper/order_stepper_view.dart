@@ -7,9 +7,11 @@ import 'package:transport/widgets/cargo_type/cargo_type_dropdown.dart';
 import 'package:transport/widgets/error/error_dialog_view.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
+import 'package:transport/widgets/order/stepper/map_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
 import 'package:transport/widgets/order/stepper/total/total_step.dart';
+import 'package:google_maps_webservice/places.dart';
 
 import '../../../models/car.dart';
 import '../../../models/order.dart';
@@ -31,12 +33,15 @@ class _OrderStepperViewState extends State<OrderStepperView> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
+  PlaceDetails departure = PlaceDetails(name: '', placeId: '');
+  PlaceDetails arrival = PlaceDetails(name: '', placeId: '');
   late double totalPrice = 0;
   User user = new User.createGuest();
   Car selectedCar = new Car(0);
   CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();
   final dateFormKey = GlobalKey<FormState>();
+  final mapFormKey = GlobalKey<FormState>();
   late List<OrderService> selectedServices = [];
   @override
   Widget build(BuildContext context) {
@@ -132,7 +137,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
           isActive: currentStep >= 2,
           title: Text("Маршрут"),
-          content: MapView()
+          content: MapStep(mapFormKey, mapCallback)
       ),
       Step(
         state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
@@ -165,6 +170,8 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           phone: phoneController.text,
           dateTime: dateTimeController.text,
           totalPrice: totalPrice = getTotalPrice(),
+          departure: departure,
+          arrival: arrival,
           cargoType: selectedCargoType.id > 0 ? selectedCargoType : state.cargoTypes[0],
           car: selectedCar.id != 0 ? selectedCar : state.cars[0],
           services: selectedServices,) : CustomCircularProgressIndicator(),
@@ -177,6 +184,8 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       result = false;
     } else if (stepNum == 1 && !dateFormKey.currentState!.validate()) {
       result = false;
+    } else if (stepNum == 2 && !mapFormKey.currentState!.validate()) {
+      result = false;
     } else if (stepNum == 3 && selectedCargoType.id == 0) {
       result = false;
     } else if (stepNum == 4 && selectedCar.id == 0) {
@@ -188,6 +197,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
     bool result = true;
     if (!dateFormKey.currentState!.validate() ||
         !personInfoFormKey.currentState!.validate() ||
+        !mapFormKey.currentState!.validate() ||
         selectedCar.id == 0 ||
         selectedCargoType.id < 1) {
       result = false;
@@ -198,6 +208,10 @@ class _OrderStepperViewState extends State<OrderStepperView> {
     setState(() {
       selectedCar = val;
     });
+  }
+  mapCallback(dep, arr){
+    departure = dep;
+    arrival = arr;
   }
   servicesCallback(val){
     setState(() {
@@ -224,7 +238,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
-      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, 54.3, 43.3, 'address1'), new Point(0, 55.3, 45.3, 'address2'));
+      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, departure.geometry!.location.lat, departure.geometry!.location.lng, departure.formattedAddress!), new Point(0, arrival.geometry!.location.lat, arrival.geometry!.location.lng, arrival.formattedAddress!));
       Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
       bloc.add(CreateOrderEvent(order));
     } catch (error) {

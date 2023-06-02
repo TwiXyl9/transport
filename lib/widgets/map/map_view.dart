@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:google_map_polyline_new/google_map_polyline_new.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:transport/services/direction_service.dart';
@@ -17,7 +14,8 @@ import '../../models/direction_response.dart';
 enum MarkerType {departure, arrival}
 
 class MapView extends StatefulWidget {
-  const MapView({Key? key}) : super(key: key);
+  final Function callback;
+  const MapView({Key? key,required this.callback}) : super(key: key);
 
   @override
   State<MapView> createState() => _MapViewState();
@@ -45,8 +43,8 @@ class _MapViewState extends State<MapView> {
 
   final List<Polyline> polyline = [];
 
-  late PlaceDetails departure = PlaceDetails(name: '', placeId: '');
-  late PlaceDetails arrival = PlaceDetails(name: '', placeId: '');
+  PlaceDetails departure = PlaceDetails(name: '', placeId: '');
+  PlaceDetails arrival = PlaceDetails(name: '', placeId: '');
 
   void onMapCreated(controller) {
     setState(() {
@@ -151,7 +149,7 @@ class _MapViewState extends State<MapView> {
         ),
         child: Column(
           children: <Widget>[
-            TextField(
+            TextFormField(
               decoration: InputDecoration(
                 labelText: label,
                 border: InputBorder.none,
@@ -167,6 +165,11 @@ class _MapViewState extends State<MapView> {
                 labelStyle: const TextStyle(color: Colors.black),
               ),
               controller: controller,
+              validator: (val){
+                if(val!.isEmpty){
+                  return 'Введите адрес!';
+                }
+              },
               onTap: () async {
                 Prediction p = (await PlacesAutocomplete.show(
                     context: context,
@@ -216,6 +219,7 @@ class _MapViewState extends State<MapView> {
       routeCreated = true;
     });
 
+    widget.callback(departure, arrival);
   }
 
   void moveCamera(double lat, double lng) {
