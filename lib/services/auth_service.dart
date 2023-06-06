@@ -19,11 +19,12 @@ class AuthService {
         headers: headers,
         body: json.encode(body),
       );
-      final responseData = json.decode(response.body);
+      Map<String, dynamic> responseData = json.decode(response.body);
       if (response.statusCode != 201 && response.statusCode != 200) {
+        print(responseData);
+        if (responseData['errors'] is Map) return new HttpException(responseData['errors']['full_messages'][0]);
         return new HttpException(responseData['errors'][0]);
       }
-      print(response.headers);
       return Auth.fromMap(responseData, response.headers);
     } catch (error) {
       print(error);
@@ -38,6 +39,7 @@ class AuthService {
         'email': email,
         'password': password,
         'password_confirmation': confirmPassword,
+        //'confirm_success_url': 'http://localhost:5050/'
       },
     );
   }

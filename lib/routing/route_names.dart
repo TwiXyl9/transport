@@ -4,6 +4,7 @@ const String servicesRoute = '/services';
 const String contactsRoute = '/contacts';
 const String aboutRoute = '/about';
 const String authenticationRoute = '/authentication';
+const String confirmationRoute = 'confirmation';
 const String registrationRoute = '/registration';
 const String accountRoute = '/account';
 const String accountPrefixRoute = '/account/';

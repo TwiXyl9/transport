@@ -137,7 +137,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
           state: currentStep > 2 ? fieldAreValid(2) ? StepState.complete : StepState.error : StepState.indexed,
           isActive: currentStep >= 2,
           title: Text("Маршрут"),
-          content: MapStep(mapFormKey, mapCallback)
+          content: MapStep(departure, arrival, mapFormKey, mapCallback)
       ),
       Step(
         state: currentStep > 3 ? fieldAreValid(3) ? StepState.complete : StepState.error : StepState.indexed,
@@ -238,7 +238,7 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
-      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, departure.geometry!.location.lat, departure.geometry!.location.lng, departure.formattedAddress!), new Point(0, arrival.geometry!.location.lat, arrival.geometry!.location.lng, arrival.formattedAddress!));
+      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, departure.geometry!.location.lat, departure.geometry!.location.lng, departure.formattedAddress!, departure.placeId), new Point(0, arrival.geometry!.location.lat, arrival.geometry!.location.lng, arrival.formattedAddress!, arrival.placeId));
       Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
       bloc.add(CreateOrderEvent(order));
     } catch (error) {

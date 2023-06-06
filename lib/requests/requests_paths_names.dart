@@ -1,8 +1,9 @@
 const String newsPath = '/news';
 const String carsPath = '/cars';
-const String authPath = '/auth';
+const String authPath = '/authentication';
 const String servicesPath = '/services';
 const String cargoTypesPath = '/cargo_types';
 const String ordersPath = '/orders';
 const String tailTypesPath = '/tail_types';
 const String usersPath = '/users';
+const String confirmEmailPath = '$authPath/confirmation';

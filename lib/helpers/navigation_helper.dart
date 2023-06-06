@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
+import 'package:transport/views/authentication/confirmation/confirmation_view.dart';
 
 import '../data_provider/session_data_provider.dart';
 import '../models/user.dart';
@@ -32,7 +33,17 @@ class NavigationHelper {
       GoRoute(path: adminTailTypeRoute, builder: ((context, state) => AdminTailTypeView())),
       GoRoute(path: adminOrdersRoute, builder: ((context, state) => AdminOrdersView())),
       GoRoute(path: adminStatisticsRoute, builder: ((context, state) => AdminStatisticsView())),
-      GoRoute(path: authenticationRoute, builder: ((context, state) => AuthenticationView())),
+      GoRoute(
+        path: authenticationRoute,
+        builder: ((context, state) => AuthenticationView()),
+        routes: [
+          GoRoute(path: confirmationRoute, builder: ((context, state){
+            var confirmToken = state.queryParameters['confirmation_token'].toString();
+            return ConfirmationView(confirmToken: confirmToken,);
+          }),),
+        ]
+      ),
+
       GoRoute(path: registrationRoute, builder: ((context, state) => RegistrationView())),
       GoRoute(path: servicesRoute, builder: ((context, state) => AdditionalServiceView())),
       GoRoute(path: contactsRoute, builder: ((context, state) => ContactsView())),

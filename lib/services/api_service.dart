@@ -6,6 +6,7 @@ import 'package:transport/models/car.dart';
 import 'package:transport/models/order.dart';
 import 'package:transport/models/service.dart';
 import 'package:transport/models/http_exception.dart';
+import 'package:transport/requests/requests_paths_names.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -392,6 +393,20 @@ class ApiService {
         return true;
       } else {
         return new HttpException(responseData['errors']['full_messages']);
+      }
+    } catch(e){
+      print(e);
+    }
+  }
+  Future<dynamic> confirmEmail(confirmToken) async {
+    try {
+      var fullPath = baseUrl + confirmEmailPath + '?confirmation_token=$confirmToken';
+      http.Response response = await http.get(Uri.parse(fullPath), headers: headers,);
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
       }
     } catch(e){
       print(e);

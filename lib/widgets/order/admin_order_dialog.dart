@@ -4,12 +4,14 @@ import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
 import 'package:transport/widgets/order/stepper/date_step.dart';
+import 'package:transport/widgets/order/stepper/map_step.dart';
 import 'package:transport/widgets/order/stepper/person_info_step.dart';
 import 'package:transport/widgets/order/stepper/services_step.dart';
 import 'package:transport/widgets/order/stepper/total/total_step.dart';
 import 'package:transport/widgets/order/total_table_view.dart';
 import 'package:transport/models/route.dart' as OrderRoute;
 import 'package:transport/widgets/status/status_dropdown.dart';
+import 'package:google_maps_webservice/places.dart';
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
 import '../../models/order.dart';
@@ -35,6 +37,8 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final dateTimeController = TextEditingController();
+  PlaceDetails departure = PlaceDetails(name: '', placeId: '');
+  PlaceDetails arrival = PlaceDetails(name: '', placeId: '');
   String selectedStage = '';
   late double totalPrice = 0;
   User user = new User.createGuest();
@@ -42,6 +46,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
   CargoType selectedCargoType = new CargoType(0, '');
   final personInfoFormKey = GlobalKey<FormState>();
   final dateFormKey = GlobalKey<FormState>();
+  final mapFormKey = GlobalKey<FormState>();
   late List<OrderService> selectedServices = [];
   late Order _order;
   void initState() {
@@ -60,6 +65,8 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         selectedStage = _order.stage!;
         selectedCar = _order.car;
         selectedServices = _order.services;
+        departure = PlaceDetails(name: _order.route.start_point.address, placeId: _order.route.start_point.placeId);
+        arrival = PlaceDetails(name: _order.route.start_point.address, placeId: _order.route.end_point.placeId);
         print(selectedServices.length);
       }
     }
@@ -81,7 +88,8 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                     PersonInfoStep(formKey, nameController, phoneController),
                     SizedBox(height: 20,),
                     DateStep(dateFormKey, dateTimeController),
-                    SizedBox(height: 20,),SizedBox(height: 20,),
+                    SizedBox(height: 40,),
+                    MapStep(departure, arrival, mapFormKey, mapCallback),
                     state is OrderLoadedState?
                     Column(
                       children: [
@@ -112,6 +120,10 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         );
       },
     );
+  }
+  mapCallback(dep, arr){
+    departure = dep;
+    arrival = arr;
   }
   stagesCallback(val) {
     setState(() {

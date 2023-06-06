@@ -14,8 +14,10 @@ import '../../models/direction_response.dart';
 enum MarkerType {departure, arrival}
 
 class MapView extends StatefulWidget {
+  final PlaceDetails departure;
+  final PlaceDetails arrival;
   final Function callback;
-  const MapView({Key? key,required this.callback}) : super(key: key);
+  const MapView({Key? key, required this.departure, required this.arrival, required this.callback}) : super(key: key);
 
   @override
   State<MapView> createState() => _MapViewState();
@@ -43,8 +45,16 @@ class _MapViewState extends State<MapView> {
 
   final List<Polyline> polyline = [];
 
-  PlaceDetails departure = PlaceDetails(name: '', placeId: '');
-  PlaceDetails arrival = PlaceDetails(name: '', placeId: '');
+  late PlaceDetails _departure;
+  late PlaceDetails _arrival;
+
+  @override
+  void initState() {
+    _departure = widget.departure;
+    _arrival = widget.arrival;
+    computePath();
+    super.initState();
+  }
 
   void onMapCreated(controller) {
     setState(() {
@@ -59,10 +69,10 @@ class _MapViewState extends State<MapView> {
 
     setState(() {
       if (type == MarkerType.departure) {
-        departure = detail.result;
+        _departure = detail.result;
         departureController.text = detail.result.formattedAddress!;
       } else {
-        arrival = detail.result;
+        _arrival = detail.result;
         arrivalController.text = detail.result.formattedAddress!;
       }
       Marker marker = Marker(
@@ -194,9 +204,9 @@ class _MapViewState extends State<MapView> {
   }
 
   void computePath() async {
-    if (departure.name.isEmpty || arrival.name.isEmpty) return;
-    LatLng origin = LatLng(departure.geometry!.location.lat, departure.geometry!.location.lng);
-    LatLng end = LatLng(arrival.geometry!.location.lat, arrival.geometry!.location.lng);
+    if (_departure.name.isEmpty || _arrival.name.isEmpty) return;
+    LatLng origin = LatLng(_departure.geometry!.location.lat, _departure.geometry!.location.lng);
+    LatLng end = LatLng(_arrival.geometry!.location.lat, _arrival.geometry!.location.lng);
 
 
 
@@ -219,7 +229,7 @@ class _MapViewState extends State<MapView> {
       routeCreated = true;
     });
 
-    widget.callback(departure, arrival);
+    widget.callback(_departure, _arrival);
   }
 
   void moveCamera(double lat, double lng) {
