@@ -8,8 +8,11 @@ import 'package:transport/widgets/news/admin_news_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
 import 'package:transport/widgets/news/news_slider_view.dart';
 
+import '../../models/news.dart';
+import '../../widgets/components/circular_add_button.dart';
 import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../../widgets/components/page_header_text.dart';
+import '../../widgets/news/news_dialog.dart';
 import '../layout_template/layout_template.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -33,9 +36,21 @@ class HomeView extends StatelessWidget {
                         OrderProcessWidget(),
                       ],
                     ) :
-                    state.news.length > 0 ?
-                    AdminNewsView(state.news) :
-                    PageHeaderText(text: 'У компании пока нет услуг! Создайте первую!')
+                    Column(
+                      children: [
+                        state.news.length > 0 ?
+                        AdminNewsView(state.news) :
+                        PageHeaderText(text: 'У компании пока нет услуг! Создайте первую!'),
+                        CircularAddButton(() => {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return NewsDialog(new News(0,'','',''));
+                              }
+                          ),
+                        },)
+                        ],
+                    ),
                   ],
                 ) :
             CustomCircularProgressIndicator();

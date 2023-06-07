@@ -24,14 +24,6 @@ class AdminNewsView extends StatelessWidget {
             ),
           ),
         ),
-        CircularAddButton(() => {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return NewsDialog(new News(0,'','',''));
-              }
-          ),
-        },)
       ],
     );
   }

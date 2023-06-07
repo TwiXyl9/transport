@@ -34,6 +34,7 @@ class ContactsView extends StatelessWidget {
               ),
               SizedBox(height: 15,),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
