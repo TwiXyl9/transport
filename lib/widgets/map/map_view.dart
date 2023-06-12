@@ -52,7 +52,10 @@ class _MapViewState extends State<MapView> {
   void initState() {
     _departure = widget.departure;
     _arrival = widget.arrival;
-    computePath();
+    if (_departure.name.isNotEmpty && _arrival.name.isNotEmpty) {
+      setInitCoordinates();
+      computePath();
+    }
     super.initState();
   }
 
@@ -208,8 +211,6 @@ class _MapViewState extends State<MapView> {
     LatLng origin = LatLng(_departure.geometry!.location.lat, _departure.geometry!.location.lng);
     LatLng end = LatLng(_arrival.geometry!.location.lat, _arrival.geometry!.location.lng);
 
-
-
     directionsResponse = await DirectionService().getSometing(Secrets.API_KEY_PLACES, origin, end);
 
     totalDistance = directionsResponse.routes![0].legs![0].distance!.text!;
@@ -241,5 +242,26 @@ class _MapViewState extends State<MapView> {
             )
         )
     );
+  }
+
+  void setMarkers(type, lat, lng) {
+    Marker marker = Marker(
+        markerId: type == MarkerType.departure? const MarkerId('departureMarker') : const MarkerId('arrivalMarker'),
+        draggable: false,
+        infoWindow: InfoWindow(
+          title: type == MarkerType.departure? "Точка отправления" : "Точка прибытия",
+        ),
+        onTap: () {},
+        position: LatLng(lat!, lng!)
+    );
+    markersList.add(marker);
+  }
+
+  void setInitCoordinates() {
+    departureController.text = _departure.formattedAddress!;
+    setMarkers(MarkerType.departure, _departure.geometry?.location.lat, _departure.geometry?.location.lng);
+    arrivalController.text = _arrival.formattedAddress!;
+    setMarkers(MarkerType.arrival, _arrival.geometry?.location.lat, _arrival.geometry?.location.lng);
+
   }
 }

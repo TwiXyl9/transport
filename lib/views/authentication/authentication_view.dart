@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:transport/blocs/authentication_bloc.dart';
 import 'package:transport/services/oauth_service.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
@@ -153,8 +154,9 @@ class _AuthenticationViewState extends State<AuthenticationView> {
   }
 
   Future googleSignIn() async {
-    var user = await GoogleSignInApi.Login();
-    print(user);
+    var googleUser = await GoogleSignInApi.Login();
+    GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+    print(googleAuth.accessToken);
   }
   Future<void> signIn(AuthenticationBloc bloc) async {
     if(_formKey.currentState!.validate()){

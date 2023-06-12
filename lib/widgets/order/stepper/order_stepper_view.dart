@@ -238,7 +238,9 @@ class _OrderStepperViewState extends State<OrderStepperView> {
       var name = nameController.text;
       var phone = phoneController.text;
       var dateTime = dateTimeController.text;
-      OrderRoute.Route route = new OrderRoute.Route(0, new Point(0, departure.geometry!.location.lat, departure.geometry!.location.lng, departure.formattedAddress!, departure.placeId), new Point(0, arrival.geometry!.location.lat, arrival.geometry!.location.lng, arrival.formattedAddress!, arrival.placeId));
+      OrderRoute.Route route = new OrderRoute.Route(0,
+          new Point(0, departure.geometry!.location.lat, departure.geometry!.location.lng, departure.formattedAddress!, departure.placeId),
+          new Point(0, arrival.geometry!.location.lat, arrival.geometry!.location.lng, arrival.formattedAddress!, arrival.placeId));
       Order order = new Order(0, name, phone, dateTime, null, totalPrice, selectedCar, selectedCargoType, route, selectedServices.where((e) => e.amount > 0).toList(), user);
       bloc.add(CreateOrderEvent(order));
     } catch (error) {

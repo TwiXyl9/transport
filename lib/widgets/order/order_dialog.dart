@@ -57,10 +57,23 @@ class _OrderDialogState extends State<OrderDialog> {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Padding(
               padding: const EdgeInsets.all(25.0),
-              child: SingleChildScrollView(
-                child: Container(
-                  constraints: BoxConstraints(minHeight:200, maxHeight: MediaQuery.of(context).size.height, minWidth: 200, maxWidth: 800),
-                  child: OrderStepperView(),
+              child: Container(
+                constraints: BoxConstraints(minHeight:200, maxHeight: MediaQuery.of(context).size.height, minWidth: 200, maxWidth: 800),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(Icons.exit_to_app),
+                      ),
+                    ),
+                    Expanded(
+                        child: OrderStepperView()
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -6,11 +6,10 @@ class GoogleSignInApi{
     clientId: Secrets.CLIENT_ID,
     scopes: <String>[
       'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
 
 
-  static Future<GoogleSignInAccount?> Login() => _googleSignIn.signInSilently();
-  static Future<GoogleSignInAccount?>SignOut() => _googleSignIn.signOut();
+  static Future<GoogleSignInAccount?> Login() => _googleSignIn.signIn();
+  static Future<GoogleSignInAccount?> SignOut() => _googleSignIn.signOut();
 }

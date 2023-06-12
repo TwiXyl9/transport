@@ -75,7 +75,7 @@ dependencies:
 
   google_sign_in: ^6.1.0
 
-  google_sign_in_web: ^0.12.0
+  google_sign_in_web: ^0.12.0+2
 
   flutter_signin_button: ^2.0.0
 

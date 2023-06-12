@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:transport/blocs/order_bloc.dart';
 import 'package:transport/helpers/validation_helper.dart';
 import 'package:transport/widgets/order/stepper/cars_step.dart';
@@ -12,6 +13,7 @@ import 'package:transport/widgets/order/total_table_view.dart';
 import 'package:transport/models/route.dart' as OrderRoute;
 import 'package:transport/widgets/status/status_dropdown.dart';
 import 'package:google_maps_webservice/places.dart';
+import '../../config/secrets.dart';
 import '../../models/car.dart';
 import '../../models/cargo_type.dart';
 import '../../models/order.dart';
@@ -49,27 +51,29 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
   final mapFormKey = GlobalKey<FormState>();
   late List<OrderService> selectedServices = [];
   late Order _order;
+  final GoogleMapsPlaces _places = GoogleMapsPlaces(
+      apiKey: Secrets.API_KEY_PLACES,
+      baseUrl: 'https://maps.googleapis.com/maps/api',
+      apiHeaders: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Access-Control-Allow-Origin' : '*',
+      }
+  );
   void initState() {
     _order = widget.order;
+    nameController.text = _order.name;
+    phoneController.text = _order.phone;
+    dateTimeController.text = _order.dateTime;
+    selectedCargoType = _order.cargoType;
+    selectedStage = _order.stage!;
+    selectedCar = _order.car;
+    selectedServices = _order.services;
     super.initState();
+    getPlacesResults();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_order.id != 0) {
-      if (allIsEmpty()) {
-        nameController.text = _order.name;
-        phoneController.text = _order.phone;
-        dateTimeController.text = _order.dateTime;
-        selectedCargoType = _order.cargoType;
-        selectedStage = _order.stage!;
-        selectedCar = _order.car;
-        selectedServices = _order.services;
-        departure = PlaceDetails(name: _order.route.start_point.address, placeId: _order.route.start_point.placeId);
-        arrival = PlaceDetails(name: _order.route.start_point.address, placeId: _order.route.end_point.placeId);
-        print(selectedServices.length);
-      }
-    }
 
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
@@ -89,7 +93,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                     SizedBox(height: 20,),
                     DateStep(dateFormKey, dateTimeController),
                     SizedBox(height: 40,),
-                    MapStep(departure, arrival, mapFormKey, mapCallback),
+                    if (departure.placeId.isNotEmpty && departure.placeId.isNotEmpty) MapStep(departure, arrival, mapFormKey, mapCallback),
                     state is OrderLoadedState?
                     Column(
                       children: [
@@ -121,35 +125,51 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
       },
     );
   }
+
   mapCallback(dep, arr){
     departure = dep;
     arrival = arr;
   }
+
   stagesCallback(val) {
     setState(() {
       selectedStage = val;
     });
   }
+
   carsCallback(val) {
     setState(() {
       selectedCar = val;
     });
   }
+
   servicesCallback(val){
     setState(() {
       selectedServices = val;
     });
   }
+
   cargoTypesCallback(val){
     setState(() {
       selectedCargoType = val;
     });
   }
+
+  Future<void> getPlacesResults() async {
+    var dep = (await _places.getDetailsByPlaceId(_order.route.start_point.placeId)).result;
+    var arr = (await _places.getDetailsByPlaceId(_order.route.end_point.placeId)).result;
+    setState(() {
+      departure = dep;
+      arrival = arr;
+    });
+  }
+
   bool allIsEmpty(){
     return nameController.text.isEmpty && phoneController.text.isEmpty &&
         dateTimeController.text.isEmpty && selectedCar.id == 0 &&
         selectedCargoType.id == 0 && selectedServices.isEmpty;
   }
+
   double getTotalPrice(){
     double result = selectedCar.id! > 0 ? selectedCar.pricePerHour : 0;
     if (selectedServices.length > 0) {
@@ -159,6 +179,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
     }
     return result;
   }
+
   void saveOrder() {
     try {
       var bloc = context.read<OrderBloc>();
@@ -170,7 +191,20 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
       _order.cargoType = selectedCargoType;
       _order.car = selectedCar;
       _order.services = selectedServices.where((e) => e.amount > 0).toList();
-      print(_order.services.length);
+      _order.route.start_point = new Point(
+          _order.route.start_point.id,
+          departure.geometry!.location.lat,
+          departure.geometry!.location.lng,
+          departure.formattedAddress!,
+          departure.placeId
+      );
+      _order.route.end_point = new Point(
+          _order.route.end_point.id,
+          arrival.geometry!.location.lat,
+          arrival.geometry!.location.lng,
+          arrival.formattedAddress!,
+          arrival.placeId
+      );
       bloc.add(UpdateOrderEvent(_order));
     } catch (error) {
       var errorMessage = error.toString();
@@ -181,4 +215,5 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
     }
     Navigator.of(context).pop();
   }
+
 }

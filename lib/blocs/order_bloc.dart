@@ -130,6 +130,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(OrderUpdatedState());
+        add(InitialOrderEvent());
       } else {
         print(result.toString());
         emit(OrderFailureState(result.toString()));
@@ -145,6 +146,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       print(result.runtimeType);
       if (result.runtimeType != HttpException) {
         emit(OrderDeletedState());
+        add(InitialOrderEvent());
       } else {
         emit(OrderFailureState(result.toString()));
       }
