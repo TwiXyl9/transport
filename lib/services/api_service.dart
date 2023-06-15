@@ -58,14 +58,10 @@ class ApiService {
       print(response.statusCode);
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
-        print(response.headers);
-        print('Before - ${authHeaders}');
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
-        print('After - $authHeaders');
         return new User.fromMap(responseData);
       } else {
-        print(responseData);
-        return new HttpException(responseData['errors'][0]);
+        return new HttpException(response.statusCode, responseData['errors'][0]);
       }
     } catch(e){
       print(e);
@@ -88,7 +84,7 @@ class ApiService {
           Uri.parse(fullPath), headers: headers, body: json.encode(body));
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return true;
     } catch(e){
@@ -116,7 +112,7 @@ class ApiService {
         // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return true;
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);
@@ -135,7 +131,7 @@ class ApiService {
         return data.map((order) => Order.fromMap(order)).toList();
       } else {
         print(responseData);
-        return new HttpException(responseData['errors'][0]);
+        return new HttpException(response.statusCode, responseData['errors'][0]);
       }
     } catch(e){
       print(e);
@@ -153,7 +149,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return new News.fromMap(responseData);
     } catch(e){
@@ -171,7 +167,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 200) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return true;
     } catch(e){
@@ -191,7 +187,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return new Car.fromMap(responseData);
     } catch(e){
@@ -210,7 +206,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 200) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return true;
     } catch(e){
@@ -237,7 +233,7 @@ class ApiService {
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new User.fromMap(responseData);
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);
@@ -250,7 +246,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return new CargoType.fromMap(responseData);
     } catch(e){
@@ -267,7 +263,7 @@ class ApiService {
        // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new CargoType.fromMap(responseData);
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);
@@ -280,7 +276,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return new TailType.fromMap(responseData);
     } catch(e){
@@ -297,7 +293,7 @@ class ApiService {
         // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new TailType.fromMap(responseData);
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);
@@ -313,7 +309,7 @@ class ApiService {
         // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return new CargoType.fromMap(responseData);
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);
@@ -341,7 +337,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 201) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return new News.fromMap(responseData);
     } catch(e){
@@ -359,7 +355,7 @@ class ApiService {
       final responseData = json.decode(response.body);
       if (response.statusCode != 200) {
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
       return true;
     } catch(e){
@@ -374,7 +370,7 @@ class ApiService {
       if (response.statusCode != 204) {
         final responseData = json.decode(response.body);
         print(responseData);
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       } else {
         return true;
       }
@@ -392,7 +388,7 @@ class ApiService {
         // if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
         return true;
       } else {
-        return new HttpException(responseData['errors']['full_messages']);
+        return new HttpException(response.statusCode, responseData['errors']['full_messages']);
       }
     } catch(e){
       print(e);

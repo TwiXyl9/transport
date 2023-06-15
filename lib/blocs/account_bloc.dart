@@ -61,18 +61,23 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   onInitialAccountEvent(InitialAccountEvent event, Emitter<AccountState> emit) async {
     List<Order> orders = [];
     //User user = new User.createGuest();
-    var user = await _sessionDataProvider.getUser(); //проверить что с гостем, передается ли он
+    var user = await _sessionDataProvider.getUser();
     if (user != null) {
-
       var authString = await _sessionDataProvider.getAuthData();
       var authData = Auth.fromJson(jsonDecode(authString!));
       var authHeadersMap = authData.mapFromFields();
-      var result = await ApiService().usersOrdersIndexRequest('$usersPath/${user.id}/$ordersPath', authHeadersMap);
-      if(result.runtimeType == HttpException){
+      var userInfoResult = await ApiService().userShowRequest('$usersPath/${user.id}', authHeadersMap);
+      if (userInfoResult.runtimeType == HttpException) {
         authBloc.add(AuthenticationLogoutEvent());
-        emit(AccountFailureState(result.toString()));
+        emit(AccountFailureState(userInfoResult.toString()));
+      }
+      user = userInfoResult;
+      var ordersResult = await ApiService().usersOrdersIndexRequest('$usersPath/${user!.id}$ordersPath', authHeadersMap);
+      if(ordersResult.runtimeType == HttpException){
+        authBloc.add(AuthenticationLogoutEvent());
+        emit(AccountFailureState(ordersResult.toString()));
       } else {
-        orders = result;
+        orders = ordersResult;
         _sessionDataProvider.deleteAuthData();
         _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
         emit(AccountLoadedState(user, orders));

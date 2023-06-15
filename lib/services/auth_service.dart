@@ -22,8 +22,8 @@ class AuthService {
       Map<String, dynamic> responseData = json.decode(response.body);
       if (response.statusCode != 201 && response.statusCode != 200) {
         print(responseData);
-        if (responseData['errors'] is Map) return new HttpException(responseData['errors']['full_messages'][0]);
-        return new HttpException(responseData['errors'][0]);
+        if (responseData['errors'] is Map) return new HttpException(response.statusCode, responseData['errors']['full_messages'][0]);
+        return new HttpException(response.statusCode, responseData['errors'][0]);
       }
       return Auth.fromMap(responseData, response.headers);
     } catch (error) {
@@ -32,14 +32,13 @@ class AuthService {
   }
 
   Future<dynamic> signup(String name, String phone, String email, String password, String confirmPassword) async {
-    return _authenticate('/',
+    return _authenticate('',
       {
         'name': name,
         'phone': phone,
         'email': email,
         'password': password,
         'password_confirmation': confirmPassword,
-        //'confirm_success_url': 'http://localhost:5050/'
       },
     );
   }

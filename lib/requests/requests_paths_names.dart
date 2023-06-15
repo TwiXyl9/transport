@@ -7,3 +7,4 @@ const String ordersPath = '/orders';
 const String tailTypesPath = '/tail_types';
 const String usersPath = '/users';
 const String confirmEmailPath = '$authPath/confirmation';
+const String googleOmniauthPath = '/omniauth/google_oauth2/callback';

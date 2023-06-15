@@ -31,17 +31,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<RegistrationBloc>(
+          create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
+        ),
         BlocProvider<AuthenticationBloc>(
-          create: (context) => AuthenticationBloc()..add(AuthenticationCheckStatusEvent()),
+          create: (context) => AuthenticationBloc(context.read<RegistrationBloc>())..add(AuthenticationCheckStatusEvent()),
         ),
         BlocProvider<CarsBloc>(
           create: (context) => CarsBloc()..add(InitialCarsEvent()),
         ),
         BlocProvider<NewsBloc>(
           create: (context) => NewsBloc(context.read<AuthenticationBloc>())..add(InitialNewsEvent()),
-        ),
-        BlocProvider<RegistrationBloc>(
-          create: (context) => RegistrationBloc()..add(RegistrationInitialEvent()),
         ),
         BlocProvider<OrderBloc>(
           create: (context) => OrderBloc()..add(InitialOrderEvent()),

@@ -26,6 +26,9 @@ class FooterView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset('lib/assets/images/delivery.png', color: Colors.white,),
+              SizedBox(
+                height: 22,
+              ),
               Column(
                 children: [
                   Text("2023 © AirTrans", style: TextStyle(color: textColor),),

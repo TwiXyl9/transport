@@ -5,7 +5,7 @@ extension extString on String {
   }
 
   bool get isValidName{
-    final nameRegExp = new RegExp(r"^\s*[A-ЯЁ][а-яё]+\s*$");
+    final nameRegExp = new RegExp(r"^[А-Я]*[а-я]*$");
     return nameRegExp.hasMatch(this);
   }
 

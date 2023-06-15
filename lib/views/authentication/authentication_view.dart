@@ -135,7 +135,9 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                                 SizedBox(height: 25,),
                                 SignInButton(
                                   Buttons.Google,
-                                  onPressed: googleSignIn,
+                                  onPressed: () {
+                                    bloc.add(AuthenticationGoogleLoginEvent());
+                                  }
                                 ),
                                 SizedBox(height: 30,),
                               ],
@@ -153,18 +155,12 @@ class _AuthenticationViewState extends State<AuthenticationView> {
     );
   }
 
-  Future googleSignIn() async {
-    var googleUser = await GoogleSignInApi.Login();
-    GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
-    print(googleAuth.accessToken);
-  }
   Future<void> signIn(AuthenticationBloc bloc) async {
     if(_formKey.currentState!.validate()){
       try {
         final email = emailController.text;
         final password = passwordController.text;
         bloc.add(AuthenticationLoginEvent(email: email, password: password));
-
       } catch (error) {
         var errorMessage = error.toString();
         showDialog(

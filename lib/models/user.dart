@@ -23,16 +23,6 @@ class User {
     phone = map['phone'];
     email = map['email'];
     role = map['role'];
-    final userData = json.encode(
-      {
-        'id': id,
-        'name': name,
-        'phone': phone,
-        'email': email,
-        'role': role
-      },
-    );
-    Prefs.setString("userData", userData);
   }
 
   bool isAdmin(){

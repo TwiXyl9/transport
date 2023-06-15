@@ -1,10 +1,10 @@
 class HttpException implements Exception {
   final String message;
-
-  HttpException(this.message);
+  final int statusCode;
+  HttpException(this.statusCode, this.message);
 
   @override
   String toString() {
-    return message;
+    return 'Статус - $statusCode. $message';
   }
 }
