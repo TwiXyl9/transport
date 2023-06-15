@@ -10,6 +10,8 @@ import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/components/custom_button.dart';
 import 'package:transport/widgets/components/custom_text_field.dart';
+import 'package:transport/widgets/registration/google_registration_view.dart';
+import 'package:transport/widgets/registration/user_registration_view.dart';
 
 import '../../blocs/authentication_bloc.dart';
 import '../../widgets/error/error_dialog_view.dart';
@@ -24,13 +26,6 @@ class RegistrationView extends StatefulWidget {
 }
 
 class _RegistrationViewState extends State<RegistrationView> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,146 +59,16 @@ class _RegistrationViewState extends State<RegistrationView> {
                   borderRadius: BorderRadius.circular(10)
               ),
               child: Container(
-                  constraints: BoxConstraints(maxWidth: 400),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 25,),
-                        Text("Регистрация", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                        SizedBox(height: 15,),
-                        if (state is RegistrationGoogleState) ...[
-                          Image.network(state.avatar),
-                          Text(state.user.name),
-                          Text(state.user.email),
-                          CustomTextField(
-                              controller: phoneController,
-                              hint: 'Телефон',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidPhone){
-                                  return 'Некорректный номер телефона';
-                                }
-                              }),
-                          CustomButton(btnText: "Зарегистрироваться", onTap:() => googleSignUp(bloc, state.accessToken), btnColor: Colors.black),
-                        ] else ...[
-                          CustomTextField(
-                              controller: nameController,
-                              hint: 'Имя',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidName){
-                                  return 'Некорректное имя';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: phoneController,
-                              hint: 'Телефон',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidPhone){
-                                  return 'Некорректный номер телефона';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: emailController,
-                              hint: 'Email',
-                              type: FieldType.text,
-                              validator: (val) {
-                                if(!val!.isValidEmail){
-                                  return 'Некорректный email';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: passwordController,
-                              hint: 'Пароль',
-                              type: FieldType.password,
-                              validator: (val){
-                                if(!val!.isValidPassword){
-                                  return 'Некорректный пароль';
-                                }
-                              }),
-                          SizedBox(height: 10,),
-                          CustomTextField(
-                              controller: confirmPasswordController,
-                              hint: 'Повтор пароля',
-                              type: FieldType.password,
-                              validator: (val){
-                                if (!val!.isValidPassword) {
-                                  return 'Некорректный пароль';
-                                } else if (val != passwordController.text) {
-                                  return 'Пароли не совпадают';
-                                }
-                              }),
-                          CustomButton(btnText: "Зарегистрироваться", onTap:() => signUp(bloc), btnColor: Colors.black),
-                          Container(
-                            child: Text.rich(
-                                TextSpan(
-                                    children: [
-                                      TextSpan(text: "У вас уже есть аккаунт? "),
-                                      TextSpan(
-                                          text: "Войти",
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.bold),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = (){
-                                              bloc.add(RegistrationRedirectToAuthEvent());
-                                            }
-                                      ),
-                                    ]
-                                )
-                            ),
-                          ),
-                          SizedBox(height: 25,),
-                        ]
-                      ],
-                    ),
-                  )
+                constraints: BoxConstraints(maxWidth: 400),
+                child: state is RegistrationGoogleState?
+                  GoogleRegistrationView(state: state) :
+                  UserRegistrationView(),
               ),
             );
           },
         ),
       )
     );
-  }
-  void signUp(RegistrationBloc bloc) async {
-    if(_formKey.currentState!.validate()){
-      try {
-        final name = nameController.text;
-        final phone = phoneController.text;
-        final email = emailController.text;
-        final password = passwordController.text;
-        final confirmPassword = confirmPasswordController.text;
-        bloc.add(RegistrationSignUpEvent(name, phone, email, password, confirmPassword));
-
-      } catch (error) {
-        var errorMessage = error.toString();
-        showDialog(
-            context: context,
-            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-        );
-      }
-    }
-  }
-
-  Future googleSignUp(RegistrationBloc bloc, String token) async {
-    if(_formKey.currentState!.validate()){
-      try {
-        final phone = phoneController.text;
-        bloc.add(RegistrationGoogleEvent(token, phone, context.read<AuthenticationBloc>()));
-      } catch (error) {
-        var errorMessage = error.toString();
-        showDialog(
-            context: context,
-            builder: (ctx) => ErrorDialogView(ctx: ctx, message: errorMessage)
-        );
-      }
-    }
   }
 }
 
