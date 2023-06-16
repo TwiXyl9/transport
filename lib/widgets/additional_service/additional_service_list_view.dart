@@ -12,14 +12,9 @@ class AdditionalServiceListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        PageHeaderText(text: "Дополнительные услуги"),
-        ListView(
-          shrinkWrap: true,
-          children: services.map((e) => AdditionalServiceItemView(e, user)).toList(),
-        ),
-      ],
+    return ListView(
+      shrinkWrap: true,
+      children: services.map((e) => AdditionalServiceItemView(e, user)).toList(),
     );
   }
 }

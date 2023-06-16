@@ -10,6 +10,7 @@ import '../../widgets/additional_service/additional_service_dialog.dart';
 import '../../widgets/additional_service/additional_service_list_view.dart';
 import '../../widgets/components/circular_add_button.dart';
 import '../../widgets/components/custom_circular_progress_indicator.dart';
+import '../../widgets/components/page_header_text.dart';
 
 class AdditionalServiceView extends StatelessWidget {
   const AdditionalServiceView({Key? key}) : super(key: key);
@@ -23,9 +24,7 @@ class AdditionalServiceView extends StatelessWidget {
           return state is AdditionalServiceLoadedState?
           Column(
             children: [
-              state.services.length > 0 ?
-              AdditionalServiceListView(state.services, state.user) :
-              Center(child: Text('У компании пока нет услуг! Создайте первую!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
+              PageHeaderText(text: "Дополнительные услуги"),
               state.user.isAdmin() ?
               CircularAddButton(() => showDialog(
                   context: context,
@@ -34,6 +33,17 @@ class AdditionalServiceView extends StatelessWidget {
                   }
               )) :
               Container(),
+              state.services.length > 0 ?
+              AdditionalServiceListView(state.services, state.user) :
+              Center(
+                  child: Text(
+                    'У компании пока нет услуг! Создайте первую!',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold
+                    ),
+                  )
+              ),
             ],
           ) :
           CustomCircularProgressIndicator();

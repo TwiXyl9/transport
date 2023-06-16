@@ -8,7 +8,7 @@ class CircularAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.bottomRight,
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(5),
         child: CircleAvatar(
           radius: 30,
           backgroundColor: Colors.green,
