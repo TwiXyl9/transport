@@ -38,9 +38,6 @@ class HomeView extends StatelessWidget {
                     ) :
                     Column(
                       children: [
-                        state.news.length > 0 ?
-                        AdminNewsView(state.news) :
-                        PageHeaderText(text: 'У компании пока нет услуг! Создайте первую!'),
                         CircularAddButton(() => {
                           showDialog(
                               context: context,
@@ -48,8 +45,11 @@ class HomeView extends StatelessWidget {
                                 return NewsDialog(new News(0,'','',''));
                               }
                           ),
-                        },)
-                        ],
+                        },),
+                        state.news.length > 0 ?
+                        AdminNewsView(state.news) :
+                        PageHeaderText(text: 'У компании пока нет новостей! Создайте первую!'),
+                      ],
                     ),
                   ],
                 ) :

@@ -26,11 +26,6 @@ class CarsView extends StatelessWidget {
             return Column(
               children: [
                 PageHeaderText(text: "Наш автопарк"),
-                ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
-                ),
                 state.user.isAdmin() ?
                 CircularAddButton(() => showDialog(
                     context: context,
@@ -39,6 +34,11 @@ class CarsView extends StatelessWidget {
                     }
                 )) :
                 Container(),
+                ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+                ),
               ],
             );
          }
