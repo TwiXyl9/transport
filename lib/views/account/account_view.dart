@@ -28,11 +28,17 @@ class AccountView extends StatelessWidget {
             child: Column(
               children: [
                 Text('Профиль', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                SizedBox(height: 20,),
                 Text(state.user.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                SizedBox(height: 5,),
                 Text(state.user.email, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                SizedBox(height: 5,),
                 Text(state.user.phone, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                SizedBox(height: 10,),
                 CustomButton(btnText: "Редактировать", onTap:() => { locator<NavigationHelper>().navigateTo('$accountPrefixRoute$accountSettingsRoute', data: state.user) }, btnColor: Colors.blue,),
+                SizedBox(height: 5,),
                 CustomButton(btnText: "Заказы", onTap:() => { locator<NavigationHelper>().navigateTo('$accountPrefixRoute$accountOrdersRoute') }, btnColor: Colors.blue,),
+                SizedBox(height: 5,),
                 CustomButton(btnText: "Выйти", onTap:() => logoutClick(bloc), btnColor: Colors.black,),
               ],
             ),

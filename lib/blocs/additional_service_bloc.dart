@@ -66,7 +66,6 @@ class AdditionalServiceBloc extends Bloc<AdditionalServiceEvent, AdditionalServi
     List<Service> services = [];
     //User user = new User.createGuest();
     try {
-      print('Helllo');
       emit(AdditionalServiceLoadInProcessState());
       var user = await _sessionDataProvider.getUser();
       if (user == null) user = new User.createGuest();

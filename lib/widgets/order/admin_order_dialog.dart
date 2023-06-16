@@ -97,13 +97,14 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
                     state is OrderLoadedState?
                     Column(
                       children: [
+                        SizedBox(height: 20,),
                         Text("Тип груза"),
                         CargoTypeDropdown(state.cargoTypes, selectedCargoType, cargoTypesCallback,),
                         SizedBox(height: 20,),
                         CarsStep(carCallback: carsCallback, selectedCar: selectedCar, cars: state.cars),
                         SizedBox(height: 20,),
                         ServicesStep(
-                            selectedServices: selectedServices.length == 0 ? state.services.map((e) => new OrderService(0, 0, e)).toList() : selectedServices,
+                            selectedServices: getSelectedServices(state.services),
                             servicesCallback: servicesCallback,
                             services: state.services
                         ),
@@ -124,6 +125,16 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
         );
       },
     );
+  }
+
+  List<OrderService> getSelectedServices(services){
+    if (selectedServices.length == services.length) return selectedServices;
+    List<OrderService> list = List<OrderService>.from(services.map((e) {
+      OrderService serv = selectedServices.firstWhere((el) => el.service == e, orElse: () => new OrderService(0, 0, e));
+      return serv;
+    }).toList());
+    print(list.runtimeType);
+    return list;
   }
 
   mapCallback(dep, arr){
@@ -172,7 +183,7 @@ class _AdminOrderDialogState extends State<AdminOrderDialog> {
 
   double getTotalPrice(){
     double result = selectedCar.id! > 0 ? selectedCar.pricePerHour : 0;
-    if (selectedServices.length > 0) {
+    if (selectedServices.isNotEmpty) {
       selectedServices.forEach((e) {
         result += e.amount * e.service.price;
       });

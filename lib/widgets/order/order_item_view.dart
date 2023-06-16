@@ -89,6 +89,7 @@ class OrderItemView extends StatelessWidget {
                 },
               btnColor: Colors.blueAccent,
               width: 120,
+              margin: 0,
             ) :
             order.stage == createdStage?
             CustomButton(
@@ -96,6 +97,7 @@ class OrderItemView extends StatelessWidget {
               onTap: canselOrder,
               btnColor: Colors.blueAccent,
               width: 120,
+              margin: 0,
             ) :
             Container(),
           ],

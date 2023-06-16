@@ -5,7 +5,8 @@ class CustomButton extends StatelessWidget {
   Function()? onTap;
   Color btnColor;
   double width;
-  CustomButton({super.key, required this.btnText, required this.onTap, required this.btnColor, this.width=200});
+  double margin;
+  CustomButton({super.key, required this.btnText, required this.onTap, required this.btnColor, this.width = 200, this.margin = 20});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -13,6 +14,7 @@ class CustomButton extends StatelessWidget {
       child: Container(
         width: width,
         height: 50,
+        margin: EdgeInsets.all(margin),
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: btnColor,

@@ -42,13 +42,6 @@ class OrderLoadedState extends OrderState {
   final User user;
   OrderLoadedState(this.orders, this.services, this.cargoTypes, this.cars, this.user);
 }
-// class OrderCreatingInProcessState extends OrderState {
-//   final List<Car> cars;
-//   final List<Service> services;
-//   final List<CargoType> cargoTypes;
-//   final User user;
-//   OrderCreatingInProcessState(this.cars, this.services, this.cargoTypes, this.user);
-// }
 class OrderCreatedState extends OrderState {}
 class OrderUpdatedState extends OrderState {}
 class OrderDeletedState extends OrderState {}
@@ -83,7 +76,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderLoadInProcessState());
       orders = await ApiService().orderIndexRequest(ordersPath);
       cars = await ApiService().carsIndexRequest(carsPath);
-      services = await ApiService().servicesIndexRequest(servicesPath);
+      services = await ApiService().additionalServiceIndexRequest(servicesPath);
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
       var user = await _sessionDataProvider.getUser();
       if (user == null) user = new User.createGuest();
@@ -93,23 +86,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderFailureState(e.toString()));
     }
   }
-  // onStartCreatingOrderEvent(StartCreatingOrderEvent event, Emitter<OrderState> emit) async {
-  //   List<Car> cars = [];
-  //   List<Service> services = [];
-  //   List<CargoType> cargoTypes = [];
-  //   //User user = new User.createGuest();
-  //   try {
-  //     emit(OrderLoadInProcessState());
-  //     cars = await ApiService().carsIndexRequest(carsPath);
-  //     services = await ApiService().servicesIndexRequest(servicesPath);
-  //     cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
-  //     var user = await _sessionDataProvider.getUser();
-  //     if (user == null) user = new User.createGuest();
-  //     emit(OrderCreatingInProcessState(cars, services, cargoTypes, user));
-  //   } catch (e) {
-  //     emit(OrderFailureState(e.toString()));
-  //   }
-  // }
   onCreateOrderEvent(CreateOrderEvent event, Emitter<OrderState> emit) async {
     try {
       var result = await ApiService().createOrderRequest(ordersPath, event.order.shortMapFromFields());
@@ -154,21 +130,4 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderFailureState(e.toString()));
     }
   }
-  // onStartUpdatingOrderEvent(StartUpdatingOrderEvent event, Emitter<OrderState> emit) async {
-  //   List<Car> cars = [];
-  //   List<Service> services = [];
-  //   List<CargoType> cargoTypes = [];
-  //   //User user = new User.createGuest();
-  //   try {
-  //     emit(OrderLoadInProcessState());
-  //     cars = await ApiService().carsIndexRequest(carsPath);
-  //     services = await ApiService().servicesIndexRequest(servicesPath);
-  //     cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
-  //     //var user = await _sessionDataProvider.getUser();
-  //     //if (user == null) user = new User.createGuest();
-  //     emit(OrderUpdatingInProcessState(cars, services, cargoTypes, user));
-  //   } catch (e) {
-  //     emit(OrderFailureState(e.toString()));
-  //   }
-  // }
 }

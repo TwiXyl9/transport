@@ -40,16 +40,6 @@ class ApiService {
       return [];
     }
   }
-  Future<List<Service>> servicesIndexRequest(path) async {
-    var fullPath = apiUrl + path;
-    http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((services) => Service.fromMap(services)).toList();
-    } else {
-      return [];
-    }
-  }
   Future<dynamic> userShowRequest(String path, authHeaders) async {
     try {
       var fullPath = apiUrl + path;
@@ -320,7 +310,7 @@ class ApiService {
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      return data.map((type) => Service.fromMap(type)).toList();
+      return data.map((service) => Service.fromMap(service)).toList();
     } else {
       return [];
     }
