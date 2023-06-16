@@ -7,7 +7,7 @@ class AccountCenteredContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+      constraints: BoxConstraints(maxWidth: 550),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10)
