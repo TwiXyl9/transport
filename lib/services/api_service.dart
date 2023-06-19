@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:transport/models/car.dart';
+import 'package:transport/models/car_pagination.dart';
 import 'package:transport/models/order.dart';
 import 'package:transport/models/service.dart';
 import 'package:transport/models/http_exception.dart';
@@ -30,14 +31,15 @@ class ApiService {
       return [];
     }
   }
-  Future<List<Car>> carsIndexRequest(path) async {
+  Future<dynamic> carsIndexRequest(String path, String page) async {
     var fullPath = apiUrl + path;
+    if (page.isNotEmpty) fullPath += page;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((car) => Car.fromMap(car)).toList();
+      return CarsPagination.fromMap(responseData);
     } else {
-      return [];
+      return new HttpException(response.statusCode, responseData['errors'][0]);
     }
   }
   Future<dynamic> userShowRequest(String path, authHeaders) async {

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthenticationBloc(context.read<RegistrationBloc>())..add(AuthenticationCheckStatusEvent()),
         ),
         BlocProvider<CarsBloc>(
-          create: (context) => CarsBloc()..add(InitialCarsEvent()),
+          create: (context) => CarsBloc()..add(InitialCarsEvent(1)),
         ),
         BlocProvider<NewsBloc>(
           create: (context) => NewsBloc(context.read<AuthenticationBloc>())..add(InitialNewsEvent()),

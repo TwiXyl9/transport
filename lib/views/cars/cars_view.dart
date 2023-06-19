@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_pagination/flutter_web_pagination.dart';
 import 'package:transport/blocs/cars_bloc.dart';
 import 'package:transport/models/car.dart';
 import 'package:transport/requests/requests_paths_names.dart';
@@ -14,8 +15,15 @@ import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../../widgets/components/page_header_text.dart';
 import '../../widgets/order/order_button.dart';
 import '../layout_template/layout_template.dart';
-class CarsView extends StatelessWidget {
+class CarsView extends StatefulWidget {
   CarsView({Key? key}) : super(key: key);
+
+  @override
+  State<CarsView> createState() => _CarsViewState();
+}
+
+class _CarsViewState extends State<CarsView> {
+  int _counter = 1;
   @override
   Widget build(BuildContext context) {
     return LayoutTemplate(
@@ -37,8 +45,18 @@ class CarsView extends StatelessWidget {
                 ListView(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
-                    children: state.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
+                    children: state.carsPagination.cars.map((e) => CarsItemView(e, state.user.isAdmin(), state.tailTypes)).toList()
                 ),
+                WebPagination(
+                    currentPage: _counter,
+                    totalPage: state.carsPagination.count,
+                    displayItemCount: 5,
+                    onPageChanged: (page) {
+                      setState(() {
+                        _counter = page;
+                        context.read<CarsBloc>().add(InitialCarsEvent(_counter));
+                      });
+                    }),
               ],
             );
          }

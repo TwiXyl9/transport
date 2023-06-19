@@ -12,11 +12,15 @@ import 'package:transport/requests/requests_paths_names.dart';
 import 'package:transport/services/api_service.dart';
 
 import '../models/car.dart';
+import '../models/car_pagination.dart';
 import '../models/user.dart';
 
 @immutable
 abstract class CarsEvent {}
-class InitialCarsEvent extends CarsEvent {}
+class InitialCarsEvent extends CarsEvent {
+  int page;
+  InitialCarsEvent(this.page);
+}
 class CreateCarEvent extends CarsEvent {
   Car car;
   CreateCarEvent(this.car);
@@ -34,10 +38,10 @@ abstract class CarsState {}
 class CarsInitialState extends CarsState {}
 class CarsLoadInProcessState extends CarsState {}
 class CarsLoadedState extends CarsState {
-  final List<Car> cars;
+  final CarsPagination carsPagination;
   final List<TailType> tailTypes;
   final User user;
-  CarsLoadedState(this.cars, this.user, this.tailTypes);
+  CarsLoadedState(this.carsPagination, this.user, this.tailTypes);
 }
 class CarCreateInProcessState extends CarsState {}
 class CarCreatedState extends CarsState {}
@@ -67,13 +71,14 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     }, transformer: sequential());
   }
   onInitialCarEvent(InitialCarsEvent event, Emitter<CarsState> emit) async {
-    List<Car> cars = [];
+    CarsPagination carsPagination;
     List<TailType> tailTypes = [];
     //User user = new User.createGuest();
     try {
       emit(CarsLoadInProcessState());
       var user = await _sessionDataProvider.getUser();
-      cars = await ApiService().carsIndexRequest(carsPath);
+      String page = '?page=${event.page}';
+      carsPagination = await ApiService().carsIndexRequest(carsPath, page);
       tailTypes = await ApiService().tailTypesIndexRequest(tailTypesPath);
       if (user == null) {
         user = new User.createGuest();
@@ -84,8 +89,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         // _sessionDataProvider.deleteAuthData();
         // _sessionDataProvider.setAuthData(jsonEncode(authHeadersMap));
       }
-      emit(CarsLoadedState(cars, user!, tailTypes));
+      emit(CarsLoadedState(carsPagination, user!, tailTypes));
     } catch (e) {
+      print(e);
       emit(CarsFailureState(e.toString()));
     }
   }
