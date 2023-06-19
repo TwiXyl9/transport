@@ -13,6 +13,7 @@ import 'dart:convert';
 
 import '../models/cargo_type.dart';
 import '../models/news.dart';
+import '../models/orders_pagination.dart';
 import '../models/services_pagination.dart';
 import '../models/tail_type.dart';
 import '../models/user.dart';
@@ -84,15 +85,15 @@ class ApiService {
       print(e);
     }
   }
-  Future<List<Order>> orderIndexRequest(path) async {
+  Future<dynamic> orderIndexRequest(String path, String page) async {
     var fullPath = apiUrl + path;
+    if (page.isNotEmpty) fullPath += page;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      print(response.body);
-      return data.map((order) => Order.fromMap(order)).toList();
+      return OrdersPagination.fromMap(responseData);
     } else {
-      return [];
+      return new HttpException(response.statusCode, responseData['errors'][0]);
     }
   }
   Future<dynamic> updateOrderRequest(path, order) async {
@@ -111,19 +112,18 @@ class ApiService {
       print(e);
     }
   }
-  Future<dynamic> usersOrdersIndexRequest(path, authHeaders) async {
+  Future<dynamic> usersOrdersIndexRequest(String path, authHeaders, String page) async {
     try {
       var fullPath = apiUrl + path;
+      if (page.isNotEmpty) fullPath += page;
       Map<String, String> fullHeaders = {}..addAll(authHeaders)..addAll(headers);
       http.Response response = await http.get(Uri.parse(fullPath), headers: fullHeaders as Map<String, String>);
       print(response.statusCode);
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
         if (response.headers['access-token']! != '') authHeaders['access-token'] = response.headers['access-token']!;
-        List<dynamic> data = jsonDecode(response.body);
-        return data.map((order) => Order.fromMap(order)).toList();
+        return OrdersPagination.fromMap(responseData);
       } else {
-        print(responseData);
         return new HttpException(response.statusCode, responseData['errors'][0]);
       }
     } catch(e){

@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:transport/helpers/navigation_helper.dart';
 import 'package:transport/locator.dart';
 import 'package:transport/models/order.dart';
+import 'package:transport/models/orders_pagination.dart';
 import 'package:transport/routing/route_names.dart';
 import 'package:transport/services/api_service.dart';
 
@@ -20,7 +21,10 @@ import 'authentication_bloc.dart';
 
 @immutable
 abstract class AccountEvent {}
-class InitialAccountEvent extends AccountEvent {}
+class InitialAccountEvent extends AccountEvent {
+  int page;
+  InitialAccountEvent({this.page = 1});
+}
 class UpdateAccountEvent extends AccountEvent {
   late User user;
   UpdateAccountEvent(this.user);
@@ -31,9 +35,9 @@ class RedirectToMainPageAccountEvent extends AccountEvent {}
 abstract class AccountState {}
 class AccountInitialState extends AccountState {}
 class AccountLoadedState extends AccountState {
-  final List<Order> orders;
+  final OrdersPagination ordersPagination;
   final User user;
-  AccountLoadedState(this.user, this.orders);
+  AccountLoadedState(this.user, this.ordersPagination);
 }
 class AccountUpdateInProcessState extends AccountState {}
 class AccountUpdatedState extends AccountState {
@@ -59,7 +63,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     });
   }
   onInitialAccountEvent(InitialAccountEvent event, Emitter<AccountState> emit) async {
-    List<Order> orders = [];
+    OrdersPagination orders;
     //User user = new User.createGuest();
     var user = await _sessionDataProvider.getUser();
     if (user != null) {
@@ -72,7 +76,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         emit(AccountFailureState(userInfoResult.toString()));
       }
       user = userInfoResult;
-      var ordersResult = await ApiService().usersOrdersIndexRequest('$usersPath/${user!.id}$ordersPath', authHeadersMap);
+      String page = '?page=${event.page}';
+      var ordersResult = await ApiService().usersOrdersIndexRequest('$usersPath/${user!.id}$ordersPath', authHeadersMap, page);
       if(ordersResult.runtimeType == HttpException){
         authBloc.add(AuthenticationLogoutEvent());
         emit(AccountFailureState(ordersResult.toString()));

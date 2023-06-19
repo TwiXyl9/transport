@@ -66,7 +66,7 @@ class ContactsView extends StatelessWidget {
                   ],
                 ),
               ),
-              SocialMediaView(color: Colors.black),
+              Center(child: SocialMediaView(color: Colors.black)),
               SizedBox(height: 15,),
               Divider(
                 thickness: 0.5,

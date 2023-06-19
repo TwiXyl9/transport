@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/models/car.dart';
 import 'package:transport/models/http_exception.dart';
+import 'package:transport/models/orders_pagination.dart';
 import 'package:transport/models/service.dart';
 import 'package:transport/models/user.dart';
 import 'package:transport/requests/requests_paths_names.dart';
@@ -17,7 +18,10 @@ import '../models/order.dart';
 
 @immutable
 abstract class OrderEvent {}
-class InitialOrderEvent extends OrderEvent {}
+class InitialOrderEvent extends OrderEvent {
+  int page;
+  InitialOrderEvent({this.page = 1});
+}
 class CreateOrderEvent extends OrderEvent {
   Order order;
   CreateOrderEvent(this.order);
@@ -35,12 +39,12 @@ abstract class OrderState {}
 class OrderInitialState extends OrderState {}
 class OrderLoadInProcessState extends OrderState {}
 class OrderLoadedState extends OrderState {
-  final List<Order> orders;
+  final OrdersPagination ordersPagination;
   final List<Service> services;
   final List<CargoType> cargoTypes;
   final List<Car> cars;
   final User user;
-  OrderLoadedState(this.orders, this.services, this.cargoTypes, this.cars, this.user);
+  OrderLoadedState(this.ordersPagination, this.services, this.cargoTypes, this.cars, this.user);
 }
 class OrderCreatedState extends OrderState {}
 class OrderUpdatedState extends OrderState {}
@@ -68,15 +72,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
   onInitialOrderEvent(InitialOrderEvent event, Emitter<OrderState> emit) async {
     List<Car> cars = [];
-    List<Order> orders = [];
+    OrdersPagination orders;
     List<Service> services = [];
     List<CargoType> cargoTypes = [];
     User user = new User.createGuest();
+    String page = '?page=${event.page}';
     try {
       emit(OrderLoadInProcessState());
-      orders = await ApiService().orderIndexRequest(ordersPath);
+      orders = await ApiService().orderIndexRequest(ordersPath, page);
       cars = (await ApiService().carsIndexRequest(carsPath, '')).cars;
-      services = await ApiService().additionalServiceIndexRequest(servicesPath, '');
+      services = (await ApiService().additionalServiceIndexRequest(servicesPath, '')).services;
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
       var user = await _sessionDataProvider.getUser();
       if (user == null) user = new User.createGuest();

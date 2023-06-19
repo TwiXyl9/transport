@@ -46,7 +46,8 @@ class _AdditionalServiceViewState extends State<AdditionalServiceView> {
                 Column(
                   children: [
                     AdditionalServiceListView(state.servicesPagination.services, state.user),
-                    state.servicesPagination.count > 1 ? WebPagination(
+                    state.servicesPagination.count > 1 ?
+                    WebPagination(
                         currentPage: _counter,
                         totalPage: state.servicesPagination.count,
                         displayItemCount: 5,
@@ -55,7 +56,8 @@ class _AdditionalServiceViewState extends State<AdditionalServiceView> {
                             _counter = page;
                             context.read<AdditionalServiceBloc>().add(InitialAdditionalServiceEvent(page: _counter));
                           });
-                        }) : Container(),
+                        }) :
+                    Container(),
                   ],
                 ) :
                 Center(
