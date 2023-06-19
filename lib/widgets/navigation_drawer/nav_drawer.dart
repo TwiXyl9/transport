@@ -36,7 +36,7 @@ class NavDrawer extends StatelessWidget {
                   !state.user.isAdmin()?
                   Column(
                     children: [
-                      DrawerItem("Контаты", Icons.contact_phone, carsRoute),
+                      DrawerItem("Контаты", Icons.contact_phone, contactsRoute),
                       DrawerItem("О Нас", Icons.info, aboutRoute),
                       DrawerItem("Личный кабинет", Icons.person, accountRoute),
                     ],
@@ -53,7 +53,7 @@ class NavDrawer extends StatelessWidget {
                   ) :
                   Column(
                     children: [
-                      DrawerItem("Контакты", Icons.contact_phone, carsRoute),
+                      DrawerItem("Контакты", Icons.contact_phone, contactsRoute),
                       DrawerItem("О Нас", Icons.info, aboutRoute),
                       DrawerItem("Войти", Icons.login, authenticationRoute),
                     ],

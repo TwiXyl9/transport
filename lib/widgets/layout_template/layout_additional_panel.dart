@@ -31,8 +31,10 @@ class LayoutAdditionalPanel extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 10.0,
+              crossAxisAlignment: WrapCrossAlignment.start,
               children: [
                 OrderButton(context),
                 SizedBox(width: 10,),

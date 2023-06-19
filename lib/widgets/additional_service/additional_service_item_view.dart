@@ -50,7 +50,7 @@ class AdditionalServiceItemView extends StatelessWidget {
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(service.name),
                 Text(service.description, softWrap: true,),

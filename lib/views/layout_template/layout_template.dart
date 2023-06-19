@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:transport/data_provider/session_data_provider.dart';
 import 'package:transport/views/contacts/contacts_view.dart';
@@ -48,14 +49,14 @@ class LayoutTemplate extends StatelessWidget {
                           }
                       ),
                       Container(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(kIsWeb? 20 : 0),
                         child: Center(
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.black26.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            margin: EdgeInsets.symmetric(horizontal:  kIsWeb? 40 : 0),
                             padding: EdgeInsets.all(20),
                             constraints: BoxConstraints(maxWidth: 800),
                             child: child

@@ -17,6 +17,7 @@ class ContactsView extends StatelessWidget {
           ),
           padding: EdgeInsets.all(15.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -33,11 +34,16 @@ class ContactsView extends StatelessWidget {
                 color: Colors.grey[400],
               ),
               SizedBox(height: 15,),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
+              Container(
+                width: double.maxFinite,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  spacing: 8.0,
+                  runSpacing: 10.0,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  runAlignment: WrapAlignment.start,
+                  children: [
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -47,10 +53,7 @@ class ContactsView extends StatelessWidget {
                         SizedBox(height: 15,),
                       ],
                     ),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    child: Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -59,8 +62,8 @@ class ContactsView extends StatelessWidget {
                         _infoBlock("Телефон", "+375 (29) 28-08-724"),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               SocialMediaView(color: Colors.black),
               SizedBox(height: 15,),

@@ -22,29 +22,32 @@ class AdditionalServiceView extends StatelessWidget {
         builder: (context, state) {
           print(state);
           return state is AdditionalServiceLoadedState?
-          Column(
-            children: [
-              PageHeaderText(text: "Дополнительные услуги"),
-              state.user.isAdmin() ?
-              CircularAddButton(() => showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AdditionalServiceDialog(new Service(0));
-                  }
-              )) :
-              Container(),
-              state.services.length > 0 ?
-              AdditionalServiceListView(state.services, state.user) :
-              Center(
-                  child: Text(
-                    'У компании пока нет услуг! Создайте первую!',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold
-                    ),
-                  )
-              ),
-            ],
+          Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Column(
+              children: [
+                PageHeaderText(text: "Дополнительные услуги"),
+                state.user.isAdmin() ?
+                CircularAddButton(() => showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AdditionalServiceDialog(new Service(0));
+                    }
+                )) :
+                Container(),
+                state.services.length > 0 ?
+                AdditionalServiceListView(state.services, state.user) :
+                Center(
+                    child: Text(
+                      'У компании пока нет услуг! Создайте первую!',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold
+                      ),
+                    )
+                ),
+              ],
+            ),
           ) :
           CustomCircularProgressIndicator();
         },
