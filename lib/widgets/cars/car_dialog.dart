@@ -226,7 +226,7 @@ class _CarDialogState extends State<CarDialog> {
         final httpImages = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name)).toList());
         var car = new Car.withFiles(0, brand, model, pricePerHour, pricePerKilometer, httpImages, new Capacity(0, width, height, length, numOfPallets, loadCapacity), selectedTailType);
         context.read<CarsBloc>().add(CreateCarEvent(car));
-        context.read<CarsBloc>().add(InitialCarsEvent(1));
+        context.read<CarsBloc>().add(InitialCarsEvent());
         Navigator.of(context).pop();
       } catch (error) {
         var errorMessage = error.toString();
@@ -254,7 +254,7 @@ class _CarDialogState extends State<CarDialog> {
         _car.imagesFiles = await Future.wait(selectedImages!.map((e) async => http.MultipartFile.fromBytes('car[images][]', await e!.readAsBytes(), filename: e.name.isEmpty? path.basename(e.path) : e.name)).toList());
         print(_car.imagesFiles.length);
         context.read<CarsBloc>().add(UpdateCarEvent(_car));
-        context.read<CarsBloc>().add(InitialCarsEvent(1));
+        context.read<CarsBloc>().add(InitialCarsEvent());
         Navigator.of(context).pop();
       } catch (error) {
         var errorMessage = error.toString();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_pagination/flutter_web_pagination.dart';
 import 'package:transport/views/layout_template/layout_template.dart';
 import 'package:transport/widgets/centered_view/centered_view.dart';
 import 'package:transport/widgets/order/order_button.dart';
@@ -12,9 +13,15 @@ import '../../widgets/components/circular_add_button.dart';
 import '../../widgets/components/custom_circular_progress_indicator.dart';
 import '../../widgets/components/page_header_text.dart';
 
-class AdditionalServiceView extends StatelessWidget {
+class AdditionalServiceView extends StatefulWidget {
   const AdditionalServiceView({Key? key}) : super(key: key);
 
+  @override
+  State<AdditionalServiceView> createState() => _AdditionalServiceViewState();
+}
+
+class _AdditionalServiceViewState extends State<AdditionalServiceView> {
+  int _counter = 1;
   @override
   Widget build(BuildContext context) {
     return LayoutTemplate(
@@ -35,8 +42,22 @@ class AdditionalServiceView extends StatelessWidget {
                     }
                 )) :
                 Container(),
-                state.services.length > 0 ?
-                AdditionalServiceListView(state.services, state.user) :
+                state.servicesPagination.services.length > 0 ?
+                Column(
+                  children: [
+                    AdditionalServiceListView(state.servicesPagination.services, state.user),
+                    state.servicesPagination.count > 1 ? WebPagination(
+                        currentPage: _counter,
+                        totalPage: state.servicesPagination.count,
+                        displayItemCount: 5,
+                        onPageChanged: (page) {
+                          setState(() {
+                            _counter = page;
+                            context.read<AdditionalServiceBloc>().add(InitialAdditionalServiceEvent(page: _counter));
+                          });
+                        }) : Container(),
+                  ],
+                ) :
                 Center(
                     child: Text(
                       'У компании пока нет услуг! Создайте первую!',

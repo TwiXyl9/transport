@@ -19,7 +19,7 @@ import '../models/user.dart';
 abstract class CarsEvent {}
 class InitialCarsEvent extends CarsEvent {
   int page;
-  InitialCarsEvent(this.page);
+  InitialCarsEvent({this.page = 1});
 }
 class CreateCarEvent extends CarsEvent {
   Car car;

@@ -76,7 +76,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderLoadInProcessState());
       orders = await ApiService().orderIndexRequest(ordersPath);
       cars = (await ApiService().carsIndexRequest(carsPath, '')).cars;
-      services = await ApiService().additionalServiceIndexRequest(servicesPath);
+      services = await ApiService().additionalServiceIndexRequest(servicesPath, '');
       cargoTypes = await ApiService().cargoTypesIndexRequest(cargoTypesPath);
       var user = await _sessionDataProvider.getUser();
       if (user == null) user = new User.createGuest();

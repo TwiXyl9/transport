@@ -13,6 +13,7 @@ import 'dart:convert';
 
 import '../models/cargo_type.dart';
 import '../models/news.dart';
+import '../models/services_pagination.dart';
 import '../models/tail_type.dart';
 import '../models/user.dart';
 import '../requests/requests_config.dart';
@@ -307,14 +308,15 @@ class ApiService {
       print(e);
     }
   }
-  Future<List<Service>> additionalServiceIndexRequest(path) async {
+  Future<dynamic> additionalServiceIndexRequest(String path, String page) async {
     var fullPath = apiUrl + path;
+    if (page.isNotEmpty) fullPath += page;
     http.Response response = await http.get(Uri.parse(fullPath), headers: headers);
+    Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((service) => Service.fromMap(service)).toList();
+      return ServicesPagination.fromMap(responseData);
     } else {
-      return [];
+      return new HttpException(response.statusCode, responseData['errors'][0]);
     }
   }
   Future<dynamic> create(path, data) async {

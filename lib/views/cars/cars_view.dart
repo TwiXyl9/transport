@@ -54,7 +54,7 @@ class _CarsViewState extends State<CarsView> {
                     onPageChanged: (page) {
                       setState(() {
                         _counter = page;
-                        context.read<CarsBloc>().add(InitialCarsEvent(_counter));
+                        context.read<CarsBloc>().add(InitialCarsEvent(page: _counter));
                       });
                     }),
               ],

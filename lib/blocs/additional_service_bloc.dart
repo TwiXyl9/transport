@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
+import 'package:transport/models/services_pagination.dart';
 import 'package:transport/requests/requests_paths_names.dart';
 
 import '../data_provider/session_data_provider.dart';
@@ -12,7 +13,10 @@ import '../services/api_service.dart';
 
 @immutable
 abstract class AdditionalServiceEvent {}
-class InitialAdditionalServiceEvent extends AdditionalServiceEvent {}
+class InitialAdditionalServiceEvent extends AdditionalServiceEvent {
+  int page;
+  InitialAdditionalServiceEvent({this.page = 1});
+}
 class CreateAdditionalServiceEvent extends AdditionalServiceEvent {
   Service service;
   CreateAdditionalServiceEvent(this.service);
@@ -31,9 +35,9 @@ abstract class AdditionalServiceState {}
 class AdditionalServiceInitialState extends AdditionalServiceState {}
 class AdditionalServiceLoadInProcessState extends AdditionalServiceState {}
 class AdditionalServiceLoadedState extends AdditionalServiceState {
-  final List<Service> services;
+  final ServicesPagination servicesPagination;
   final User user;
-  AdditionalServiceLoadedState(this.services, this.user);
+  AdditionalServiceLoadedState(this.servicesPagination, this.user);
 }
 class AdditionalServiceCreateInProcessState extends AdditionalServiceState {}
 class AdditionalServiceCreatedState extends AdditionalServiceState {}
@@ -63,14 +67,14 @@ class AdditionalServiceBloc extends Bloc<AdditionalServiceEvent, AdditionalServi
     }, transformer: sequential());
   }
   onInitialAdditionalServiceEvent(InitialAdditionalServiceEvent event, Emitter<AdditionalServiceState> emit) async {
-    List<Service> services = [];
+    ServicesPagination services;
     //User user = new User.createGuest();
     try {
       emit(AdditionalServiceLoadInProcessState());
       var user = await _sessionDataProvider.getUser();
+      String page = '?page=${event.page}';
       if (user == null) user = new User.createGuest();
-      services = await ApiService().additionalServiceIndexRequest(servicesPath);
-      print(services.length);
+      services = await ApiService().additionalServiceIndexRequest(servicesPath, page);
       emit(AdditionalServiceLoadedState(services, user));
     } catch (e) {
       print(e.toString());

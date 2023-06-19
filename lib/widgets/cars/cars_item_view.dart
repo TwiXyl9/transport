@@ -25,7 +25,7 @@ class CarsItemView extends StatelessWidget {
       final bloc = Provider.of<CarsBloc>(context, listen: false);
       try {
         bloc.add(DeleteCarEvent(car));
-        bloc.add(InitialCarsEvent(1));
+        bloc.add(InitialCarsEvent());
       } catch (error) {
         var errorMessage = error.toString();
         showDialog(
