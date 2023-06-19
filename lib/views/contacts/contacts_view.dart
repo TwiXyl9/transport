@@ -37,13 +37,13 @@ class ContactsView extends StatelessWidget {
               Container(
                 width: double.maxFinite,
                 child: Wrap(
-                  alignment: WrapAlignment.spaceEvenly,
+                  alignment: WrapAlignment.spaceAround,
                   spacing: 8.0,
                   runSpacing: 10.0,
                   crossAxisAlignment: WrapCrossAlignment.start,
-                  runAlignment: WrapAlignment.start,
                   children: [
                     Column(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -54,11 +54,12 @@ class ContactsView extends StatelessWidget {
                       ],
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _infoBlock("Электронная почта", "grant199494@mail.ru"),
-                        SizedBox(height: 15,),
+                        SizedBox( height: 15,),
                         _infoBlock("Телефон", "+375 (29) 28-08-724"),
                       ],
                     ),

@@ -9,7 +9,8 @@ class SocialMediaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _socialButton("tg://t.me/TwiXyl9", Icon(Icons.telegram, color: color)),
