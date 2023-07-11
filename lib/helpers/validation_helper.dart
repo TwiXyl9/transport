@@ -5,7 +5,7 @@ extension extString on String {
   }
 
   bool get isValidName{
-    final nameRegExp = new RegExp(r"^[A-ЯЁ][а-яё]+$");
+    final nameRegExp = new RegExp(r"^[А-Я]*[а-я]*$");
     return nameRegExp.hasMatch(this);
   }
 
@@ -15,7 +15,7 @@ extension extString on String {
   }
 
   bool get isNotNull{
-    return this!=null;
+    return this != null;
   }
 
   bool get isValidPhone{

@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String btnText;
   Function()? onTap;
-  CustomButton({super.key, required this.btnText, required this.onTap});
+  Color btnColor;
+  double width;
+  double margin;
+  CustomButton({super.key, required this.btnText, required this.onTap, required this.btnColor, this.width = 200, this.margin = 20});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(25),
-        margin: EdgeInsets.all(25),
+        width: width,
+        height: 50,
+        margin: EdgeInsets.all(margin),
+        padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: btnColor,
           borderRadius: BorderRadius.circular(8)
         ),
         child: Center(

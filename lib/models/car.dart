@@ -1,38 +1,48 @@
+import 'package:http/http.dart';
+import 'package:transport/models/capacity.dart';
+import 'package:transport/models/tail_type.dart';
+
 class Car {
-  late int id;
+  late int? id;
   late String brand;
   late String model;
-  late List<String> images;
-  late double width;
-  late double height;
-  late double length;
-  late int numOfPallets;
-  late double loadCapacity;
-  late String tailType;
-
-  Car(this.id, this.brand, this.model, this.images, this.width, this.height, this.length, this.numOfPallets,this.tailType);
-
+  late double pricePerHour;
+  late double pricePerKilometer;
+  late List<String> imagesUrls;
+  late List<MultipartFile> imagesFiles;
+  late Capacity capacity;
+  late TailType tailType;
+  Car(this.id);
+  Car.fromData(this.id, this.brand, this.model, this.pricePerHour, this.pricePerKilometer, this.imagesUrls);
+  Car.withFiles(this.id, this.brand, this.model, this.pricePerHour, this.pricePerKilometer, this.imagesFiles, this.capacity, this.tailType);
   Car.fromMap(Map<String, dynamic> map) {
-    id = map['car']['id'];
-    brand = map['car']['brand'];
-    model = map['car']['model'];
-    images = List<String>.from(map['car']['images'] as List);
-    width = map['car']['width'];
-    height = map['car']['height'];
-    length = map['car']['length'];
-    numOfPallets = map['car']['num_of_pallets'];
-    loadCapacity = map['car']['load_capacity'];
-    tailType = map['car']['tail_type'];
+    id = map['id'];
+    brand = map['brand'];
+    model = map['model'];
+    pricePerHour = map['price_per_hour'];
+    pricePerKilometer = map['price_per_kilometer'];
+    imagesUrls = List<String>.from(map['images_url'] as List);
+    capacity = Capacity.fromMap(map['capacity']);
+    tailType = TailType.fromMap(map['tail_type']);
   }
-
   Map<String, dynamic> mapFromFields() {
     return {
-      'car': {
-        'brand': brand, 'model': model, 'tail_type_id': tailType, 'images': images
-      },
-      'capacity': {
-        'width': width, 'height': height, 'length': length, 'num_of_pallets': numOfPallets
-      }
+      'brand': brand,
+      'model': model,
+      'price_per_hour': pricePerHour,
+      'price_per_kilometer': pricePerKilometer
     };
   }
+  Map<String, String> namedMapFromFields() {
+    return {
+      'car[brand]': brand,
+      'car[model]': model,
+      'car[price_per_hour]': pricePerHour.toString(),
+      'car[price_per_kilometer]': pricePerKilometer.toString(),
+      'car[tail_type_id]': tailType.id.toString(),
+    };
+  }
+
+  bool operator ==(Object other) => other is Car && other.id == id;
+
 }

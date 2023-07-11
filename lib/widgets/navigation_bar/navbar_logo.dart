@@ -11,10 +11,9 @@ class NavBarLogo extends StatelessWidget {
         onTap: () {
           locator<NavigationHelper>().navigateTo(homeRoute);
         },
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: Image.asset('lib/assets/delivery.png'),
+        child: Image.asset(
+          'lib/assets/images/delivery.png',
+          color: Colors.white,
         ),
     );
     // return SizedBox(

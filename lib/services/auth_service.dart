@@ -10,45 +10,29 @@ import 'package:transport/requests/requests_paths_names.dart';
 
 import '../models/prefs.dart';
 class AuthService {
-  // Future<void> setAuthorizationData(http.Response response) async {
-  //   final responseData = json.decode(response.body);
-  //   final prefs = await SharedPreferences.getInstance();
-  //   token = response.headers['access-token'];
-  //   uid = response.headers['uid'];
-  //   client = response.headers['client'];
-  //   userId = responseData['data']['id'];
-  //   expiryDate = new DateTime.fromMillisecondsSinceEpoch(int.parse(response.headers['expiry']!) * 1000);
-  //   final userData = json.encode(
-  //     {
-  //       'access-token': token,
-  //       'user_id': userId,
-  //       'uid': uid,
-  //       'client': client,
-  //       'expiry': response.headers['expiry']
-  //     },
-  //   );
-  //   prefs.setString('userData', userData);
-  // }
 
-  Future<http.Response> _authenticate(String prefix, Map<String, String> body) async {
+  Future<dynamic> _authenticate(String prefix, Map<String, String> body) async {
     final url = '$baseUrl$authPath$prefix';
-    late http.Response response;
     try {
-      response = await http.post(
+      var response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: json.encode(body),
       );
-
-      //setAuthorizationData(response);
+      Map<String, dynamic> responseData = json.decode(response.body);
+      if (response.statusCode != 201 && response.statusCode != 200) {
+        print(responseData);
+        if (responseData['errors'] is Map) return new HttpException(response.statusCode, responseData['errors']['full_messages'][0]);
+        return new HttpException(response.statusCode, responseData['errors'][0]);
+      }
+      return Auth.fromMap(responseData, response.headers);
     } catch (error) {
       print(error);
     }
-    return response;
   }
 
-  Future<http.Response> signup(String name, String phone, String email, String password, String confirmPassword) async {
-    return _authenticate('/',
+  Future<dynamic> signup(String name, String phone, String email, String password, String confirmPassword) async {
+    return _authenticate('',
       {
         'name': name,
         'phone': phone,
@@ -59,14 +43,11 @@ class AuthService {
     );
   }
 
-  Future<http.Response> login(String email, String password) async {
+  Future<dynamic> login(String email, String password) async {
     return _authenticate('/sign_in', {
       'email': email,
       'password': password,
     },);
   }
 
-  void logout() {
-    Prefs.clear();
-  }
 }
